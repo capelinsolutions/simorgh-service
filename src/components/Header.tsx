@@ -30,12 +30,18 @@ const Header = () => {
       </nav>
 
       <div className="self-stretch flex items-center gap-2 font-semibold whitespace-nowrap w-[233px] my-auto">
-        <button className="justify-center items-center rounded border self-stretch flex min-h-12 gap-2 text-[#58C0D7] w-[97px] my-auto px-4 py-[13px] border-solid border-[#58C0D7] hover:bg-[#58C0D7] hover:text-white transition-colors">
+        <a 
+          href="/auth" 
+          className="justify-center items-center rounded border self-stretch flex min-h-12 gap-2 text-[#58C0D7] w-[97px] my-auto px-4 py-[13px] border-solid border-[#58C0D7] hover:bg-[#58C0D7] hover:text-white transition-colors"
+        >
           Login
-        </button>
-        <button className="justify-center items-center rounded self-stretch flex min-h-12 gap-2 text-white w-[127px] bg-[#58C0D7] my-auto px-4 py-[13px] hover:bg-[#4aa8c0] transition-colors">
+        </a>
+        <a 
+          href="/auth" 
+          className="justify-center items-center rounded self-stretch flex min-h-12 gap-2 text-white w-[127px] bg-[#58C0D7] my-auto px-4 py-[13px] hover:bg-[#4aa8c0] transition-colors"
+        >
           Register
-        </button>
+        </a>
       </div>
     </header>
   );
