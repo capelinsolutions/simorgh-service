@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { services, locations } from '@/data/services';
 
 const Hero = () => {
   const [location, setLocation] = useState('');
@@ -37,9 +38,9 @@ const Hero = () => {
                 className="bg-transparent border-none outline-none self-stretch my-auto"
               >
                 <option value="">Location</option>
-                <option value="manhattan">Manhattan</option>
-                <option value="malibu">Malibu</option>
-                <option value="brooklyn">Brooklyn</option>
+                {locations.map((loc) => (
+                  <option key={loc} value={loc.toLowerCase()}>{loc}</option>
+                ))}
               </select>
               <img
                 src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/3f5f495de87889a60ffbdc7438ef8189344efc37?placeholderIfAbsent=true"
@@ -54,11 +55,11 @@ const Hero = () => {
                 onChange={(e) => setService(e.target.value)}
                 className="bg-transparent border-none outline-none self-stretch my-auto"
               >
-                <option value="">Service</option>
-                <option value="office">Office Cleaning</option>
-                <option value="deep">Deep Cleaning</option>
-                <option value="industrial">Industrial Cleaning</option>
-                <option value="facade">Facade Cleaning</option>
+                <option value="">Select Service</option>
+                {services.slice(0, 20).map((svc) => (
+                  <option key={svc.id} value={svc.id}>{svc.title}</option>
+                ))}
+                <option value="more">+ View All Services</option>
               </select>
               <img
                 src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/3f5f495de87889a60ffbdc7438ef8189344efc37?placeholderIfAbsent=true"
