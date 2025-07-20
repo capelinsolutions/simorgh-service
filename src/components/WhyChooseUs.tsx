@@ -7,7 +7,7 @@ const WhyChooseUs = () => {
       description: "Lorem ipsum dolor sit amet consectetur. Aliquam maecenas ut viverra ."
     },
     {
-      title: "Trusted Professionals",
+      title: "Trusted Professionals", 
       description: "Lorem ipsum dolor sit amet consectetur. Aliquam maecenas ut viverra ."
     },
     {
@@ -17,45 +17,55 @@ const WhyChooseUs = () => {
   ];
 
   return (
-    <section className="self-center w-full max-w-[1200px] mt-[73px] max-md:max-w-full max-md:mt-10">
-      <div className="gap-5 flex max-md:flex-col max-md:items-stretch">
-        <div className="w-[61%] max-md:w-full max-md:ml-0">
-          <img
-            src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/3eeedfa4ebf67a2c7e19e4216557c0aa738a157a?placeholderIfAbsent=true"
-            alt="Professional cleaning service"
-            className="aspect-[0.99] object-contain w-full grow max-md:max-w-full max-md:mt-10"
-          />
-        </div>
-        
-        <div className="w-[39%] ml-5 max-md:w-full max-md:ml-0">
-          <div className="self-stretch my-auto max-md:max-w-full max-md:mt-10">
-            <div className="max-w-full w-[432px]">
-              <h2 className="text-black text-5xl font-semibold max-md:text-[40px]">
-                Why choose Us
-              </h2>
-              <p className="text-[rgba(15,15,15,1)] text-xl font-normal mt-3 max-md:max-w-full">
-                We Are Very Experienced In Cleaning Services
-              </p>
+    <section className="w-full py-12 md:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-background">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+          {/* Image Section */}
+          <div className="w-full lg:w-1/2 order-2 lg:order-1">
+            <div className="relative aspect-square max-w-md mx-auto lg:max-w-none">
+              <img
+                src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/3eeedfa4ebf67a2c7e19e4216557c0aa738a157a?placeholderIfAbsent=true"
+                alt="Professional cleaning service"
+                className="w-full h-full object-cover rounded-2xl shadow-lg"
+              />
             </div>
-            
-            <div className="w-[372px] max-w-full mt-12 max-md:mt-10">
-              {features.map((feature, index) => (
-                <article key={index} className={`flex w-full gap-3 ${index > 0 ? 'mt-10' : ''}`}>
-                  <img
-                    src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/d607e6f8960105630b686c50130fdec8508d6b19?placeholderIfAbsent=true"
-                    alt=""
-                    className="aspect-[1] object-contain w-8 shrink-0 rounded-2xl"
-                  />
-                  <div className="min-w-60 w-[328px]">
-                    <h3 className="text-black text-2xl font-semibold">
-                      {feature.title}
-                    </h3>
-                    <p className="text-[rgba(15,15,15,1)] text-base font-normal mt-3">
-                      {feature.description}
-                    </p>
-                  </div>
-                </article>
-              ))}
+          </div>
+          
+          {/* Content Section */}
+          <div className="w-full lg:w-1/2 order-1 lg:order-2">
+            <div className="max-w-xl mx-auto lg:max-w-none">
+              {/* Header */}
+              <div className="text-center lg:text-left mb-8 lg:mb-12">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-foreground mb-4">
+                  Why choose Us
+                </h2>
+                <p className="text-lg sm:text-xl text-muted-foreground">
+                  We Are Very Experienced In Cleaning Services
+                </p>
+              </div>
+              
+              {/* Features */}
+              <div className="space-y-6 lg:space-y-8">
+                {features.map((feature, index) => (
+                  <article key={index} className="flex items-start gap-4">
+                    <div className="flex-shrink-0">
+                      <img
+                        src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/d607e6f8960105630b686c50130fdec8508d6b19?placeholderIfAbsent=true"
+                        alt=""
+                        className="w-8 h-8 rounded-2xl object-contain"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-xl sm:text-2xl font-semibold text-foreground mb-2">
+                        {feature.title}
+                      </h3>
+                      <p className="text-base text-muted-foreground leading-relaxed">
+                        {feature.description}
+                      </p>
+                    </div>
+                  </article>
+                ))}
+              </div>
             </div>
           </div>
         </div>
