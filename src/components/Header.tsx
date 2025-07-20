@@ -62,7 +62,7 @@ const Header = () => {
         ))}
       </nav>
 
-      <div className="self-stretch flex items-center gap-2 font-semibold whitespace-nowrap w-[233px] my-auto">
+      <div className="self-stretch flex items-center gap-2 font-semibold whitespace-nowrap w-[280px] my-auto">
         <a 
           href="/auth" 
           className="justify-center items-center rounded border self-stretch flex min-h-12 gap-2 text-[#58C0D7] w-[97px] my-auto px-4 py-[13px] border-solid border-[#58C0D7] hover:bg-[#58C0D7] hover:text-white transition-colors"
@@ -74,6 +74,12 @@ const Header = () => {
           className="justify-center items-center rounded self-stretch flex min-h-12 gap-2 text-white w-[127px] bg-[#58C0D7] my-auto px-4 py-[13px] hover:bg-[#4aa8c0] transition-colors"
         >
           Register
+        </a>
+        <a 
+          href="/admin" 
+          className="justify-center items-center rounded border self-stretch flex min-h-12 gap-2 text-[#666] w-[56px] my-auto px-2 py-[13px] border-solid border-[#666] hover:bg-[#666] hover:text-white transition-colors text-xs"
+        >
+          Admin
         </a>
       </div>
     </header>

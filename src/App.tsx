@@ -31,6 +31,7 @@ const App = () => (
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/subscription-success" element={<SubscriptionSuccess />} />
           <Route path="/freelancer-profile" element={<FreelancerProfile />} />
+          <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/customer/*" element={<CustomerDashboard />} />
           <Route path="/freelancer/*" element={<FreelancerDashboard />} />
           <Route path="/admin/*" element={<AdminDashboard />} />

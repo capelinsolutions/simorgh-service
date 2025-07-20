@@ -14,6 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_users: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          permissions: string[] | null
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          permissions?: string[] | null
+          role?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          permissions?: string[] | null
+          role?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      communications: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          message: string
+          metadata: Json | null
+          recipient_id: string | null
+          recipient_type: string
+          scheduled_at: string | null
+          sent_at: string | null
+          status: string | null
+          subject: string | null
+          template_id: string | null
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          message: string
+          metadata?: Json | null
+          recipient_id?: string | null
+          recipient_type: string
+          scheduled_at?: string | null
+          sent_at?: string | null
+          status?: string | null
+          subject?: string | null
+          template_id?: string | null
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          message?: string
+          metadata?: Json | null
+          recipient_id?: string | null
+          recipient_type?: string
+          scheduled_at?: string | null
+          sent_at?: string | null
+          status?: string | null
+          subject?: string | null
+          template_id?: string | null
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       freelancers: {
         Row: {
           business_name: string | null
@@ -102,6 +183,7 @@ export type Database = {
       }
       orders: {
         Row: {
+          admin_notes: string | null
           amount: number
           assigned_freelancer_id: string | null
           assignment_status: string | null
@@ -111,6 +193,9 @@ export type Database = {
           customer_zip_code: string | null
           id: string
           is_guest_order: boolean | null
+          payment_method: string | null
+          refund_amount: number | null
+          refund_reason: string | null
           service_description: string | null
           service_name: string
           status: string | null
@@ -119,6 +204,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          admin_notes?: string | null
           amount: number
           assigned_freelancer_id?: string | null
           assignment_status?: string | null
@@ -128,6 +214,9 @@ export type Database = {
           customer_zip_code?: string | null
           id?: string
           is_guest_order?: boolean | null
+          payment_method?: string | null
+          refund_amount?: number | null
+          refund_reason?: string | null
           service_description?: string | null
           service_name: string
           status?: string | null
@@ -136,6 +225,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          admin_notes?: string | null
           amount?: number
           assigned_freelancer_id?: string | null
           assignment_status?: string | null
@@ -145,6 +235,9 @@ export type Database = {
           customer_zip_code?: string | null
           id?: string
           is_guest_order?: boolean | null
+          payment_method?: string | null
+          refund_amount?: number | null
+          refund_reason?: string | null
           service_description?: string | null
           service_name?: string
           status?: string | null
@@ -193,6 +286,42 @@ export type Database = {
         }
         Relationships: []
       }
+      system_settings: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_public: boolean | null
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: Json
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value: Json
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -200,6 +329,14 @@ export type Database = {
     Functions: {
       auto_assign_order: {
         Args: { order_id: string }
+        Returns: boolean
+      }
+      get_admin_role: {
+        Args: { user_id: string }
+        Returns: string
+      }
+      is_admin: {
+        Args: { user_id: string }
         Returns: boolean
       }
     }
