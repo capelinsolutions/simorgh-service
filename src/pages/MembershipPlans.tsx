@@ -361,11 +361,11 @@ const MembershipPlans = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-background p-4 sm:p-6">
+      <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
         <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold text-foreground">Membership Plans</h1>
-          <p className="text-xl text-muted-foreground">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground">Membership Plans</h1>
+          <p className="text-lg sm:text-xl text-muted-foreground px-4">
             Choose the perfect plan for your needs - whether you're a customer or freelancer
           </p>
         </div>
@@ -440,7 +440,7 @@ const MembershipPlans = () => {
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
               {customerPlans.map((plan) => (
                 <PricingCard key={plan.name} plan={plan} membershipType="customer" />
               ))}
@@ -495,7 +495,7 @@ const MembershipPlans = () => {
               </p>
             </div>
             
-            <div className="grid lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
               {freelancerPlans.map((plan) => (
                 <PricingCard key={plan.name} plan={plan} membershipType="freelancer" />
               ))}

@@ -10,9 +10,9 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <div className="flex">
+      <div className="flex flex-col lg:flex-row">
         <AdminSidebar />
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-4 lg:p-6">
           <Routes>
             <Route index element={<ServiceManager />} />
             <Route path="users" element={<UserManager />} />
