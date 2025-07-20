@@ -14,7 +14,40 @@ const Header = () => {
       />
       
       <nav className="bg-[rgba(134,134,134,0.1)] self-stretch flex min-w-60 items-center gap-2 text-[rgba(40,40,40,1)] font-normal flex-wrap my-auto rounded-[48px] max-md:max-w-full">
-        {navItems.map((item) => (
+        <a
+          href="/"
+          onClick={() => setActiveNav('Home')}
+          className={`self-stretch flex min-h-12 items-center gap-2 whitespace-nowrap justify-center my-auto px-4 py-[13px] ${
+            activeNav === 'Home' 
+              ? 'text-[#58C0D7] font-semibold' 
+              : 'text-[rgba(40,40,40,1)] font-normal'
+          }`}
+        >
+          Home
+        </a>
+        <a
+          href="/service-booking"
+          onClick={() => setActiveNav('Services')}
+          className={`self-stretch flex min-h-12 items-center gap-2 whitespace-nowrap justify-center my-auto px-4 py-[13px] ${
+            activeNav === 'Services' 
+              ? 'text-[#58C0D7] font-semibold' 
+              : 'text-[rgba(40,40,40,1)] font-normal'
+          }`}
+        >
+          Services
+        </a>
+        <a
+          href="/membership"
+          onClick={() => setActiveNav('Membership')}
+          className={`self-stretch flex min-h-12 items-center gap-2 whitespace-nowrap justify-center my-auto px-4 py-[13px] ${
+            activeNav === 'Membership' 
+              ? 'text-[#58C0D7] font-semibold' 
+              : 'text-[rgba(40,40,40,1)] font-normal'
+          }`}
+        >
+          Membership
+        </a>
+        {['About us', 'Contact us'].map((item) => (
           <button
             key={item}
             onClick={() => setActiveNav(item)}
