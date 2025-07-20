@@ -14,12 +14,101 @@ export type Database = {
   }
   public: {
     Tables: {
+      freelancers: {
+        Row: {
+          business_name: string | null
+          contact_phone: string | null
+          created_at: string
+          hourly_rate: number | null
+          id: string
+          is_active: boolean | null
+          rating: number | null
+          service_areas: string[]
+          services_offered: string[]
+          total_jobs: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          business_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          hourly_rate?: number | null
+          id?: string
+          is_active?: boolean | null
+          rating?: number | null
+          service_areas?: string[]
+          services_offered?: string[]
+          total_jobs?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          business_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          hourly_rate?: number | null
+          id?: string
+          is_active?: boolean | null
+          rating?: number | null
+          service_areas?: string[]
+          services_offered?: string[]
+          total_jobs?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      order_assignments: {
+        Row: {
+          accepted_at: string | null
+          assigned_at: string
+          created_at: string
+          freelancer_id: string
+          id: string
+          order_id: string
+          rejected_at: string | null
+          status: string | null
+        }
+        Insert: {
+          accepted_at?: string | null
+          assigned_at?: string
+          created_at?: string
+          freelancer_id: string
+          id?: string
+          order_id: string
+          rejected_at?: string | null
+          status?: string | null
+        }
+        Update: {
+          accepted_at?: string | null
+          assigned_at?: string
+          created_at?: string
+          freelancer_id?: string
+          id?: string
+          order_id?: string
+          rejected_at?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_assignments_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orders: {
         Row: {
           amount: number
+          assigned_freelancer_id: string | null
+          assignment_status: string | null
           created_at: string
           currency: string | null
           customer_email: string
+          customer_zip_code: string | null
           id: string
           is_guest_order: boolean | null
           service_description: string | null
@@ -31,9 +120,12 @@ export type Database = {
         }
         Insert: {
           amount: number
+          assigned_freelancer_id?: string | null
+          assignment_status?: string | null
           created_at?: string
           currency?: string | null
           customer_email: string
+          customer_zip_code?: string | null
           id?: string
           is_guest_order?: boolean | null
           service_description?: string | null
@@ -45,9 +137,12 @@ export type Database = {
         }
         Update: {
           amount?: number
+          assigned_freelancer_id?: string | null
+          assignment_status?: string | null
           created_at?: string
           currency?: string | null
           customer_email?: string
+          customer_zip_code?: string | null
           id?: string
           is_guest_order?: boolean | null
           service_description?: string | null
@@ -100,7 +195,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      auto_assign_order: {
+        Args: { order_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

@@ -9,6 +9,7 @@ import ServiceBooking from "./pages/ServiceBooking";
 import Membership from "./pages/Membership";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import SubscriptionSuccess from "./pages/SubscriptionSuccess";
+import FreelancerProfile from "./pages/FreelancerProfile";
 import CustomerDashboard from "./pages/CustomerDashboard";
 import FreelancerDashboard from "./pages/FreelancerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/membership" element={<Membership />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/subscription-success" element={<SubscriptionSuccess />} />
+          <Route path="/freelancer-profile" element={<FreelancerProfile />} />
           <Route path="/customer/*" element={<CustomerDashboard />} />
           <Route path="/freelancer/*" element={<FreelancerDashboard />} />
           <Route path="/admin/*" element={<AdminDashboard />} />

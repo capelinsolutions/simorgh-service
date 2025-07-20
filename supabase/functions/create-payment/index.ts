@@ -13,7 +13,7 @@ serve(async (req) => {
   }
 
   try {
-    const { serviceName, serviceDescription, amount, isGuest, customerEmail } = await req.json();
+    const { serviceName, serviceDescription, amount, isGuest, customerEmail, zipCode } = await req.json();
 
     // Create Supabase client using service role key to bypass RLS
     const supabaseClient = createClient(
@@ -78,16 +78,34 @@ serve(async (req) => {
     });
 
     // Record the order in database
-    await supabaseClient.from("orders").insert({
+    const { data: orderData, error: orderError } = await supabaseClient.from("orders").insert({
       user_id: user?.id || null,
       customer_email: email,
+      customer_zip_code: zipCode,
       service_name: serviceName,
       service_description: serviceDescription,
       stripe_session_id: session.id,
       amount,
       status: "pending",
+      assignment_status: "pending",
       is_guest_order: isGuest,
-    });
+    }).select().single();
+
+    if (orderError) {
+      console.error("Failed to create order:", orderError);
+    } else if (orderData && zipCode) {
+      // Trigger auto-assignment if zip code is provided
+      try {
+        console.log("Triggering auto-assignment for order:", orderData.id);
+        const assignmentResponse = await supabaseClient.functions.invoke('auto-assign-order', {
+          body: { orderId: orderData.id }
+        });
+        console.log("Auto-assignment response:", assignmentResponse);
+      } catch (assignError) {
+        console.error("Auto-assignment failed:", assignError);
+        // Don't fail the payment if assignment fails
+      }
+    }
 
     return new Response(JSON.stringify({ url: session.url }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

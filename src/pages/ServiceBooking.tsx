@@ -17,6 +17,7 @@ const ServiceBooking = () => {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [isGuest, setIsGuest] = useState(false);
   const [guestEmail, setGuestEmail] = useState('');
+  const [zipCode, setZipCode] = useState('');
   const [specialRequests, setSpecialRequests] = useState('');
   const [loading, setLoading] = useState(false);
   const [filteredServices, setFilteredServices] = useState(services);
@@ -74,10 +75,19 @@ const ServiceBooking = () => {
       return;
     }
 
-    if (isGuest && !guestEmail) {
+    if (isGuest && (!guestEmail || !zipCode)) {
       toast({
-        title: "Email required",
-        description: "Please provide your email address.",
+        title: "Information required",
+        description: "Please provide your email address and zip code.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!isGuest && !zipCode) {
+      toast({
+        title: "Zip code required",
+        description: "Please provide your zip code for service assignment.",
         variant: "destructive"
       });
       return;
@@ -93,6 +103,7 @@ const ServiceBooking = () => {
           amount: selectedService.regularPrice * 100, // Convert to cents
           isGuest,
           customerEmail: isGuest ? guestEmail : user?.email,
+          zipCode: zipCode,
         },
         headers: session ? {
           Authorization: `Bearer ${session.access_token}`,
@@ -234,20 +245,38 @@ const ServiceBooking = () => {
                         </div>
                         
                         {isGuest && (
-                          <div className="space-y-2">
-                            <Label htmlFor="guest-email">Email Address</Label>
-                            <Input
-                              id="guest-email"
-                              type="email"
-                              placeholder="your@email.com"
-                              value={guestEmail}
-                              onChange={(e) => setGuestEmail(e.target.value)}
-                              required
-                            />
-                          </div>
+                          <>
+                            <div className="space-y-2">
+                              <Label htmlFor="guest-email">Email Address</Label>
+                              <Input
+                                id="guest-email"
+                                type="email"
+                                placeholder="your@email.com"
+                                value={guestEmail}
+                                onChange={(e) => setGuestEmail(e.target.value)}
+                                required
+                              />
+                            </div>
+                          </>
                         )}
                       </div>
                     )}
+
+                    <div className="space-y-2">
+                      <Label htmlFor="zip-code">Zip Code</Label>
+                      <Input
+                        id="zip-code"
+                        type="text"
+                        placeholder="Enter your zip code"
+                        value={zipCode}
+                        onChange={(e) => setZipCode(e.target.value)}
+                        required
+                        maxLength={10}
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Required for automatic freelancer assignment
+                      </p>
+                    </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="special-requests">
@@ -265,7 +294,7 @@ const ServiceBooking = () => {
 
                     <Button
                       onClick={handleBookService}
-                      disabled={loading || (!user && (!isGuest || !guestEmail))}
+                      disabled={loading || (!user && (!isGuest || !guestEmail || !zipCode)) || (!zipCode)}
                       className="w-full"
                       size="lg"
                     >
