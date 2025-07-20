@@ -45,7 +45,7 @@ const Header = () => {
               : 'text-[rgba(40,40,40,1)] font-normal'
           }`}
         >
-          Membership
+          Pricing
         </a>
         {['About us', 'Contact us'].map((item) => (
           <button

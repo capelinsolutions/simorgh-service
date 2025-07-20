@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import AuthPage from "./pages/AuthPage";
 import ServiceBooking from "./pages/ServiceBooking";
-import Membership from "./pages/Membership";
+import MembershipPlans from "./pages/MembershipPlans";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import SubscriptionSuccess from "./pages/SubscriptionSuccess";
 import FreelancerProfile from "./pages/FreelancerProfile";
@@ -27,7 +27,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/service-booking" element={<ServiceBooking />} />
-          <Route path="/membership" element={<Membership />} />
+          <Route path="/membership" element={<MembershipPlans />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/subscription-success" element={<SubscriptionSuccess />} />
           <Route path="/freelancer-profile" element={<FreelancerProfile />} />

@@ -79,11 +79,24 @@ serve(async (req) => {
       const price = await stripe.prices.retrieve(priceId);
       const amount = price.unit_amount || 0;
       
-      if (amount <= 2999) {
+      // Map amounts to subscription tiers
+      if (amount === 1900) {
+        subscriptionTier = "Freelancer Basic";
+      } else if (amount === 2900) {
         subscriptionTier = "Basic";
-      } else {
+      } else if (amount === 3900) {
+        subscriptionTier = "Freelancer Pro";
+      } else if (amount === 4900) {
         subscriptionTier = "Premium";
+      } else if (amount === 7900) {
+        subscriptionTier = "Freelancer Enterprise";
       }
+    }
+
+    // Determine membership type based on tier
+    let membershipType = 'customer';
+    if (subscriptionTier?.startsWith('Freelancer')) {
+      membershipType = 'freelancer';
     }
 
     // Update subscriber record
@@ -94,6 +107,7 @@ serve(async (req) => {
       subscribed: hasActiveSub,
       subscription_tier: subscriptionTier,
       subscription_end: subscriptionEnd,
+      membership_type: membershipType,
       updated_at: new Date().toISOString(),
     }, { onConflict: 'email' });
 
@@ -101,6 +115,7 @@ serve(async (req) => {
       subscribed: hasActiveSub,
       subscription_tier: subscriptionTier,
       subscription_end: subscriptionEnd,
+      membership_type: membershipType,
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,

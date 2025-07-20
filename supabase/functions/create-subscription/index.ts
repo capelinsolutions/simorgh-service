@@ -13,7 +13,7 @@ serve(async (req) => {
   }
 
   try {
-    const { tier } = await req.json(); // "Basic" or "Premium"
+    const { tier, membershipType = 'customer' } = await req.json(); // "Basic", "Premium", "Freelancer Basic", etc.
 
     // Create Supabase client using anon key for user auth
     const supabaseClient = createClient(
@@ -44,10 +44,15 @@ serve(async (req) => {
       customerId = customers.data[0].id;
     }
 
-    // Define pricing based on tier
+    // Define pricing based on tier and membership type
     const pricing = {
-      Basic: 2900, // $29/month
-      Premium: 4900, // $49/month
+      // Customer plans
+      'Basic': 2900, // $29/month
+      'Premium': 4900, // $49/month
+      // Freelancer plans
+      'Freelancer Basic': 1900, // $19/month
+      'Freelancer Pro': 3900, // $39/month
+      'Freelancer Enterprise': 7900, // $79/month
     };
 
     const amount = pricing[tier as keyof typeof pricing];
@@ -65,7 +70,7 @@ serve(async (req) => {
             currency: "usd",
             product_data: {
               name: `${tier} Membership`,
-              description: `Monthly ${tier} subscription`,
+              description: `Monthly ${tier} subscription for ${membershipType}s`,
             },
             unit_amount: amount,
             recurring: { interval: "month" },
