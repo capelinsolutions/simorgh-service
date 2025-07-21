@@ -88,6 +88,75 @@ export type Database = {
           },
         ]
       }
+      cleaner_earnings: {
+        Row: {
+          amount: number
+          cleaner_id: string
+          created_at: string
+          currency: string | null
+          id: string
+          order_id: string
+          paid_at: string | null
+          status: string | null
+          stripe_transfer_id: string | null
+        }
+        Insert: {
+          amount: number
+          cleaner_id: string
+          created_at?: string
+          currency?: string | null
+          id?: string
+          order_id: string
+          paid_at?: string | null
+          status?: string | null
+          stripe_transfer_id?: string | null
+        }
+        Update: {
+          amount?: number
+          cleaner_id?: string
+          created_at?: string
+          currency?: string | null
+          id?: string
+          order_id?: string
+          paid_at?: string | null
+          status?: string | null
+          stripe_transfer_id?: string | null
+        }
+        Relationships: []
+      }
+      cleaner_notifications: {
+        Row: {
+          cleaner_id: string
+          created_at: string
+          id: string
+          is_read: boolean | null
+          message: string
+          related_id: string | null
+          title: string
+          type: string
+        }
+        Insert: {
+          cleaner_id: string
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message: string
+          related_id?: string | null
+          title: string
+          type?: string
+        }
+        Update: {
+          cleaner_id?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          related_id?: string | null
+          title?: string
+          type?: string
+        }
+        Relationships: []
+      }
       communications: {
         Row: {
           created_at: string
@@ -213,46 +282,70 @@ export type Database = {
       }
       freelancers: {
         Row: {
+          availability: Json | null
+          bio: string | null
           business_name: string | null
+          certifications: string[] | null
           contact_phone: string | null
           created_at: string
+          documents: Json | null
+          experience_years: number | null
           hourly_rate: number | null
           id: string
           is_active: boolean | null
+          profile_image_url: string | null
           rating: number | null
           service_areas: string[]
           services_offered: string[]
+          stripe_account_id: string | null
           total_jobs: number | null
           updated_at: string
           user_id: string
+          verification_status: string | null
         }
         Insert: {
+          availability?: Json | null
+          bio?: string | null
           business_name?: string | null
+          certifications?: string[] | null
           contact_phone?: string | null
           created_at?: string
+          documents?: Json | null
+          experience_years?: number | null
           hourly_rate?: number | null
           id?: string
           is_active?: boolean | null
+          profile_image_url?: string | null
           rating?: number | null
           service_areas?: string[]
           services_offered?: string[]
+          stripe_account_id?: string | null
           total_jobs?: number | null
           updated_at?: string
           user_id: string
+          verification_status?: string | null
         }
         Update: {
+          availability?: Json | null
+          bio?: string | null
           business_name?: string | null
+          certifications?: string[] | null
           contact_phone?: string | null
           created_at?: string
+          documents?: Json | null
+          experience_years?: number | null
           hourly_rate?: number | null
           id?: string
           is_active?: boolean | null
+          profile_image_url?: string | null
           rating?: number | null
           service_areas?: string[]
           services_offered?: string[]
+          stripe_account_id?: string | null
           total_jobs?: number | null
           updated_at?: string
           user_id?: string
+          verification_status?: string | null
         }
         Relationships: []
       }

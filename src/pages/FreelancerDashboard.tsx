@@ -6,6 +6,7 @@ import ActiveJobs from '@/components/freelancer/ActiveJobs';
 import JobHistory from '@/components/freelancer/JobHistory';
 import FreelancerProfile from '@/components/freelancer/FreelancerProfile';
 import FreelancerSidebar from '@/components/freelancer/FreelancerSidebar';
+import CleanerNotifications from '@/components/freelancer/CleanerNotifications';
 
 const FreelancerDashboard = () => {
   return (
@@ -18,6 +19,7 @@ const FreelancerDashboard = () => {
             <Route index element={<ActiveJobs />} />
             <Route path="history" element={<JobHistory />} />
             <Route path="profile" element={<FreelancerProfile />} />
+            <Route path="notifications" element={<CleanerNotifications />} />
           </Routes>
         </main>
       </div>
