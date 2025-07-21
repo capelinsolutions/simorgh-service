@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import ServiceBooking from '@/components/customer/ServiceBooking';
 import MyBookings from '@/components/customer/MyBookings';
 import Membership from '@/components/customer/Membership';
+import CustomerProfile from '@/components/customer/CustomerProfile';
 import CustomerSidebar from '@/components/customer/CustomerSidebar';
 
 const CustomerDashboard = () => {
@@ -18,6 +19,7 @@ const CustomerDashboard = () => {
             <Route index element={<ServiceBooking />} />
             <Route path="bookings" element={<MyBookings />} />
             <Route path="membership" element={<Membership />} />
+            <Route path="profile" element={<CustomerProfile />} />
           </Routes>
         </main>
       </div>
