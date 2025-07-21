@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Calendar, User, CreditCard } from 'lucide-react';
+import { Calendar, User, CreditCard, UserCircle, Bell, Star } from 'lucide-react';
 
 const CustomerSidebar = () => {
   return (
@@ -42,6 +42,39 @@ const CustomerSidebar = () => {
         >
           <CreditCard className="mr-3 h-5 w-5" />
           Membership
+        </NavLink>
+        <NavLink
+          to="/customer/profile"
+          className={({ isActive }) =>
+            `flex items-center px-6 py-3 text-sm font-medium ${
+              isActive ? 'bg-[#58C0D7] text-white' : 'text-gray-600 hover:bg-gray-50'
+            }`
+          }
+        >
+          <UserCircle className="mr-3 h-5 w-5" />
+          My Profile
+        </NavLink>
+        <NavLink
+          to="/customer/notifications"
+          className={({ isActive }) =>
+            `flex items-center px-6 py-3 text-sm font-medium ${
+              isActive ? 'bg-[#58C0D7] text-white' : 'text-gray-600 hover:bg-gray-50'
+            }`
+          }
+        >
+          <Bell className="mr-3 h-5 w-5" />
+          Notifications
+        </NavLink>
+        <NavLink
+          to="/customer/testimonials"
+          className={({ isActive }) =>
+            `flex items-center px-6 py-3 text-sm font-medium ${
+              isActive ? 'bg-[#58C0D7] text-white' : 'text-gray-600 hover:bg-gray-50'
+            }`
+          }
+        >
+          <Star className="mr-3 h-5 w-5" />
+          Testimonials
         </NavLink>
       </nav>
     </div>

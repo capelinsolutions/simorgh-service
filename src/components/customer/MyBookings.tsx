@@ -6,10 +6,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { 
-  Calendar, 
+  Calendar as CalendarIcon, 
   Clock, 
   MapPin, 
   Star, 
@@ -18,7 +20,11 @@ import {
   CreditCard,
   AlertCircle,
   CheckCircle,
-  XCircle
+  XCircle,
+  Edit3,
+  CalendarX,
+  Receipt,
+  Download
 } from 'lucide-react';
 
 interface Booking {
@@ -51,8 +57,16 @@ const MyBookings = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [reviewDialog, setReviewDialog] = useState<string | null>(null);
+  const [rescheduleDialog, setRescheduleDialog] = useState<string | null>(null);
+  const [invoiceDialog, setInvoiceDialog] = useState<string | null>(null);
   const [review, setReview] = useState<Review>({ rating: 5, review_text: '' });
+  const [rescheduleData, setRescheduleData] = useState({
+    date: undefined as Date | undefined,
+    time: '',
+    reason: ''
+  });
   const [submittingReview, setSubmittingReview] = useState(false);
+  const [processingReschedule, setProcessingReschedule] = useState(false);
 
   const { toast } = useToast();
 
@@ -143,6 +157,182 @@ const MyBookings = () => {
     });
   };
 
+  const timeSlots = [
+    '08:00', '09:00', '10:00', '11:00', '12:00',
+    '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'
+  ];
+
+  const canReschedule = (booking: Booking) => {
+    if (!booking.preferred_date) return false;
+    const bookingDate = new Date(booking.preferred_date);
+    const now = new Date();
+    const timeDiff = bookingDate.getTime() - now.getTime();
+    const hoursDiff = timeDiff / (1000 * 60 * 60);
+    return hoursDiff > 24 && ['pending', 'paid', 'assigned'].includes(booking.status);
+  };
+
+  const canCancel = (booking: Booking) => {
+    return ['pending', 'paid', 'assigned'].includes(booking.status);
+  };
+
+  const handleReschedule = async (bookingId: string) => {
+    if (!rescheduleData.date || !rescheduleData.time) {
+      toast({
+        title: "Missing Information",
+        description: "Please select both date and time.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setProcessingReschedule(true);
+    try {
+      const { error } = await supabase
+        .from('orders')
+        .update({
+          preferred_date: rescheduleData.date.toISOString().split('T')[0],
+          preferred_time: rescheduleData.time,
+          admin_notes: `Rescheduled by customer. Reason: ${rescheduleData.reason}`,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', bookingId);
+
+      if (error) throw error;
+
+      // Create notification for customer
+      await supabase
+        .from('notifications')
+        .insert({
+          user_id: user.id,
+          title: 'Booking Rescheduled',
+          message: `Your booking has been rescheduled to ${formatDate(rescheduleData.date.toISOString())} at ${formatTime(rescheduleData.time)}.`,
+          type: 'booking',
+          related_id: bookingId
+        });
+
+      toast({
+        title: "Booking Rescheduled",
+        description: "Your booking has been rescheduled successfully.",
+      });
+
+      setRescheduleDialog(null);
+      setRescheduleData({ date: undefined, time: '', reason: '' });
+      loadBookings(); // Refresh bookings
+    } catch (error) {
+      console.error('Error rescheduling booking:', error);
+      toast({
+        title: "Error",
+        description: "Failed to reschedule booking. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setProcessingReschedule(false);
+    }
+  };
+
+  const handleCancel = async (bookingId: string) => {
+    if (!confirm('Are you sure you want to cancel this booking? This action cannot be undone.')) return;
+
+    try {
+      const { error } = await supabase
+        .from('orders')
+        .update({
+          status: 'cancelled',
+          admin_notes: 'Cancelled by customer',
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', bookingId);
+
+      if (error) throw error;
+
+      // Create notification for customer
+      await supabase
+        .from('notifications')
+        .insert({
+          user_id: user.id,
+          title: 'Booking Cancelled',
+          message: 'Your booking has been cancelled. You will receive a refund within 3-5 business days.',
+          type: 'booking',
+          related_id: bookingId
+        });
+
+      toast({
+        title: "Booking Cancelled",
+        description: "Your booking has been cancelled successfully.",
+      });
+
+      loadBookings(); // Refresh bookings
+    } catch (error) {
+      console.error('Error cancelling booking:', error);
+      toast({
+        title: "Error",
+        description: "Failed to cancel booking. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const generateInvoice = (booking: Booking) => {
+    const invoiceData = {
+      invoiceNumber: `INV-${booking.id.slice(-8).toUpperCase()}`,
+      date: new Date(booking.created_at).toLocaleDateString(),
+      dueDate: booking.preferred_date || 'TBD',
+      service: booking.service_name,
+      description: booking.service_description,
+      duration: booking.duration_hours,
+      amount: booking.amount,
+      originalAmount: booking.original_amount,
+      hasMembershipDiscount: booking.has_membership_discount,
+      addons: booking.selected_addons,
+      customerEmail: booking.customer_email,
+      zipCode: booking.customer_zip_code
+    };
+
+    return invoiceData;
+  };
+
+  const downloadInvoice = (booking: Booking) => {
+    const invoice = generateInvoice(booking);
+    const invoiceText = `
+INVOICE #${invoice.invoiceNumber}
+
+Date: ${invoice.date}
+Service Date: ${invoice.dueDate}
+Customer: ${invoice.customerEmail}
+
+Service: ${invoice.service}
+Description: ${invoice.description}
+Duration: ${invoice.duration} hours
+Location: ZIP ${invoice.zipCode}
+
+${invoice.hasMembershipDiscount && invoice.originalAmount ? 
+  `Subtotal: $${(invoice.originalAmount / 100).toFixed(2)}
+Membership Discount (50%): -$${((invoice.originalAmount - invoice.amount) / 100).toFixed(2)}` : ''}
+Total: $${(invoice.amount / 100).toFixed(2)}
+
+Thank you for choosing our service!
+    `.trim();
+
+    const blob = new Blob([invoiceText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `invoice-${invoice.invoiceNumber}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const formatTime = (timeString: string) => {
+    if (!timeString) return 'Not set';
+    return new Date(`2000-01-01T${timeString}`).toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+  };
+
   const handleReviewSubmit = async (bookingId: string) => {
     if (!user || !review.rating) {
       toast({
@@ -212,7 +402,7 @@ const MyBookings = () => {
       {bookings.length === 0 ? (
         <Card>
           <CardContent className="p-12 text-center">
-            <Calendar className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+            <CalendarIcon className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <h3 className="text-lg font-semibold mb-2">No bookings yet</h3>
             <p className="text-muted-foreground mb-4">
               Book your first cleaning service to get started!
@@ -243,7 +433,7 @@ const MyBookings = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                       <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-muted-foreground" />
+                        <CalendarIcon className="h-4 w-4 text-muted-foreground" />
                         <span>{booking.preferred_date ? formatDate(booking.preferred_date) : 'Date TBD'}</span>
                       </div>
                       <div className="flex items-center gap-2">
@@ -299,68 +489,244 @@ const MyBookings = () => {
                       Booked: {formatDate(booking.created_at)}
                     </div>
 
-                    {booking.status === 'completed' && (
-                      <Dialog open={reviewDialog === booking.id} onOpenChange={(open) => 
-                        setReviewDialog(open ? booking.id : null)
-                      }>
-                        <DialogTrigger asChild>
-                          <Button variant="outline" size="sm" className="w-full lg:w-auto">
-                            <Star className="h-4 w-4 mr-2" />
-                            Leave Review
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Rate Your Experience</DialogTitle>
-                          </DialogHeader>
-                          <div className="space-y-4">
-                            <div>
-                              <Label>Rating</Label>
-                              <Select 
-                                value={review.rating.toString()} 
-                                onValueChange={(value) => setReview(prev => ({ ...prev, rating: parseInt(value) }))}
-                              >
-                                <SelectTrigger>
-                                  <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {[5, 4, 3, 2, 1].map(rating => (
-                                    <SelectItem key={rating} value={rating.toString()}>
-                                      {'⭐'.repeat(rating)} ({rating} star{rating !== 1 ? 's' : ''})
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
+                    <div className="flex flex-wrap gap-2">
+                      {/* Reschedule Button */}
+                      {canReschedule(booking) && (
+                        <Dialog open={rescheduleDialog === booking.id} onOpenChange={(open) => 
+                          setRescheduleDialog(open ? booking.id : null)
+                        }>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" size="sm">
+                              <Edit3 className="h-4 w-4 mr-2" />
+                              Reschedule
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-md">
+                            <DialogHeader>
+                              <DialogTitle>Reschedule Booking</DialogTitle>
+                            </DialogHeader>
+                            <div className="space-y-4">
+                              <div>
+                                <Label>New Date</Label>
+                                <Popover>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      className="w-full justify-start text-left font-normal"
+                                    >
+                                      <CalendarIcon className="mr-2 h-4 w-4" />
+                                      {rescheduleData.date ? 
+                                        formatDate(rescheduleData.date.toISOString()) : 
+                                        "Pick a date"
+                                      }
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-auto p-0">
+                                    <Calendar
+                                      mode="single"
+                                      selected={rescheduleData.date}
+                                      onSelect={(date) => setRescheduleData(prev => ({ ...prev, date }))}
+                                      disabled={(date) => date < new Date()}
+                                    />
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
+                              <div>
+                                <Label>New Time</Label>
+                                <Select 
+                                  value={rescheduleData.time} 
+                                  onValueChange={(time) => setRescheduleData(prev => ({ ...prev, time }))}
+                                >
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select time" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {timeSlots.map(time => (
+                                      <SelectItem key={time} value={time}>
+                                        {formatTime(time)}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div>
+                                <Label>Reason (Optional)</Label>
+                                <Textarea
+                                  placeholder="Why are you rescheduling?"
+                                  value={rescheduleData.reason}
+                                  onChange={(e) => setRescheduleData(prev => ({ ...prev, reason: e.target.value }))}
+                                  rows={3}
+                                />
+                              </div>
+                              <div className="flex gap-2">
+                                <Button 
+                                  onClick={() => handleReschedule(booking.id)}
+                                  disabled={processingReschedule}
+                                  className="flex-1"
+                                >
+                                  {processingReschedule ? 'Rescheduling...' : 'Reschedule'}
+                                </Button>
+                                <Button 
+                                  variant="outline" 
+                                  onClick={() => setRescheduleDialog(null)}
+                                  className="flex-1"
+                                >
+                                  Cancel
+                                </Button>
+                              </div>
                             </div>
-                            <div>
-                              <Label>Review (Optional)</Label>
-                              <Textarea
-                                placeholder="Share your experience with this cleaning service..."
-                                value={review.review_text}
-                                onChange={(e) => setReview(prev => ({ ...prev, review_text: e.target.value }))}
-                                rows={4}
-                              />
+                          </DialogContent>
+                        </Dialog>
+                      )}
+
+                      {/* Cancel Button */}
+                      {canCancel(booking) && (
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => handleCancel(booking.id)}
+                        >
+                          <CalendarX className="h-4 w-4 mr-2" />
+                          Cancel
+                        </Button>
+                      )}
+
+                      {/* Invoice Button */}
+                      {booking.status === 'paid' || booking.status === 'completed' ? (
+                        <Dialog open={invoiceDialog === booking.id} onOpenChange={(open) => 
+                          setInvoiceDialog(open ? booking.id : null)
+                        }>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" size="sm">
+                              <Receipt className="h-4 w-4 mr-2" />
+                              Invoice
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-lg">
+                            <DialogHeader>
+                              <DialogTitle>Invoice Details</DialogTitle>
+                            </DialogHeader>
+                            <div className="space-y-4">
+                              {(() => {
+                                const invoice = generateInvoice(booking);
+                                return (
+                                  <div className="space-y-4">
+                                    <div className="grid grid-cols-2 gap-4 text-sm">
+                                      <div>
+                                        <strong>Invoice #:</strong> {invoice.invoiceNumber}
+                                      </div>
+                                      <div>
+                                        <strong>Date:</strong> {invoice.date}
+                                      </div>
+                                      <div>
+                                        <strong>Service:</strong> {invoice.service}
+                                      </div>
+                                      <div>
+                                        <strong>Duration:</strong> {invoice.duration}h
+                                      </div>
+                                    </div>
+                                    
+                                    <div className="border-t pt-4">
+                                      <h4 className="font-medium mb-2">Amount Breakdown</h4>
+                                      <div className="space-y-1 text-sm">
+                                        {invoice.hasMembershipDiscount && invoice.originalAmount ? (
+                                          <>
+                                            <div className="flex justify-between">
+                                              <span>Subtotal:</span>
+                                              <span>${(invoice.originalAmount / 100).toFixed(2)}</span>
+                                            </div>
+                                            <div className="flex justify-between text-green-600">
+                                              <span>Membership Discount (50%):</span>
+                                              <span>-${((invoice.originalAmount - invoice.amount) / 100).toFixed(2)}</span>
+                                            </div>
+                                          </>
+                                        ) : null}
+                                        <div className="flex justify-between font-medium text-lg border-t pt-2">
+                                          <span>Total:</span>
+                                          <span>${(invoice.amount / 100).toFixed(2)}</span>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <Button 
+                                      onClick={() => downloadInvoice(booking)}
+                                      className="w-full"
+                                    >
+                                      <Download className="h-4 w-4 mr-2" />
+                                      Download Invoice
+                                    </Button>
+                                  </div>
+                                );
+                              })()}
                             </div>
-                            <div className="flex gap-2">
-                              <Button 
-                                onClick={() => handleReviewSubmit(booking.id)}
-                                disabled={submittingReview}
-                                className="flex-1"
-                              >
-                                {submittingReview ? 'Submitting...' : 'Submit Review'}
-                              </Button>
-                              <Button 
-                                variant="outline" 
-                                onClick={() => setReviewDialog(null)}
-                                className="flex-1"
-                              >
-                                Cancel
-                              </Button>
+                          </DialogContent>
+                        </Dialog>
+                      ) : null}
+
+                      {/* Review Button */}
+                      {booking.status === 'completed' && (
+                        <Dialog open={reviewDialog === booking.id} onOpenChange={(open) => 
+                          setReviewDialog(open ? booking.id : null)
+                        }>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" size="sm">
+                              <Star className="h-4 w-4 mr-2" />
+                              Review
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Rate Your Experience</DialogTitle>
+                            </DialogHeader>
+                            <div className="space-y-4">
+                              <div>
+                                <Label>Rating</Label>
+                                <Select 
+                                  value={review.rating.toString()} 
+                                  onValueChange={(value) => setReview(prev => ({ ...prev, rating: parseInt(value) }))}
+                                >
+                                  <SelectTrigger>
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {[5, 4, 3, 2, 1].map(rating => (
+                                      <SelectItem key={rating} value={rating.toString()}>
+                                        {'⭐'.repeat(rating)} ({rating} star{rating !== 1 ? 's' : ''})
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div>
+                                <Label>Review (Optional)</Label>
+                                <Textarea
+                                  placeholder="Share your experience with this cleaning service..."
+                                  value={review.review_text}
+                                  onChange={(e) => setReview(prev => ({ ...prev, review_text: e.target.value }))}
+                                  rows={4}
+                                />
+                              </div>
+                              <div className="flex gap-2">
+                                <Button 
+                                  onClick={() => handleReviewSubmit(booking.id)}
+                                  disabled={submittingReview}
+                                  className="flex-1"
+                                >
+                                  {submittingReview ? 'Submitting...' : 'Submit Review'}
+                                </Button>
+                                <Button 
+                                  variant="outline" 
+                                  onClick={() => setReviewDialog(null)}
+                                  className="flex-1"
+                                >
+                                  Cancel
+                                </Button>
+                              </div>
                             </div>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    )}
+                          </DialogContent>
+                        </Dialog>
+                      )}
+                    </div>
                   </div>
                 </div>
               </CardContent>
