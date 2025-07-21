@@ -17,7 +17,7 @@ import {
   User, 
   Calendar,
   Trash2,
-  MarkAsUnread
+  Mail
 } from 'lucide-react';
 
 interface Notification {
@@ -375,7 +375,7 @@ const CustomerNotifications = () => {
                           size="sm"
                           onClick={() => markAsUnread(notification.id)}
                         >
-                          <MarkAsUnread className="h-4 w-4" />
+                          <Mail className="h-4 w-4" />
                         </Button>
                       ) : (
                         <Button

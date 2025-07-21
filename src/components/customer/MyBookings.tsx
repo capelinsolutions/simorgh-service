@@ -284,7 +284,7 @@ const MyBookings = () => {
       originalAmount: booking.original_amount,
       hasMembershipDiscount: booking.has_membership_discount,
       addons: booking.selected_addons,
-      customerEmail: booking.customer_email,
+      customerEmail: user?.email || 'N/A',
       zipCode: booking.customer_zip_code
     };
 
@@ -324,14 +324,6 @@ Thank you for choosing our service!
     URL.revokeObjectURL(url);
   };
 
-  const formatTime = (timeString: string) => {
-    if (!timeString) return 'Not set';
-    return new Date(`2000-01-01T${timeString}`).toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    });
-  };
 
   const handleReviewSubmit = async (bookingId: string) => {
     if (!user || !review.rating) {
