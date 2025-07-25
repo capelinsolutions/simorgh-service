@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Header from '@/components/Header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -339,7 +340,9 @@ const MembershipPlans = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-6">
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="flex items-center justify-center p-6">
         <Card className="max-w-md mx-auto text-center">
           <CardHeader>
             <CardTitle className="flex items-center justify-center gap-2">
@@ -356,12 +359,15 @@ const MembershipPlans = () => {
             </Button>
           </CardContent>
         </Card>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background p-4 sm:p-6">
+    <div className="min-h-screen bg-background">
+      <Header />
+      <div className="p-4 sm:p-6">
       <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
         <div className="text-center space-y-4">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground">Membership Plans</h1>
@@ -568,6 +574,7 @@ const MembershipPlans = () => {
             </Card>
           </TabsContent>
         </Tabs>
+      </div>
       </div>
     </div>
   );

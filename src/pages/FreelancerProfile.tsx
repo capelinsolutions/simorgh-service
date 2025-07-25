@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Header from '@/components/Header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -174,7 +175,9 @@ const FreelancerProfile = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-6">
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="flex items-center justify-center p-6">
         <Card className="max-w-md mx-auto text-center">
           <CardHeader>
             <CardTitle>Authentication Required</CardTitle>
@@ -186,12 +189,15 @@ const FreelancerProfile = () => {
             </Button>
           </CardContent>
         </Card>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background p-6">
+    <div className="min-h-screen bg-background">
+      <Header />
+      <div className="p-6">
       <div className="max-w-4xl mx-auto space-y-8">
         <div className="flex items-center justify-between">
           <div>
@@ -431,6 +437,7 @@ const FreelancerProfile = () => {
             </ul>
           </CardContent>
         </Card>
+      </div>
       </div>
     </div>
   );

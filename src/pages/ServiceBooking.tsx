@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useSearchParams, Link } from 'react-router-dom';
+import Header from '@/components/Header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -168,38 +169,40 @@ const ServiceBooking = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-7xl mx-auto space-y-8">
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold text-foreground">Book a Service</h1>
-          <p className="text-xl text-muted-foreground">Choose from our wide range of professional services</p>
-        </div>
-
-        {/* Search and Filter */}
-        <div className="flex flex-col md:flex-row gap-4 items-center">
-          <div className="flex-1">
-            <Input
-              placeholder="Search services..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full"
-            />
+    <div className="min-h-screen bg-background">
+      <Header />
+      <div className="p-6">
+        <div className="max-w-7xl mx-auto space-y-8">
+          <div className="text-center space-y-4">
+            <h1 className="text-4xl font-bold text-foreground">Book a Service</h1>
+            <p className="text-xl text-muted-foreground">Choose from our wide range of professional services</p>
           </div>
-          <div className="flex gap-2 flex-wrap">
-            {categories.map((category) => (
-              <Button
-                key={category}
-                variant={selectedCategory === category ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSelectedCategory(category)}
-              >
-                {category}
-              </Button>
-            ))}
-          </div>
-        </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Search and Filter */}
+          <div className="flex flex-col md:flex-row gap-4 items-center">
+            <div className="flex-1">
+              <Input
+                placeholder="Search services..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full"
+              />
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              {categories.map((category) => (
+                <Button
+                  key={category}
+                  variant={selectedCategory === category ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  {category}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-8">
           {/* Services Grid */}
           <div className="lg:col-span-2">
             <div className="grid md:grid-cols-2 gap-6">
@@ -361,6 +364,7 @@ const ServiceBooking = () => {
               </CardContent>
             </Card>
           </div>
+        </div>
         </div>
       </div>
     </div>
