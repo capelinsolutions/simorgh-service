@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { services, serviceCategories } from '@/data/services';
 
 const ServicesGrid = () => {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('All Services');
   const [showAll, setShowAll] = useState(false);
+
+  const handleBookNow = (serviceId: number) => {
+    navigate(`/service-booking?selectedService=${serviceId}`);
+  };
 
   const filteredServices = selectedCategory === 'All Services' 
     ? services 
@@ -76,7 +82,10 @@ const ServicesGrid = () => {
                   {service.description}
                 </p>
                 
-                <button className="mt-4 w-full bg-[#58C0D7] text-white py-2 px-4 rounded-lg hover:bg-[#4aa8c0] transition-colors">
+                <button 
+                  onClick={() => handleBookNow(service.id)}
+                  className="mt-4 w-full bg-[#58C0D7] text-white py-2 px-4 rounded-lg hover:bg-[#4aa8c0] transition-colors"
+                >
                   Book Now
                 </button>
               </div>

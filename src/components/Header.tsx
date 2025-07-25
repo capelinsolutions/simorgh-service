@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
+  const location = useLocation();
   const [activeNav, setActiveNav] = useState('Home');
 
-  const navItems = ['Home', 'Service', 'Agencies', 'About us', 'Contact us'];
+  const getActiveClass = (path: string) => {
+    const isActive = location.pathname === path;
+    return isActive 
+      ? 'text-[#58C0D7] font-semibold' 
+      : 'text-[rgba(40,40,40,1)] font-normal';
+  };
 
   return (
     <header className="bg-white flex w-full items-center gap-[40px_100px] text-base justify-between flex-wrap px-[120px] max-md:max-w-full max-md:px-5">
@@ -14,73 +21,57 @@ const Header = () => {
       />
       
       <nav className="bg-[rgba(134,134,134,0.1)] self-stretch flex min-w-60 items-center gap-2 text-[rgba(40,40,40,1)] font-normal flex-wrap my-auto rounded-[48px] max-md:max-w-full">
-        <a
-          href="/"
-          onClick={() => setActiveNav('Home')}
-          className={`self-stretch flex min-h-12 items-center gap-2 whitespace-nowrap justify-center my-auto px-4 py-[13px] ${
-            activeNav === 'Home' 
-              ? 'text-[#58C0D7] font-semibold' 
-              : 'text-[rgba(40,40,40,1)] font-normal'
-          }`}
+        <Link
+          to="/"
+          className={`self-stretch flex min-h-12 items-center gap-2 whitespace-nowrap justify-center my-auto px-4 py-[13px] ${getActiveClass('/')}`}
         >
           Home
-        </a>
-        <a
-          href="/service-booking"
-          onClick={() => setActiveNav('Services')}
-          className={`self-stretch flex min-h-12 items-center gap-2 whitespace-nowrap justify-center my-auto px-4 py-[13px] ${
-            activeNav === 'Services' 
-              ? 'text-[#58C0D7] font-semibold' 
-              : 'text-[rgba(40,40,40,1)] font-normal'
-          }`}
+        </Link>
+        <Link
+          to="/service-booking"
+          className={`self-stretch flex min-h-12 items-center gap-2 whitespace-nowrap justify-center my-auto px-4 py-[13px] ${getActiveClass('/service-booking')}`}
         >
           Services
-        </a>
-        <a
-          href="/membership"
-          onClick={() => setActiveNav('Membership')}
-          className={`self-stretch flex min-h-12 items-center gap-2 whitespace-nowrap justify-center my-auto px-4 py-[13px] ${
-            activeNav === 'Membership' 
-              ? 'text-[#58C0D7] font-semibold' 
-              : 'text-[rgba(40,40,40,1)] font-normal'
-          }`}
+        </Link>
+        <Link
+          to="/membership"
+          className={`self-stretch flex min-h-12 items-center gap-2 whitespace-nowrap justify-center my-auto px-4 py-[13px] ${getActiveClass('/membership')}`}
         >
           Pricing
-        </a>
-        {['About us', 'Contact us'].map((item) => (
-          <button
-            key={item}
-            onClick={() => setActiveNav(item)}
-            className={`self-stretch flex min-h-12 items-center gap-2 whitespace-nowrap justify-center my-auto px-4 py-[13px] ${
-              activeNav === item 
-                ? 'text-[#58C0D7] font-semibold' 
-                : 'text-[rgba(40,40,40,1)] font-normal'
-            }`}
+        </Link>
+        {[
+          { name: 'About us', href: '#about' },
+          { name: 'Contact us', href: '#contact' }
+        ].map((item) => (
+          <a
+            key={item.name}
+            href={item.href}
+            className="self-stretch flex min-h-12 items-center gap-2 whitespace-nowrap justify-center my-auto px-4 py-[13px] text-[rgba(40,40,40,1)] font-normal hover:text-[#58C0D7] transition-colors"
           >
-            {item}
-          </button>
+            {item.name}
+          </a>
         ))}
       </nav>
 
       <div className="self-stretch flex items-center gap-2 font-semibold whitespace-nowrap w-[280px] my-auto">
-        <a 
-          href="/auth" 
+        <Link 
+          to="/auth" 
           className="justify-center items-center rounded border self-stretch flex min-h-12 gap-2 text-[#58C0D7] w-[97px] my-auto px-4 py-[13px] border-solid border-[#58C0D7] hover:bg-[#58C0D7] hover:text-white transition-colors"
         >
           Login
-        </a>
-        <a 
-          href="/auth" 
+        </Link>
+        <Link 
+          to="/auth" 
           className="justify-center items-center rounded self-stretch flex min-h-12 gap-2 text-white w-[127px] bg-[#58C0D7] my-auto px-4 py-[13px] hover:bg-[#4aa8c0] transition-colors"
         >
           Register
-        </a>
-        <a 
-          href="/admin" 
+        </Link>
+        <Link 
+          to="/admin" 
           className="justify-center items-center rounded border self-stretch flex min-h-12 gap-2 text-[#666] w-[56px] my-auto px-2 py-[13px] border-solid border-[#666] hover:bg-[#666] hover:text-white transition-colors text-xs"
         >
           Admin
-        </a>
+        </Link>
       </div>
     </header>
   );

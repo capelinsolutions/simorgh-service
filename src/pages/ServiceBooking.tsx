@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useSearchParams, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -12,6 +13,7 @@ import { ShoppingCart, CreditCard, User, Mail, MessageCircle } from 'lucide-reac
 import type { User as SupabaseUser, Session } from '@supabase/supabase-js';
 
 const ServiceBooking = () => {
+  const [searchParams] = useSearchParams();
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
@@ -25,6 +27,40 @@ const ServiceBooking = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
   const categories = ['All', ...Array.from(new Set(services.map(s => s.category).filter(Boolean)))];
+
+  // Handle URL parameters on component mount
+  useEffect(() => {
+    const selectedServiceId = searchParams.get('selectedService');
+    const searchParam = searchParams.get('search');
+    const locationParam = searchParams.get('location');
+    const serviceParam = searchParams.get('service');
+
+    // Set selected service if provided
+    if (selectedServiceId) {
+      const service = services.find(s => s.id === parseInt(selectedServiceId));
+      if (service) {
+        setSelectedService(service);
+      }
+    }
+
+    // Set search query if provided
+    if (searchParam) {
+      setSearchQuery(searchParam);
+    }
+
+    // Set location in zipCode if provided
+    if (locationParam) {
+      setZipCode(locationParam);
+    }
+
+    // Set category based on service parameter
+    if (serviceParam) {
+      const service = services.find(s => s.id === parseInt(serviceParam));
+      if (service && service.category) {
+        setSelectedCategory(service.category);
+      }
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -308,10 +344,10 @@ const ServiceBooking = () => {
                           Have an account?
                         </p>
                         <Button variant="outline" asChild>
-                          <a href="/auth">
+                          <Link to="/auth">
                             <User className="h-4 w-4 mr-2" />
                             Sign In
-                          </a>
+                          </Link>
                         </Button>
                       </div>
                     )}

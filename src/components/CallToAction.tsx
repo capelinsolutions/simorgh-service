@@ -1,9 +1,12 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const CallToAction = () => {
+  const navigate = useNavigate();
+  
   const handleApplyClick = () => {
-    console.log('Apply to become an agent clicked');
-    // Handle application process
+    // Navigate to auth page with cleaner signup intent
+    navigate('/auth?type=cleaner');
   };
 
   return (

@@ -1,14 +1,24 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { services, locations } from '@/data/services';
 
 const Hero = () => {
+  const navigate = useNavigate();
   const [location, setLocation] = useState('');
   const [service, setService] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Search:', { location, service, searchQuery });
+    
+    // Build search params
+    const searchParams = new URLSearchParams();
+    if (location) searchParams.set('location', location);
+    if (service) searchParams.set('service', service);
+    if (searchQuery) searchParams.set('search', searchQuery);
+    
+    // Navigate to service booking page with search parameters
+    navigate(`/service-booking?${searchParams.toString()}`);
   };
 
   return (
@@ -35,11 +45,12 @@ const Hero = () => {
               <select 
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                className="bg-transparent border-none outline-none self-stretch my-auto"
+                className="bg-white border-none outline-none self-stretch my-auto text-[#333] z-50"
+                style={{ backgroundColor: 'white' }}
               >
-                <option value="">Location</option>
+                <option value="" style={{ backgroundColor: 'white', color: '#333' }}>Location</option>
                 {locations.map((loc) => (
-                  <option key={loc} value={loc.toLowerCase()}>{loc}</option>
+                  <option key={loc} value={loc.toLowerCase()} style={{ backgroundColor: 'white', color: '#333' }}>{loc}</option>
                 ))}
               </select>
               <img
@@ -53,13 +64,14 @@ const Hero = () => {
               <select 
                 value={service}
                 onChange={(e) => setService(e.target.value)}
-                className="bg-transparent border-none outline-none self-stretch my-auto"
+                className="bg-white border-none outline-none self-stretch my-auto text-[#333] z-50"
+                style={{ backgroundColor: 'white' }}
               >
-                <option value="">Select Service</option>
+                <option value="" style={{ backgroundColor: 'white', color: '#333' }}>Select Service</option>
                 {services.slice(0, 20).map((svc) => (
-                  <option key={svc.id} value={svc.id}>{svc.title}</option>
+                  <option key={svc.id} value={svc.id} style={{ backgroundColor: 'white', color: '#333' }}>{svc.title}</option>
                 ))}
-                <option value="more">+ View All Services</option>
+                <option value="more" style={{ backgroundColor: 'white', color: '#333' }}>+ View All Services</option>
               </select>
               <img
                 src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/3f5f495de87889a60ffbdc7438ef8189344efc37?placeholderIfAbsent=true"
