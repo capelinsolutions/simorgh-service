@@ -69,6 +69,7 @@ const FreelancerProfile = () => {
   const [uploading, setUploading] = useState(false);
   const [newZipCode, setNewZipCode] = useState('');
   const [newCertification, setNewCertification] = useState('');
+  const [connectingStripe, setConnectingStripe] = useState(false);
 
   const { toast } = useToast();
 
@@ -295,6 +296,32 @@ const FreelancerProfile = () => {
       });
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleStripeConnect = async () => {
+    setConnectingStripe(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('create-stripe-connect-account');
+      
+      if (error) throw error;
+      
+      if (data?.url) {
+        window.open(data.url, '_blank');
+        toast({
+          title: "Stripe Connect",
+          description: "Opening Stripe Connect setup in a new tab.",
+        });
+      }
+    } catch (error) {
+      console.error('Error connecting to Stripe:', error);
+      toast({
+        title: "Error",
+        description: "Failed to connect to Stripe. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setConnectingStripe(false);
     }
   };
 
@@ -730,8 +757,12 @@ const FreelancerProfile = () => {
               <p className="text-muted-foreground">
                 Connect your Stripe account to receive payments for completed jobs.
               </p>
-              <Button variant="outline">
-                Connect Stripe Account
+              <Button 
+                onClick={handleStripeConnect}
+                disabled={connectingStripe}
+                variant="outline"
+              >
+                {connectingStripe ? 'Connecting...' : 'Connect Stripe Account'}
               </Button>
             </div>
           )}

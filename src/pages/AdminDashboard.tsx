@@ -6,6 +6,7 @@ import UserManager from '@/components/admin/UserManager';
 import OrderManager from '@/components/admin/OrderManager';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import AdminDashboardComponent from '@/components/admin/AdminDashboard';
+import CleanerApproval from '@/components/admin/CleanerApproval';
 
 const AdminDashboard = () => {
   return (
@@ -19,6 +20,7 @@ const AdminDashboard = () => {
             <Route path="services" element={<ServiceManager />} />
             <Route path="users" element={<UserManager />} />
             <Route path="orders" element={<OrderManager />} />
+            <Route path="cleaners" element={<CleanerApproval />} />
           </Routes>
         </main>
       </div>

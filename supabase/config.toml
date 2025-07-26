@@ -1,1 +1,54 @@
 project_id = "acgqsmgcajfsevxkcrfi"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+
+[studio]
+enabled = true
+port = 54323
+
+[inbucket]
+enabled = true
+port = 54324
+
+[storage]
+enabled = true
+port = 54325
+
+[auth]
+enabled = true
+port = 54326
+
+[functions.admin-action]
+verify_jwt = true
+
+[functions.auto-assign-order]
+verify_jwt = false
+
+[functions.check-subscription]
+verify_jwt = true
+
+[functions.create-payment]
+verify_jwt = true
+
+[functions.create-subscription]
+verify_jwt = true
+
+[functions.customer-portal]
+verify_jwt = true
+
+[functions.send-communication]
+verify_jwt = true
+
+[functions.send-notification]
+verify_jwt = false
+
+[functions.create-stripe-connect-account]
+verify_jwt = true

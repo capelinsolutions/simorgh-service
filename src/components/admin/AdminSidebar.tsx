@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { BarChart3, Users, ShoppingCart } from 'lucide-react';
+import { BarChart3, Users, ShoppingCart, UserCheck } from 'lucide-react';
 
 const AdminSidebar = () => {
   const navItems = [
@@ -8,6 +8,7 @@ const AdminSidebar = () => {
     { to: '/admin/services', icon: ShoppingCart, label: 'Services' },
     { to: '/admin/users', icon: Users, label: 'Users' },
     { to: '/admin/orders', icon: ShoppingCart, label: 'Orders' },
+    { to: '/admin/cleaners', icon: UserCheck, label: 'Cleaner Approval' },
   ];
 
   return (

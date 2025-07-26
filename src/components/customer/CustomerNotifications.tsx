@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useRealTimeNotifications } from '@/hooks/useRealTimeNotifications';
 import { 
   Bell, 
   BellOff, 
@@ -32,11 +33,18 @@ interface Notification {
 
 const CustomerNotifications = () => {
   const [user, setUser] = useState<any>(null);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'unread' | 'read'>('all');
 
   const { toast } = useToast();
+  
+  // Use the real-time notifications hook
+  const { 
+    notifications, 
+    loading, 
+    unreadCount, 
+    markAsRead: markNotificationAsRead, 
+    markAllAsRead: markAllNotificationsAsRead 
+  } = useRealTimeNotifications(user?.id);
 
   useEffect(() => {
     const getSession = async () => {
@@ -55,53 +63,17 @@ const CustomerNotifications = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  useEffect(() => {
-    if (user) {
-      loadNotifications();
-    }
-  }, [user]);
-
-  const loadNotifications = async () => {
-    if (!user) return;
-
-    try {
-      const { data, error } = await supabase
-        .from('notifications')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      setNotifications(data || []);
-    } catch (error) {
-      console.error('Error loading notifications:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load notifications. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const markAsRead = async (notificationId: string) => {
     try {
-      const { error } = await supabase
-        .from('notifications')
-        .update({ is_read: true })
-        .eq('id', notificationId);
-
-      if (error) throw error;
-
-      setNotifications(prev => 
-        prev.map(notif => 
-          notif.id === notificationId ? { ...notif, is_read: true } : notif
-        )
-      );
+      await markNotificationAsRead(notificationId);
     } catch (error) {
       console.error('Error marking notification as read:', error);
+      toast({
+        title: "Error",
+        description: "Failed to mark notification as read.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -113,14 +85,13 @@ const CustomerNotifications = () => {
         .eq('id', notificationId);
 
       if (error) throw error;
-
-      setNotifications(prev => 
-        prev.map(notif => 
-          notif.id === notificationId ? { ...notif, is_read: false } : notif
-        )
-      );
     } catch (error) {
       console.error('Error marking notification as unread:', error);
+      toast({
+        title: "Error",
+        description: "Failed to mark notification as unread.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -135,7 +106,6 @@ const CustomerNotifications = () => {
 
       if (error) throw error;
 
-      setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
       toast({
         title: "Notification Deleted",
         description: "Notification has been deleted successfully.",
@@ -152,18 +122,7 @@ const CustomerNotifications = () => {
 
   const markAllAsRead = async () => {
     try {
-      const { error } = await supabase
-        .from('notifications')
-        .update({ is_read: true })
-        .eq('user_id', user.id)
-        .eq('is_read', false);
-
-      if (error) throw error;
-
-      setNotifications(prev => 
-        prev.map(notif => ({ ...notif, is_read: true }))
-      );
-
+      await markAllNotificationsAsRead();
       toast({
         title: "All Notifications Read",
         description: "All notifications have been marked as read.",
@@ -236,7 +195,7 @@ const CustomerNotifications = () => {
     return true;
   });
 
-  const unreadCount = notifications.filter(notif => !notif.is_read).length;
+  
 
   if (!user) {
     return (
