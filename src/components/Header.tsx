@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
+import { LogOut, User, Settings } from 'lucide-react';
 
 const Header = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, isAdmin, signOut, loading } = useAuth();
   const [activeNav, setActiveNav] = useState('Home');
 
   const getActiveClass = (path: string) => {
@@ -10,6 +15,15 @@ const Header = () => {
     return isActive 
       ? 'text-[#58C0D7] font-semibold' 
       : 'text-[rgba(40,40,40,1)] font-normal';
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigate('/');
+    } catch (error) {
+      console.error('Sign out error:', error);
+    }
   };
 
   return (
@@ -53,25 +67,63 @@ const Header = () => {
         ))}
       </nav>
 
-      <div className="self-stretch flex items-center gap-2 font-semibold whitespace-nowrap w-[280px] my-auto">
-        <Link 
-          to="/auth" 
-          className="justify-center items-center rounded border self-stretch flex min-h-12 gap-2 text-[#58C0D7] w-[97px] my-auto px-4 py-[13px] border-solid border-[#58C0D7] hover:bg-[#58C0D7] hover:text-white transition-colors"
-        >
-          Login
-        </Link>
-        <Link 
-          to="/auth" 
-          className="justify-center items-center rounded self-stretch flex min-h-12 gap-2 text-white w-[127px] bg-[#58C0D7] my-auto px-4 py-[13px] hover:bg-[#4aa8c0] transition-colors"
-        >
-          Register
-        </Link>
-        <Link 
-          to="/admin" 
-          className="justify-center items-center rounded border self-stretch flex min-h-12 gap-2 text-[#666] w-[56px] my-auto px-2 py-[13px] border-solid border-[#666] hover:bg-[#666] hover:text-white transition-colors text-xs"
-        >
-          Admin
-        </Link>
+      <div className="self-stretch flex items-center gap-2 font-semibold whitespace-nowrap my-auto">
+        {loading ? (
+          <div className="flex items-center gap-2">
+            <div className="w-20 h-12 bg-gray-200 animate-pulse rounded"></div>
+            <div className="w-24 h-12 bg-gray-200 animate-pulse rounded"></div>
+          </div>
+        ) : user ? (
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-[rgba(40,40,40,1)] mr-2">
+              Welcome, {user.email?.split('@')[0]}
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/customer')}
+              className="text-[#58C0D7] border-[#58C0D7] hover:bg-[#58C0D7] hover:text-white"
+            >
+              <User className="h-4 w-4 mr-1" />
+              Dashboard
+            </Button>
+            {isAdmin && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate('/admin')}
+                className="text-[#666] border-[#666] hover:bg-[#666] hover:text-white"
+              >
+                <Settings className="h-4 w-4 mr-1" />
+                Admin
+              </Button>
+            )}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleSignOut}
+              className="text-red-600 border-red-600 hover:bg-red-600 hover:text-white"
+            >
+              <LogOut className="h-4 w-4 mr-1" />
+              Sign Out
+            </Button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <Link 
+              to="/auth" 
+              className="justify-center items-center rounded border self-stretch flex min-h-12 gap-2 text-[#58C0D7] w-[97px] my-auto px-4 py-[13px] border-solid border-[#58C0D7] hover:bg-[#58C0D7] hover:text-white transition-colors"
+            >
+              Login
+            </Link>
+            <Link 
+              to="/auth" 
+              className="justify-center items-center rounded self-stretch flex min-h-12 gap-2 text-white w-[127px] bg-[#58C0D7] my-auto px-4 py-[13px] hover:bg-[#4aa8c0] transition-colors"
+            >
+              Register
+            </Link>
+          </div>
+        )}
       </div>
     </header>
   );

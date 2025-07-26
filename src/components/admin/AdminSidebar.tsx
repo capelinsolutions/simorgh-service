@@ -5,6 +5,7 @@ import { BarChart3, Users, ShoppingCart } from 'lucide-react';
 const AdminSidebar = () => {
   const navItems = [
     { to: '/admin', icon: BarChart3, label: 'Dashboard', end: true },
+    { to: '/admin/services', icon: ShoppingCart, label: 'Services' },
     { to: '/admin/users', icon: Users, label: 'Users' },
     { to: '/admin/orders', icon: ShoppingCart, label: 'Orders' },
   ];
