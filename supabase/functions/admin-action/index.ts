@@ -2,8 +2,8 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
 const logStep = (step: string, details?: any) => {
@@ -12,219 +12,324 @@ const logStep = (step: string, details?: any) => {
 };
 
 serve(async (req) => {
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    logStep("Admin action function started");
+    logStep("Function started");
 
-    const { action, data } = await req.json();
-    
-    if (!action) {
-      throw new Error("Action is required");
-    }
-
-    // Use service role key to access all data
-    const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+    // Initialize Supabase client with service role key
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
       { auth: { persistSession: false } }
     );
 
-    // Verify admin access
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) throw new Error("Authentication required");
-
-    const token = authHeader.replace("Bearer ", "");
-    const { data: userData } = await supabaseClient.auth.getUser(token);
-    const user = userData.user;
-    if (!user) throw new Error("Invalid authentication");
-
-    // Check if user is admin
-    const { data: adminData, error: adminError } = await supabaseClient
-      .from("admin_users")
-      .select("role")
-      .eq("user_id", user.id)
-      .single();
-
-    if (adminError || !adminData) {
-      throw new Error("Admin access required");
+    // Get user from request
+    const authHeader = req.headers.get('Authorization')!;
+    const token = authHeader.replace('Bearer ', '');
+    const { data: userData, error: userError } = await supabase.auth.getUser(token);
+    
+    if (userError || !userData.user) {
+      throw new Error('User not authenticated');
     }
 
-    logStep("Admin verified", { userId: user.id, role: adminData.role });
+    const user = userData.user;
+    logStep("User authenticated", { userId: user.id });
 
-    let result;
+    // Check if user is admin
+    const { data: isUserAdmin, error: adminError } = await supabase.rpc('is_admin', { user_id: user.id });
+    if (adminError || !isUserAdmin) {
+      throw new Error('User is not authorized as admin');
+    }
+
+    logStep("Admin status verified");
+
+    const { action, ...params } = await req.json();
+    logStep("Action requested", { action, params });
 
     switch (action) {
-      case "update_subscription":
-        result = await updateSubscription(supabaseClient, data);
-        break;
-      
-      case "refund_payment":
-        result = await refundPayment(supabaseClient, data);
-        break;
-      
-      case "send_communication":
-        result = await sendCommunication(supabaseClient, data, user.id);
-        break;
-      
-      case "update_user_status":
-        result = await updateUserStatus(supabaseClient, data);
-        break;
-      
-      case "update_system_setting":
-        result = await updateSystemSetting(supabaseClient, data, user.id);
-        break;
-      
-      case "get_dashboard_stats":
-        result = await getDashboardStats(supabaseClient);
-        break;
-      
+      case 'getDashboardStats':
+        return await getDashboardStats(supabase);
+      case 'banUser':
+        return await banUser(supabase, params.userId, params.reason);
+      case 'approveFreelancer':
+        return await approveFreelancer(supabase, params.freelancerId);
+      case 'rejectFreelancer':
+        return await rejectFreelancer(supabase, params.freelancerId, params.reason);
+      case 'processRefund':
+        return await processRefund(supabase, params.orderId, params.amount, params.reason);
+      case 'sendAnnouncement':
+        return await sendAnnouncement(supabase, user.id, params);
+      case 'manageTestimonial':
+        return await manageTestimonial(supabase, params.reviewId, params.approved, params.featured);
+      case 'createSpecialOffer':
+        return await createSpecialOffer(supabase, user.id, params);
+      case 'updatePricingTier':
+        return await updatePricingTier(supabase, params);
       default:
         throw new Error(`Unknown action: ${action}`);
     }
-
-    logStep("Admin action completed", { action, success: true });
-
-    return new Response(JSON.stringify({
-      success: true,
-      data: result
-    }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 200,
-    });
-
-  } catch (error: any) {
-    logStep("ERROR in admin-action", { message: error.message });
-    return new Response(JSON.stringify({ 
-      success: false, 
-      error: error.message 
-    }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+  } catch (error) {
+    logStep("ERROR", { message: error.message });
+    return new Response(JSON.stringify({ error: error.message }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 500,
     });
   }
 });
 
-async function updateSubscription(supabaseClient: any, data: any) {
-  const { subscriptionId, updates } = data;
-  
-  const { data: result, error } = await supabaseClient
-    .from("subscribers")
-    .update(updates)
-    .eq("id", subscriptionId)
-    .select()
-    .single();
+async function getDashboardStats(supabase: any) {
+  logStep("Fetching dashboard stats");
 
-  if (error) throw error;
-  return result;
-}
-
-async function refundPayment(supabaseClient: any, data: any) {
-  const { orderId, amount, reason } = data;
-  
-  // Update order with refund information
-  const { data: result, error } = await supabaseClient
-    .from("orders")
-    .update({
-      refund_amount: amount,
-      refund_reason: reason,
-      status: "refunded",
-      updated_at: new Date().toISOString()
-    })
-    .eq("id", orderId)
-    .select()
-    .single();
-
-  if (error) throw error;
-  
-  // Here you would also integrate with Stripe to process the actual refund
-  // const stripeRefund = await stripe.refunds.create({ ... });
-  
-  return result;
-}
-
-async function sendCommunication(supabaseClient: any, data: any, adminId: string) {
-  const { type, recipientType, subject, message, recipientId } = data;
-  
-  const { data: result, error } = await supabaseClient
-    .from("communications")
-    .insert({
-      type,
-      recipient_type: recipientType,
-      recipient_id: recipientId || null,
-      subject,
-      message,
-      status: "sent",
-      sent_at: new Date().toISOString(),
-      created_by: adminId
-    })
-    .select()
-    .single();
-
-  if (error) throw error;
-  
-  // Here you would integrate with your email service (Resend, etc.)
-  // await sendActualEmail(result);
-  
-  return result;
-}
-
-async function updateUserStatus(supabaseClient: any, data: any) {
-  const { userId, isActive } = data;
-  
-  // Update freelancer status if applicable
-  const { data: freelancerResult } = await supabaseClient
-    .from("freelancers")
-    .update({ is_active: isActive })
-    .eq("user_id", userId)
-    .select();
-
-  return { freelancerUpdated: !!freelancerResult };
-}
-
-async function updateSystemSetting(supabaseClient: any, data: any, adminId: string) {
-  const { key, value, description } = data;
-  
-  const { data: result, error } = await supabaseClient
-    .from("system_settings")
-    .upsert({
-      key,
-      value: JSON.stringify(value),
-      description,
-      updated_by: adminId,
-      updated_at: new Date().toISOString()
-    }, { onConflict: 'key' })
-    .select()
-    .single();
-
-  if (error) throw error;
-  return result;
-}
-
-async function getDashboardStats(supabaseClient: any) {
   const [
-    { count: totalUsers },
-    { count: totalFreelancers },
-    { data: orders },
-    { count: activeSubscriptions }
+    { data: customers, error: customersError },
+    { data: freelancers, error: freelancersError },
+    { data: orders, error: ordersError },
+    { data: reviews, error: reviewsError },
+    { data: subscribers, error: subscribersError }
   ] = await Promise.all([
-    supabaseClient.from('admin_users').select('id', { count: 'exact', head: true }),
-    supabaseClient.from('freelancers').select('id', { count: 'exact', head: true }),
-    supabaseClient.from('orders').select('amount, status'),
-    supabaseClient.from('subscribers').select('id', { count: 'exact', head: true }).eq('subscribed', true)
+    supabase.from('customer_profiles').select('id'),
+    supabase.from('freelancers').select('id'),
+    supabase.from('orders').select('amount, status'),
+    supabase.from('booking_reviews').select('rating'),
+    supabase.from('subscribers').select('subscribed')
   ]);
+
+  if (customersError || freelancersError || ordersError || reviewsError || subscribersError) {
+    throw new Error('Failed to fetch dashboard statistics');
+  }
 
   const totalRevenue = orders?.reduce((sum: number, order: any) => sum + (order.amount || 0), 0) || 0;
   const pendingOrders = orders?.filter((order: any) => order.status === 'pending').length || 0;
+  const completedOrders = orders?.filter((order: any) => order.status === 'completed').length || 0;
+  const activeSubscriptions = subscribers?.filter((sub: any) => sub.subscribed).length || 0;
+  const averageRating = reviews?.length > 0 
+    ? reviews.reduce((sum: number, review: any) => sum + (review.rating || 0), 0) / reviews.length 
+    : 0;
 
-  return {
-    totalUsers: totalUsers || 0,
-    totalFreelancers: totalFreelancers || 0,
+  const stats = {
+    totalCustomers: customers?.length || 0,
+    totalFreelancers: freelancers?.length || 0,
     totalOrders: orders?.length || 0,
-    totalRevenue: totalRevenue / 100, // Convert from cents
-    activeSubscriptions: activeSubscriptions || 0,
-    pendingOrders
+    totalRevenue,
+    pendingOrders,
+    activeSubscriptions,
+    averageRating,
+    completedOrders,
   };
+
+  logStep("Dashboard stats calculated", stats);
+
+  return new Response(JSON.stringify(stats), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    status: 200,
+  });
+}
+
+async function banUser(supabase: any, userId: string, reason: string) {
+  logStep("Banning user", { userId, reason });
+
+  // Update user status in both customer and freelancer tables
+  await Promise.all([
+    supabase.from('customer_profiles').update({ status: 'banned' }).eq('user_id', userId),
+    supabase.from('freelancers').update({ status: 'banned' }).eq('user_id', userId)
+  ]);
+
+  // Log the action
+  await supabase.from('system_activity_log').insert({
+    action: 'ban_user',
+    description: `User banned: ${reason}`,
+    user_id: userId,
+    metadata: { reason }
+  });
+
+  return new Response(JSON.stringify({ success: true }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    status: 200,
+  });
+}
+
+async function approveFreelancer(supabase: any, freelancerId: string) {
+  logStep("Approving freelancer", { freelancerId });
+
+  const { error } = await supabase
+    .from('freelancers')
+    .update({ verification_status: 'approved', is_active: true })
+    .eq('user_id', freelancerId);
+
+  if (error) throw error;
+
+  // Send notification to freelancer
+  await supabase.functions.invoke('send-notification', {
+    body: {
+      userId: freelancerId,
+      title: 'Application Approved!',
+      message: 'Congratulations! Your cleaner application has been approved. You can now start receiving job assignments.',
+      type: 'approval'
+    }
+  });
+
+  return new Response(JSON.stringify({ success: true }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    status: 200,
+  });
+}
+
+async function rejectFreelancer(supabase: any, freelancerId: string, reason: string) {
+  logStep("Rejecting freelancer", { freelancerId, reason });
+
+  const { error } = await supabase
+    .from('freelancers')
+    .update({ verification_status: 'rejected', is_active: false })
+    .eq('user_id', freelancerId);
+
+  if (error) throw error;
+
+  // Send notification to freelancer
+  await supabase.functions.invoke('send-notification', {
+    body: {
+      userId: freelancerId,
+      title: 'Application Update',
+      message: `Unfortunately, your cleaner application was not approved. Reason: ${reason}`,
+      type: 'rejection'
+    }
+  });
+
+  return new Response(JSON.stringify({ success: true }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    status: 200,
+  });
+}
+
+async function processRefund(supabase: any, orderId: string, amount: number, reason: string) {
+  logStep("Processing refund", { orderId, amount, reason });
+
+  // Update order with refund information
+  const { error } = await supabase
+    .from('orders')
+    .update({ 
+      refund_amount: amount,
+      refund_reason: reason,
+      status: 'refunded'
+    })
+    .eq('id', orderId);
+
+  if (error) throw error;
+
+  // Note: In a real implementation, you would integrate with Stripe's refund API here
+
+  return new Response(JSON.stringify({ success: true }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    status: 200,
+  });
+}
+
+async function sendAnnouncement(supabase: any, adminId: string, params: any) {
+  const { title, message, recipientRole, scheduledAt } = params;
+  logStep("Sending announcement", { title, recipientRole });
+
+  const { error } = await supabase
+    .from('admin_notifications')
+    .insert({
+      title,
+      message,
+      recipient_role: recipientRole,
+      scheduled_at: scheduledAt || null,
+      created_by: adminId
+    });
+
+  if (error) throw error;
+
+  return new Response(JSON.stringify({ success: true }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    status: 200,
+  });
+}
+
+async function manageTestimonial(supabase: any, reviewId: string, approved: boolean, featured: boolean) {
+  logStep("Managing testimonial", { reviewId, approved, featured });
+
+  const { error } = await supabase
+    .from('booking_reviews')
+    .update({ 
+      admin_approved: approved,
+      is_featured: featured,
+      featured_priority: featured ? 1 : 0
+    })
+    .eq('id', reviewId);
+
+  if (error) throw error;
+
+  return new Response(JSON.stringify({ success: true }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    status: 200,
+  });
+}
+
+async function createSpecialOffer(supabase: any, adminId: string, params: any) {
+  const { name, description, type, value, code, minOrderAmount, maxUses, expiresAt, applicableServices } = params;
+  logStep("Creating special offer", { name, type, value });
+
+  const { error } = await supabase
+    .from('special_offers')
+    .insert({
+      name,
+      description,
+      type,
+      value,
+      code,
+      min_order_amount: minOrderAmount || 0,
+      max_uses: maxUses,
+      expires_at: expiresAt,
+      applicable_services: applicableServices || [],
+      created_by: adminId
+    });
+
+  if (error) throw error;
+
+  return new Response(JSON.stringify({ success: true }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    status: 200,
+  });
+}
+
+async function updatePricingTier(supabase: any, params: any) {
+  const { id, name, description, serviceMultiplier, membershipDiscount, isActive } = params;
+  logStep("Updating pricing tier", { id, name });
+
+  if (id) {
+    // Update existing
+    const { error } = await supabase
+      .from('pricing_tiers')
+      .update({
+        name,
+        description,
+        service_multiplier: serviceMultiplier,
+        membership_discount: membershipDiscount,
+        is_active: isActive
+      })
+      .eq('id', id);
+
+    if (error) throw error;
+  } else {
+    // Create new
+    const { error } = await supabase
+      .from('pricing_tiers')
+      .insert({
+        name,
+        description,
+        service_multiplier: serviceMultiplier,
+        membership_discount: membershipDiscount,
+        is_active: isActive
+      });
+
+    if (error) throw error;
+  }
+
+  return new Response(JSON.stringify({ success: true }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    status: 200,
+  });
 }

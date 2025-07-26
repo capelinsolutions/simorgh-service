@@ -2,8 +2,8 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
 const logStep = (step: string, details?: any) => {
@@ -12,193 +12,168 @@ const logStep = (step: string, details?: any) => {
 };
 
 serve(async (req) => {
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    logStep("Auto-assignment function started");
+    logStep("Function started");
 
-    const { orderId } = await req.json();
-    
-    if (!orderId) {
-      throw new Error("Order ID is required");
-    }
-
-    // Use service role key to access all data
-    const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+    // Initialize Supabase client with service role key
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
       { auth: { persistSession: false } }
     );
 
-    logStep("Getting order details", { orderId });
+    const { orderId } = await req.json();
+    logStep("Processing order assignment", { orderId });
 
     // Get order details
-    const { data: order, error: orderError } = await supabaseClient
-      .from("orders")
-      .select("*")
-      .eq("id", orderId)
+    const { data: order, error: orderError } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('id', orderId)
       .single();
 
-    if (orderError) {
-      throw new Error(`Failed to fetch order: ${orderError.message}`);
+    if (orderError || !order) {
+      throw new Error('Order not found');
     }
 
-    if (!order) {
-      throw new Error("Order not found");
-    }
+    logStep("Order found", { orderStatus: order.status, zipCode: order.customer_zip_code });
 
-    logStep("Order found", { 
-      orderZip: order.customer_zip_code, 
-      serviceName: order.service_name,
-      currentStatus: order.assignment_status 
-    });
-
-    // Skip if order is already assigned or no zip code
-    if (order.assignment_status !== 'pending' || !order.customer_zip_code) {
-      logStep("Skipping assignment", { 
-        reason: order.assignment_status !== 'pending' ? 'Already assigned' : 'No zip code' 
-      });
-      return new Response(JSON.stringify({ 
-        success: false, 
-        reason: order.assignment_status !== 'pending' ? 'Order already assigned' : 'No zip code provided'
-      }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+    // Skip if order is already assigned or completed
+    if (order.assignment_status !== 'pending') {
+      return new Response(JSON.stringify({ message: 'Order already processed' }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200,
       });
     }
 
     // Find available freelancers in the area
-    logStep("Searching for freelancers", { zipCode: order.customer_zip_code });
-
-    const { data: freelancers, error: freelancersError } = await supabaseClient
-      .from("freelancers")
-      .select("user_id, business_name, service_areas, services_offered, rating, total_jobs")
-      .eq("is_active", true);
+    const { data: freelancers, error: freelancersError } = await supabase
+      .from('freelancers')
+      .select('user_id, business_name, rating, total_jobs, current_active_jobs, max_concurrent_jobs')
+      .eq('is_active', true)
+      .eq('verification_status', 'approved')
+      .neq('status', 'banned')
+      .contains('service_areas', [order.customer_zip_code])
+      .order('rating', { ascending: false })
+      .order('total_jobs', { ascending: true });
 
     if (freelancersError) {
-      throw new Error(`Failed to fetch freelancers: ${freelancersError.message}`);
+      throw new Error('Failed to fetch freelancers');
     }
 
-    logStep("Found freelancers", { count: freelancers?.length || 0 });
-
-    // Filter freelancers by zip code and service type
-    const availableFreelancers = freelancers?.filter(freelancer => {
-      const servesArea = freelancer.service_areas?.includes(order.customer_zip_code);
-      const offersService = !freelancer.services_offered?.length || 
-                           freelancer.services_offered?.includes(order.service_name);
+    if (!freelancers || freelancers.length === 0) {
+      logStep("No freelancers found for area", { zipCode: order.customer_zip_code });
       
-      logStep("Checking freelancer", {
-        freelancerId: freelancer.user_id,
-        businessName: freelancer.business_name,
-        servesArea,
-        offersService,
-        serviceAreas: freelancer.service_areas,
-        servicesOffered: freelancer.services_offered
-      });
+      // Update order status to indicate no freelancers available
+      await supabase
+        .from('orders')
+        .update({ 
+          assignment_status: 'no_freelancers_available',
+          admin_notes: 'No freelancers available in the requested area'
+        })
+        .eq('id', orderId);
 
-      return servesArea && offersService;
-    }) || [];
-
-    logStep("Filtered available freelancers", { count: availableFreelancers.length });
-
-    if (availableFreelancers.length === 0) {
-      logStep("No available freelancers found");
       return new Response(JSON.stringify({ 
         success: false, 
-        reason: 'No available freelancers in the area' 
+        message: 'No freelancers available in this area' 
       }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200,
       });
     }
 
-    // Sort by rating (desc) then by total jobs (asc) to prefer higher-rated, less busy freelancers
-    availableFreelancers.sort((a, b) => {
-      if (b.rating !== a.rating) {
-        return (b.rating || 0) - (a.rating || 0);
-      }
-      return (a.total_jobs || 0) - (b.total_jobs || 0);
-    });
+    // Filter freelancers who aren't overbooked
+    const availableFreelancers = freelancers.filter(f => 
+      (f.current_active_jobs || 0) < (f.max_concurrent_jobs || 3)
+    );
 
-    // Assign to top 3 freelancers (or all if less than 3)
-    const assignmentCount = Math.min(3, availableFreelancers.length);
-    const assignments = [];
-
-    logStep("Creating assignments", { count: assignmentCount });
-
-    for (let i = 0; i < assignmentCount; i++) {
-      const freelancer = availableFreelancers[i];
+    if (availableFreelancers.length === 0) {
+      logStep("All freelancers are overbooked");
       
-      const { data: assignment, error: assignmentError } = await supabaseClient
-        .from("order_assignments")
-        .insert({
-          order_id: orderId,
-          freelancer_id: freelancer.user_id,
-          status: 'offered'
+      await supabase
+        .from('orders')
+        .update({ 
+          assignment_status: 'freelancers_overbooked',
+          admin_notes: 'All freelancers in the area are currently overbooked'
         })
-        .select()
-        .single();
+        .eq('id', orderId);
 
-      if (assignmentError) {
-        logStep("Assignment creation failed", { 
-          freelancerId: freelancer.user_id, 
-          error: assignmentError.message 
-        });
-        continue;
-      }
-
-      assignments.push(assignment);
-      logStep("Assignment created", {
-        assignmentId: assignment.id,
-        freelancerId: freelancer.user_id,
-        businessName: freelancer.business_name
+      return new Response(JSON.stringify({ 
+        success: false, 
+        message: 'All freelancers are currently overbooked' 
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 200,
       });
     }
 
-    if (assignments.length > 0) {
-      // Update order status
-      const { error: updateError } = await supabaseClient
-        .from("orders")
-        .update({ 
-          assignment_status: 'assigned',
-          updated_at: new Date().toISOString()
-        })
-        .eq("id", orderId);
+    // Assign to top 3 available freelancers
+    const topFreelancers = availableFreelancers.slice(0, 3);
+    logStep("Assigning to top freelancers", { count: topFreelancers.length });
 
-      if (updateError) {
-        logStep("Order status update failed", { error: updateError.message });
-      } else {
-        logStep("Order status updated to assigned");
-      }
+    const assignments = topFreelancers.map(freelancer => ({
+      order_id: orderId,
+      freelancer_id: freelancer.user_id,
+      status: 'offered'
+    }));
+
+    const { error: assignmentError } = await supabase
+      .from('order_assignments')
+      .insert(assignments);
+
+    if (assignmentError) {
+      throw new Error('Failed to create assignments');
     }
 
-    logStep("Auto-assignment completed", { 
-      assignmentsCreated: assignments.length,
-      orderId: orderId
+    // Update order status
+    await supabase
+      .from('orders')
+      .update({ assignment_status: 'assigned' })
+      .eq('id', orderId);
+
+    // Send notifications to assigned freelancers
+    for (const freelancer of topFreelancers) {
+      await supabase.functions.invoke('send-notification', {
+        body: {
+          userId: freelancer.user_id,
+          title: 'New Job Assignment!',
+          message: `You have been assigned a new ${order.service_name} job. Check your dashboard to accept or decline.`,
+          type: 'job_assignment',
+          relatedId: orderId
+        }
+      });
+    }
+
+    // Log successful assignment
+    await supabase.from('system_activity_log').insert({
+      action: 'auto_assign_order',
+      description: `Order ${orderId} assigned to ${topFreelancers.length} freelancers`,
+      metadata: { 
+        orderId, 
+        assignedTo: topFreelancers.map(f => f.user_id),
+        service: order.service_name,
+        zipCode: order.customer_zip_code
+      }
     });
 
-    return new Response(JSON.stringify({
-      success: true,
-      assignmentsCreated: assignments.length,
-      assignments: assignments.map(a => ({
-        id: a.id,
-        freelancerId: a.freelancer_id,
-        status: a.status
-      }))
+    logStep("Assignment completed successfully", { assignedCount: topFreelancers.length });
+
+    return new Response(JSON.stringify({ 
+      success: true, 
+      assignedCount: topFreelancers.length 
     }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 200,
     });
 
-  } catch (error: any) {
-    logStep("ERROR in auto-assign", { message: error.message });
-    return new Response(JSON.stringify({ 
-      success: false, 
-      error: error.message 
-    }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+  } catch (error) {
+    logStep("ERROR", { message: error.message });
+    return new Response(JSON.stringify({ error: error.message }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 500,
     });
   }

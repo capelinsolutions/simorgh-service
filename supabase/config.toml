@@ -27,7 +27,7 @@ enabled = true
 port = 54326
 
 [functions.admin-action]
-verify_jwt = true
+verify_jwt = false
 
 [functions.auto-assign-order]
 verify_jwt = false
