@@ -17,7 +17,7 @@ interface SubscriptionData {
 const Membership = () => {
   const { user, session } = useAuth();
   const [subscriptionData, setSubscriptionData] = useState<SubscriptionData | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loadingTier, setLoadingTier] = useState<string | null>(null);
   const [checkingSubscription, setCheckingSubscription] = useState(true);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const Membership = () => {
   const handleSubscribe = async (tier: string) => {
     if (!user || !session) return;
     
-    setLoading(true);
+    setLoadingTier(tier);
     try {
       const { data, error } = await supabase.functions.invoke('create-subscription', {
         body: { 
@@ -83,7 +83,7 @@ const Membership = () => {
         variant: "destructive",
       });
     } finally {
-      setLoading(false);
+      setLoadingTier(null);
     }
   };
 
@@ -165,9 +165,9 @@ const Membership = () => {
             <Button 
               className="w-full" 
               onClick={() => handleSubscribe('Basic')}
-              disabled={loading || isCurrentTier('Basic')}
+              disabled={loadingTier === 'Basic' || isCurrentTier('Basic')}
             >
-              {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+              {loadingTier === 'Basic' ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
               {isCurrentTier('Basic') ? 'Current Plan' : 'Subscribe'}
             </Button>
           </CardContent>
@@ -186,9 +186,9 @@ const Membership = () => {
             <Button 
               className="w-full" 
               onClick={() => handleSubscribe('Premium')}
-              disabled={loading || isCurrentTier('Premium')}
+              disabled={loadingTier === 'Premium' || isCurrentTier('Premium')}
             >
-              {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+              {loadingTier === 'Premium' ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
               {isCurrentTier('Premium') ? 'Current Plan' : 'Subscribe'}
             </Button>
           </CardContent>
