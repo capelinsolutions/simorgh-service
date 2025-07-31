@@ -67,7 +67,7 @@ serve(async (req) => {
               name: serviceName,
               description: serviceDescription,
             },
-            unit_amount: amount, // amount in cents
+            unit_amount: Math.round(amount * 100), // Convert dollars to cents
           },
           quantity: 1,
         },
