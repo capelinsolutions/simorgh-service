@@ -250,13 +250,20 @@ const EnhancedServiceBooking = () => {
       const total = calculateTotal();
       const originalTotal = bookingData.hasMembership ? total * 2 : total;
 
+      console.log('Booking Data:', {
+        total,
+        originalTotal,
+        serviceName: selectedService.title,
+        hasMembership: bookingData.hasMembership
+      });
+
       const paymentData = {
-        amount: total,
-        currency: 'usd',
-        service_name: selectedService.title,
-        service_description: selectedService.description,
-        customer_email: user.email,
-        customer_zip_code: selectedAddress.zip_code,
+        serviceName: selectedService.title,
+        serviceDescription: selectedService.description,
+        amount: total, // Amount in cents
+        isGuest: false,
+        customerEmail: user.email,
+        zipCode: selectedAddress.zip_code,
         duration_hours: bookingData.duration,
         preferred_date: bookingData.date.toISOString().split('T')[0],
         preferred_time: bookingData.time,
@@ -270,9 +277,13 @@ const EnhancedServiceBooking = () => {
         original_amount: originalTotal
       };
 
+      console.log('Payment Data being sent:', paymentData);
+
       const { data, error } = await supabase.functions.invoke('create-payment', {
         body: paymentData
       });
+
+      console.log('Response from create-payment:', { data, error });
 
       if (error) throw error;
 
@@ -282,12 +293,14 @@ const EnhancedServiceBooking = () => {
           title: "Redirecting to Payment",
           description: "Opening Stripe checkout in a new tab...",
         });
+      } else {
+        throw new Error('No payment URL received');
       }
     } catch (error) {
       console.error('Error creating booking:', error);
       toast({
         title: "Booking Failed",
-        description: "There was an error processing your booking. Please try again.",
+        description: `There was an error processing your booking: ${error.message}`,
         variant: "destructive",
       });
     } finally {
