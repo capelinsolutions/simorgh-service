@@ -1,12 +1,12 @@
 import React from 'react';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
-import WhyChooseUs from '@/components/WhyChooseUs';
-import ServicesGrid from '@/components/ServicesGrid';
-import Testimonials from '@/components/Testimonials';
-import FAQ from '@/components/FAQ';
-import ContactForm from '@/components/ContactForm';
-import CallToAction from '@/components/CallToAction';
+import BestServiceSection from '@/components/BestServiceSection';
+import QualitySection from '@/components/QualitySection';
+import CompanySection from '@/components/CompanySection';
+import PricingSection from '@/components/PricingSection';
+import TestimonialSection from '@/components/TestimonialSection';
+import BlogSection from '@/components/BlogSection';
 import Footer from '@/components/Footer';
 
 const Index = () => {
@@ -16,12 +16,12 @@ const Index = () => {
       
       <main>
         <Hero />
-        <WhyChooseUs />
-        <ServicesGrid />
-        <Testimonials />
-        <FAQ />
-        <ContactForm />
-        <CallToAction />
+        <BestServiceSection />
+        <QualitySection />
+        <CompanySection />
+        <PricingSection />
+        <TestimonialSection />
+        <BlogSection />
       </main>
       
       <Footer />
