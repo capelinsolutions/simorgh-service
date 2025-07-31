@@ -122,6 +122,12 @@ const Header = () => {
             >
               Register
             </Link>
+            <Link 
+              to="/freelancer-signup" 
+              className="justify-center items-center rounded border self-stretch flex min-h-12 gap-2 text-[#666] w-[140px] my-auto px-4 py-[13px] border-solid border-[#666] hover:bg-[#666] hover:text-white transition-colors"
+            >
+              Join as Cleaner
+            </Link>
           </div>
         )}
       </div>
