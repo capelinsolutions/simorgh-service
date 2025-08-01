@@ -1,62 +1,92 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
+import { ChevronRight, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const BestServiceSection = () => {
+  const navigate = useNavigate();
+
+  const handleBookNow = (service: string) => {
+    navigate(`/service-booking?service=${service}`);
+  };
+
   const services = [
     {
-      title: "Office Cleaning",
-      description: "Office and commercial cleaning is essential for health and productivity as clean environment improves mood and focus.",
-      image: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/a1234567890abcdef1234567890abcdef?placeholderIfAbsent=true"
+      id: 'office',
+      title: 'Office Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1721322800607-8c38375eef04?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900'
     },
     {
-      title: "Construction Cleaning",
-      description: "Office and commercial cleaning is essential for health and productivity as clean environment improves mood and focus.",
-      image: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/b1234567890abcdef1234567890abcdef?placeholderIfAbsent=true"
+      id: 'construction',
+      title: 'Construction Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1527576539890-dfa815648363?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-[#58C0D7] hover:bg-[#4aa8c0] text-white'
     },
     {
-      title: "Deep Cleaning",
-      description: "Office and commercial cleaning is essential for health and productivity as clean environment improves mood and focus.",
-      image: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/c1234567890abcdef1234567890abcdef?placeholderIfAbsent=true"
+      id: 'deep',
+      title: 'Deep Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900'
     }
   ];
 
   return (
-    <section className="py-16 px-4 max-w-7xl mx-auto">
-      <div className="text-center mb-12">
-        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-          We Always Provide The Best Service
-        </h2>
-        <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-          We focus on providing professional excellent, and fast thorough cleaning services to meet your expectations and help you maintain a clean, healthy, and organized environment.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {services.map((service, index) => (
-          <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-            <div className="h-48 bg-gray-200 flex items-center justify-center">
-              <img 
-                src={service.image} 
-                alt={service.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="p-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                {service.title}
-              </h3>
-              <p className="text-gray-600 mb-4 leading-relaxed">
-                {service.description}
-              </p>
-              <Button 
-                variant="outline" 
-                className="w-full border-[#58C0D7] text-[#58C0D7] hover:bg-[#58C0D7] hover:text-white"
-              >
-                Read More
-              </Button>
-            </div>
+    <section className="py-16 px-[120px] max-md:px-5 bg-white">
+      <div className="max-w-7xl mx-auto">
+        {/* Header Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+          <div>
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+              We Always Provide The<br />Best Service
+            </h2>
           </div>
-        ))}
+          <div className="flex flex-col justify-center">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">Services</h3>
+            <p className="text-gray-600 leading-relaxed">
+              While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:
+            </p>
+          </div>
+        </div>
+
+        {/* Services Grid */}
+        <div className="relative">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {services.map((service) => (
+              <div key={service.id} className="bg-white rounded-2xl overflow-hidden shadow-sm">
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img
+                    src={service.image}
+                    alt={service.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                    {service.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-6">
+                    {service.description}
+                  </p>
+                  <button
+                    onClick={() => handleBookNow(service.id)}
+                    className={`${service.buttonStyle} px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2`}
+                  >
+                    Book Now
+                    <ArrowRight size={16} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          {/* Navigation Arrow */}
+          <button className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-[#58C0D7] hover:bg-[#4aa8c0] text-white w-12 h-12 rounded-full flex items-center justify-center transition-colors">
+            <ChevronRight size={20} />
+          </button>
+        </div>
       </div>
     </section>
   );
