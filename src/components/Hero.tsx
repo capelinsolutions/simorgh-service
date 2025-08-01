@@ -30,7 +30,7 @@ const Hero = () => {
             Specialized, efficient,<br />and thorough cleaning<br />services
           </h1>
           
-          <p className="text-gray-600 text-lg mb-8 leading-relaxed">
+          <p className="text-gray-600 text-lg mb-8 leading-relaxed max-w-lg">
             We provide Performing cleaning tasks using the least amount of time, energy, and money.
           </p>
           
