@@ -73,6 +73,83 @@ const BestServiceSection = () => {
       description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
       image: 'https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?auto=format&fit=crop&w=800&q=80',
       buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'movein',
+      title: 'Move-in/Move-out Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'event',
+      title: 'Event Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'medical',
+      title: 'Medical Facility Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'school',
+      title: 'School Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'restaurant',
+      title: 'Restaurant Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'warehouse',
+      title: 'Warehouse Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'hotel',
+      title: 'Hotel Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'janitorial',
+      title: 'Janitorial Services',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'floor',
+      title: 'Floor Cleaning & Polishing',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'pressure',
+      title: 'Pressure Washing',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1559599101-f09722fb4948?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'upholstery',
+      title: 'Upholstery Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
     }
   ];
 
