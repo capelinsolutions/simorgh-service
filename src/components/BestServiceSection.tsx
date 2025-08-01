@@ -34,8 +34,8 @@ const BestServiceSection = () => {
   ];
 
   return (
-    <section className="py-16 px-[120px] max-md:px-5 bg-white">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-16 px-[120px] max-md:px-5 bg-white w-full">
+      <div className="w-full">
         {/* Header Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
           <div>
