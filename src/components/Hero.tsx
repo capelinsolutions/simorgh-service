@@ -13,21 +13,21 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative min-h-[700px] w-full flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[800px] w-full flex items-center justify-center overflow-hidden">
       <img
         src="/lovable-uploads/3f1c1c8b-28bc-492c-9013-026112f96e8e.png"
         alt="Professional cleaning team"
         className="absolute inset-0 w-full h-full object-cover scale-110"
       />
       
-      <div className="relative z-10 w-full flex items-center justify-start h-full min-h-[700px] pl-[120px] max-md:pl-5">
+      <div className="relative z-10 w-full flex items-center justify-start h-full min-h-[800px] pl-[120px] max-md:pl-5">
         <div className="max-w-xl">
           <p className="text-gray-600 text-lg mb-4 font-medium">
             Quality cleaning at a fair price.
           </p>
           
           <h1 className="text-gray-900 text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight mb-6">
-            Specialized, efficient, and thorough cleaning services
+            Specialized, efficient,<br />and thorough cleaning<br />services
           </h1>
           
           <p className="text-gray-600 text-lg mb-8 leading-relaxed">
