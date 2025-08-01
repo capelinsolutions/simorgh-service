@@ -37,7 +37,7 @@ const BestServiceSection = () => {
     <section className="py-24 px-[120px] max-md:px-5 bg-white w-full">
       <div className="w-full">
         {/* Header Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-12 mb-16">
           <div>
             <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
               We Always Provide The<br />Best Service
