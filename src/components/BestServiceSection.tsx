@@ -52,19 +52,39 @@ const BestServiceSection = () => {
       description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
       image: 'https://images.unsplash.com/photo-1582719471384-894fbb16e074?auto=format&fit=crop&w=800&q=80',
       buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'carpet',
+      title: 'Carpet Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'industrial',
+      title: 'Industrial Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'disinfection',
+      title: 'Disinfection Services',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
     }
   ];
 
-  const itemsPerSlide = 3;
-  const totalSlides = Math.ceil(services.length / itemsPerSlide);
+  const visibleItems = 3;
+  const maxSlides = services.length - visibleItems;
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % totalSlides);
+    setCurrentSlide((prev) => prev >= maxSlides ? 0 : prev + 1);
   };
 
-  const getCurrentServices = () => {
-    const startIndex = currentSlide * itemsPerSlide;
-    return services.slice(startIndex, startIndex + itemsPerSlide);
+  const getVisibleServices = () => {
+    return services.slice(currentSlide, currentSlide + visibleItems);
   };
 
   return (
@@ -94,7 +114,7 @@ const BestServiceSection = () => {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(-${currentSlide * 100}%)` }}
           >
-            {getCurrentServices().map((service) => (
+            {getVisibleServices().map((service) => (
               <div key={service.id} className="bg-white rounded-2xl overflow-hidden shadow-sm">
                 <div className="aspect-[4/3] overflow-hidden">
                   <img
@@ -123,7 +143,7 @@ const BestServiceSection = () => {
           </div>
           
           {/* Navigation Arrow */}
-          {totalSlides > 1 && (
+          {maxSlides > 0 && (
             <button 
               onClick={nextSlide}
               className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-[#58C0D7] hover:bg-[#4aa8c0] text-white w-12 h-12 rounded-full flex items-center justify-center transition-colors"
