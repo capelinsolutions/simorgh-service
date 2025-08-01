@@ -13,15 +13,15 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative min-h-[600px] w-full flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[700px] w-full flex items-center justify-center overflow-hidden">
       <img
         src="/lovable-uploads/3f1c1c8b-28bc-492c-9013-026112f96e8e.png"
         alt="Professional cleaning team"
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover scale-110"
       />
       
-      <div className="relative z-10 container mx-auto px-6 lg:px-12 flex items-center justify-between h-full min-h-[600px]">
-        <div className="flex-1 max-w-xl">
+      <div className="relative z-10 w-full flex items-center justify-start h-full min-h-[700px] pl-[120px] max-md:pl-5">
+        <div className="max-w-xl">
           <p className="text-gray-600 text-lg mb-4 font-medium">
             Quality cleaning at a fair price.
           </p>
@@ -49,10 +49,6 @@ const Hero = () => {
               View all Services
             </button>
           </div>
-        </div>
-        
-        <div className="flex-1 hidden lg:block">
-          {/* This space is for the cleaning team image which is already in the background */}
         </div>
       </div>
     </section>
