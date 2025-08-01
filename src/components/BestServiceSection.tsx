@@ -193,11 +193,11 @@ const BestServiceSection = () => {
           >
             {getVisibleServices().map((service) => (
               <div key={service.id} className="bg-white rounded-2xl overflow-hidden shadow-sm">
-                <div className="aspect-[4/3] overflow-hidden">
+                <div className="aspect-[4/3] overflow-hidden rounded-2xl">
                   <img
                     src={service.image}
                     alt={service.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover rounded-2xl"
                   />
                 </div>
                 <div className="p-6">
