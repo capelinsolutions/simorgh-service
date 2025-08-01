@@ -44,7 +44,7 @@ const Hero = () => {
             
             <button
               onClick={handleViewServices}
-              className="border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 px-8 py-4 rounded-lg text-lg font-semibold transition-colors bg-white/80 backdrop-blur-sm"
+              className="border border-[#666666] hover:border-gray-400 text-gray-700 hover:text-gray-900 px-8 py-4 rounded-lg text-lg font-semibold transition-colors bg-transparent"
             >
               View all Services
             </button>
