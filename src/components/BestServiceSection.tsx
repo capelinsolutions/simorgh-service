@@ -14,22 +14,22 @@ const BestServiceSection = () => {
       id: 'office',
       title: 'Office Cleaning',
       description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
-      image: 'https://images.unsplash.com/photo-1721322800607-8c38375eef04?auto=format&fit=crop&w=800&q=80',
-      buttonStyle: 'border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900'
+      image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
     },
     {
       id: 'construction',
       title: 'Construction Cleaning',
       description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
-      image: 'https://images.unsplash.com/photo-1527576539890-dfa815648363?auto=format&fit=crop&w=800&q=80',
-      buttonStyle: 'bg-[#58C0D7] hover:bg-[#4aa8c0] text-white'
+      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-[#58C0D7] text-white hover:bg-[#4aa8c0]'
     },
     {
       id: 'deep',
       title: 'Deep Cleaning',
       description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
-      image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
-      buttonStyle: 'border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900'
+      image: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
     }
   ];
 
