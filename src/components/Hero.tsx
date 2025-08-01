@@ -15,7 +15,7 @@ const Hero = () => {
   return (
     <section className="relative min-h-[600px] w-full flex items-center justify-center overflow-hidden">
       <img
-        src="/lovable-uploads/5705ab5a-4a6d-44f5-88b3-d43b6060e988.png"
+        src="/lovable-uploads/3f1c1c8b-28bc-492c-9013-026112f96e8e.png"
         alt="Professional cleaning team"
         className="absolute inset-0 w-full h-full object-cover"
       />
