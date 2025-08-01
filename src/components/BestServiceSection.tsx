@@ -51,6 +51,9 @@ const BestServiceSection = () => {
           </div>
         </div>
 
+        {/* Divider */}
+        <div className="w-full h-px bg-[#83A790] mb-16"></div>
+
         {/* Services Grid */}
         <div className="relative">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
