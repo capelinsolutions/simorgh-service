@@ -21,7 +21,7 @@ const Hero = () => {
       />
       
       <div className="relative z-10 w-full flex items-center justify-start h-full min-h-[800px] pl-[120px] max-md:pl-5">
-        <div className="max-w-xl">
+        <div className="max-w-4xl">
           <p className="text-gray-600 text-lg mb-4 font-medium">
             Quality cleaning at a fair price.
           </p>
