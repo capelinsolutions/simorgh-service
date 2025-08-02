@@ -286,7 +286,7 @@ const BestServiceSection = () => {
           {maxSlides > 0 && (
             <button 
               onClick={nextSlide}
-              className="absolute right-4 top-1/3 transform -translate-y-1/2 bg-[#58C0D7] hover:bg-[#4aa8c0] text-white w-12 h-12 rounded-full flex items-center justify-center transition-colors shadow-lg z-10"
+              className="absolute right-12 top-1/3 transform -translate-y-1/2 bg-[#58C0D7] hover:bg-[#4aa8c0] text-white w-12 h-12 rounded-full flex items-center justify-center transition-colors shadow-lg z-10"
             >
               <img src="/lovable-uploads/1ee07c93-c687-459f-969d-e35bf8c4bd94.png" alt="Next" className="w-6 h-6" />
             </button>
