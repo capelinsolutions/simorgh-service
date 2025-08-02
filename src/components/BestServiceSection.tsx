@@ -150,6 +150,69 @@ const BestServiceSection = () => {
       description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
       image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
       buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'gutter',
+      title: 'Gutter Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1560184897-ae75f418493e?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'roof',
+      title: 'Roof Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'solar',
+      title: 'Solar Panel Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'pool',
+      title: 'Pool Area Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'gym',
+      title: 'Gym & Fitness Center Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'parking',
+      title: 'Parking Garage Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'retail',
+      title: 'Retail Store Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'daycare',
+      title: 'Daycare & Childcare Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'church',
+      title: 'Religious Facility Cleaning',
+      description: 'While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
     }
   ];
 
