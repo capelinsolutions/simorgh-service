@@ -5,8 +5,8 @@ const QualitySection = () => {
   return (
     <section className="py-24 px-[120px] max-md:px-5 w-full">
       <div className="w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-12 items-center">
+          <div className="max-w-lg">
             <p className="text-sm text-gray-500 mb-4 font-medium">
               Affordable cleaning solutions
             </p>
