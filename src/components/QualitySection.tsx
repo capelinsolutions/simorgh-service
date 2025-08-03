@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 const QualitySection = () => {
   return (
     <section className="py-24 px-[120px] max-md:px-5 w-full">
-      <div className="max-w-7xl mx-auto">
+      <div className="w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <p className="text-sm text-gray-500 mb-4 font-medium">
