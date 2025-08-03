@@ -30,7 +30,7 @@ const QualitySection = () => {
               {/* Main image container */}
               <div className="relative bg-white rounded-2xl p-4 shadow-lg">
                 <img 
-                  src="/lovable-uploads/9080b5c4-692e-402d-bd30-22f7d2f4585c.png"
+                  src="/lovable-uploads/e2664ec8-0e6e-4d41-b080-0120dc3d9a91.png"
                   alt="Professional cleaning team"
                   className="w-full h-64 object-cover rounded-xl"
                 />
