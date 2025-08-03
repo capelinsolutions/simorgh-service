@@ -28,11 +28,11 @@ const QualitySection = () => {
               <div className="absolute top-4 right-4 w-64 h-48 bg-[#58C0D7] rounded-2xl opacity-20"></div>
               
               {/* Main image container */}
-              <div className="relative bg-white rounded-2xl p-4 shadow-lg">
+              <div className="relative">
                 <img 
                   src="/lovable-uploads/e2664ec8-0e6e-4d41-b080-0120dc3d9a91.png"
                   alt="Professional cleaning team"
-                  className="w-full h-64 object-cover rounded-xl"
+                  className="w-full object-cover rounded-xl"
                 />
               </div>
             </div>
