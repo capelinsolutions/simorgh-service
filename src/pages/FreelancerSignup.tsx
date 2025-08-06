@@ -414,18 +414,18 @@ const FreelancerSignup = () => {
                   <Label className="text-base font-medium mb-4 block">Services You Offer *</Label>
                   <p className="text-sm text-gray-600 mb-4">Select all services you can provide</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {services.map((service, index) => (
-                      <div key={index} className="flex items-center space-x-2">
-                        <Checkbox
-                          id={service}
-                          checked={formData.servicesOffered.includes(service)}
-                          onCheckedChange={() => toggleService(service)}
-                        />
-                        <Label htmlFor={service} className="text-sm">
-                          {service}
-                        </Label>
-                      </div>
-                    ))}
+                     {services.map((service, index) => (
+                       <div key={index} className="flex items-center space-x-2">
+                         <Checkbox
+                           id={service.title}
+                           checked={formData.servicesOffered.includes(service.title)}
+                           onCheckedChange={() => toggleService(service.title)}
+                         />
+                         <Label htmlFor={service.title} className="text-sm">
+                           {service.title}
+                         </Label>
+                       </div>
+                     ))}
                   </div>
                   {formData.servicesOffered.length > 0 && (
                     <div className="mt-4">
