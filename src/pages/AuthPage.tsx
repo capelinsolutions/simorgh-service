@@ -5,15 +5,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { Loader2, Eye, EyeOff, UserPlus, LogIn } from 'lucide-react';
+import { Loader2, Eye, EyeOff, UserPlus, LogIn, Users, Briefcase, Shield, ChevronRight } from 'lucide-react';
 
 const AuthPage = () => {
   const { user, isAdmin } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<'customer' | 'cleaner' | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,7 +53,7 @@ const AuthPage = () => {
     }
   };
 
-  const handleSignUp = async (email: string, password: string) => {
+  const handleCustomerSignUp = async (email: string, password: string) => {
     setLoading(true);
     const redirectUrl = `${window.location.origin}/`;
     
@@ -59,7 +61,10 @@ const AuthPage = () => {
       email,
       password,
       options: {
-        emailRedirectTo: redirectUrl
+        emailRedirectTo: redirectUrl,
+        data: {
+          role: 'customer'
+        }
       }
     });
 
@@ -98,6 +103,39 @@ const AuthPage = () => {
         title: "Account created successfully!",
         description: "Please check your email for verification link.",
       });
+    }
+    setLoading(false);
+  };
+
+  const handleCleanerSignUp = async (email: string, password: string) => {
+    setLoading(true);
+    
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/freelancer-signup`,
+        data: {
+          role: 'cleaner'
+        }
+      }
+    });
+
+    if (error) {
+      toast({
+        title: "Sign up failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        title: "Account created!",
+        description: "Please check your email and complete your cleaner application.",
+      });
+      // Redirect to cleaner application form
+      setTimeout(() => {
+        navigate('/freelancer-signup');
+      }, 2000);
     }
     setLoading(false);
   };
@@ -186,11 +224,27 @@ const AuthPage = () => {
               </TabsContent>
               
               <TabsContent value="signup" className="space-y-4">
-                <AuthForm 
-                  type="signup" 
-                  onSubmit={handleSignUp} 
-                  loading={loading}
-                />
+                {!selectedRole ? (
+                  <RoleSelection onRoleSelect={setSelectedRole} />
+                ) : (
+                  <>
+                    <div className="flex items-center gap-2 mb-4">
+                      <button
+                        onClick={() => setSelectedRole(null)}
+                        className="text-sm text-gray-500 hover:text-gray-700"
+                      >
+                        ← Back to role selection
+                      </button>
+                    </div>
+                    <AuthForm 
+                      type="signup" 
+                      role={selectedRole}
+                      onSubmit={selectedRole === 'customer' ? handleCustomerSignUp : handleCleanerSignUp} 
+                      loading={loading}
+                    />
+                  </>
+                )}
+                
                 <div className="text-center space-y-2">
                   <p className="text-sm text-gray-600">
                     Already have an account?{' '}
@@ -198,20 +252,12 @@ const AuthPage = () => {
                       onClick={() => {
                         const signinTrigger = document.querySelector('[value="signin"]') as HTMLElement;
                         signinTrigger?.click();
+                        setSelectedRole(null);
                       }}
                       className="text-[#58C0D7] hover:underline font-medium"
                     >
                       Sign in here
                     </button>
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    Want to join as a cleaner?{' '}
-                    <a 
-                      href="/freelancer-signup" 
-                      className="text-[#58C0D7] hover:underline font-medium"
-                    >
-                      Apply here
-                    </a>
                   </p>
                 </div>
               </TabsContent>
@@ -223,13 +269,81 @@ const AuthPage = () => {
   );
 };
 
+interface RoleSelectionProps {
+  onRoleSelect: (role: 'customer' | 'cleaner') => void;
+}
+
+const RoleSelection: React.FC<RoleSelectionProps> = ({ onRoleSelect }) => {
+  return (
+    <div className="space-y-4">
+      <div className="text-center mb-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Choose Your Account Type</h3>
+        <p className="text-sm text-gray-600">Select how you'd like to use Simorgh</p>
+      </div>
+      
+      <div className="space-y-3">
+        <Card 
+          className="cursor-pointer hover:shadow-md transition-shadow border-2 hover:border-[#58C0D7]"
+          onClick={() => onRoleSelect('customer')}
+        >
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                  <Users className="h-5 w-5 text-blue-600" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-900">Customer</h4>
+                  <p className="text-sm text-gray-600">Book cleaning services</p>
+                </div>
+              </div>
+              <ChevronRight className="h-5 w-5 text-gray-400" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card 
+          className="cursor-pointer hover:shadow-md transition-shadow border-2 hover:border-[#58C0D7]"
+          onClick={() => onRoleSelect('cleaner')}
+        >
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                  <Briefcase className="h-5 w-5 text-green-600" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-900">Cleaner</h4>
+                  <p className="text-sm text-gray-600">Provide cleaning services</p>
+                </div>
+              </div>
+              <ChevronRight className="h-5 w-5 text-gray-400" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+        <div className="flex items-center gap-2 mb-2">
+          <Shield className="h-4 w-4 text-gray-600" />
+          <span className="text-sm font-medium text-gray-700">Admin Access</span>
+        </div>
+        <p className="text-xs text-gray-600">
+          Admin accounts are invitation-only. Contact support if you need administrative access.
+        </p>
+      </div>
+    </div>
+  );
+};
+
 interface AuthFormProps {
   type: 'signin' | 'signup';
+  role?: 'customer' | 'cleaner';
   onSubmit: (email: string, password: string) => Promise<void>;
   loading: boolean;
 }
 
-const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit, loading }) => {
+const AuthForm: React.FC<AuthFormProps> = ({ type, role, onSubmit, loading }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -241,68 +355,89 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit, loading }) => {
     }
   };
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-2">
-        <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-          Email Address
-        </Label>
-        <Input
-          id="email"
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="h-12"
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="password" className="text-sm font-medium text-gray-700">
-          Password
-        </Label>
-        <div className="relative">
-          <Input
-            id="password"
-            type={showPassword ? "text" : "password"}
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={6}
-            className="h-12 pr-10"
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-          >
-            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-          </button>
+  const getRoleDisplay = () => {
+    if (type === 'signin' || !role) return '';
+    return role === 'customer' ? 'Customer' : 'Cleaner';
+  };
+
+  const getSubmitText = () => {
+    if (loading) {
+      return (
+        <div className="flex items-center gap-2">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          {type === 'signin' ? 'Signing in...' : `Creating ${getRoleDisplay()} account...`}
         </div>
-        {type === 'signup' && (
-          <p className="text-xs text-gray-500">
-            Password must be at least 6 characters long
-          </p>
-        )}
-      </div>
+      );
+    }
+    return type === 'signin' ? 'Sign In' : `Create ${getRoleDisplay()} Account`;
+  };
+
+  return (
+    <div className="space-y-4">
+      {type === 'signup' && role && (
+        <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg">
+          <Badge variant="outline" className="text-[#58C0D7] border-[#58C0D7]">
+            {getRoleDisplay()}
+          </Badge>
+          <span className="text-sm text-gray-600">Account Type</span>
+        </div>
+      )}
       
-      <Button 
-        type="submit" 
-        className="w-full h-12 bg-gradient-to-r from-[#58C0D7] to-[#4aa8c0] hover:from-[#4aa8c0] to-[#3a96b3] text-white font-medium" 
-        disabled={loading}
-      >
-        {loading ? (
-          <div className="flex items-center gap-2">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            {type === 'signin' ? 'Signing in...' : 'Creating account...'}
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="space-y-2">
+          <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+            Email Address
+          </Label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="h-12"
+          />
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+            Password
+          </Label>
+          <div className="relative">
+            <Input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+              className="h-12 pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            >
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
           </div>
-        ) : (
-          type === 'signin' ? 'Sign In' : 'Create Account'
-        )}
-      </Button>
-    </form>
+          {type === 'signup' && (
+            <p className="text-xs text-gray-500">
+              Password must be at least 6 characters long
+            </p>
+          )}
+        </div>
+        
+        <Button 
+          type="submit" 
+          className="w-full h-12 bg-gradient-to-r from-[#58C0D7] to-[#4aa8c0] hover:from-[#4aa8c0] to-[#3a96b3] text-white font-medium" 
+          disabled={loading}
+        >
+          {getSubmitText()}
+        </Button>
+      </form>
+    </div>
   );
 };
 
