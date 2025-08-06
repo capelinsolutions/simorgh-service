@@ -1,14 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
-import { LogOut, User, Settings } from 'lucide-react';
+import { LogOut, User, Settings, Briefcase } from 'lucide-react';
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, isAdmin, signOut, loading } = useAuth();
-  const [activeNav, setActiveNav] = useState('Home');
+  const [userRole, setUserRole] = useState<'customer' | 'freelancer' | 'admin' | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      checkUserRole(user.id);
+    } else {
+      setUserRole(null);
+    }
+  }, [user, isAdmin]);
+
+  const checkUserRole = async (userId: string) => {
+    try {
+      if (isAdmin) {
+        setUserRole('admin');
+        return;
+      }
+
+      // Check if user is freelancer
+      const { data: freelancer } = await supabase
+        .from('freelancers')
+        .select('user_id')
+        .eq('user_id', userId)
+        .single();
+
+      if (freelancer) {
+        setUserRole('freelancer');
+        return;
+      }
+
+      // Default to customer
+      setUserRole('customer');
+    } catch (error) {
+      console.error('Role check error:', error);
+      setUserRole('customer'); // Default fallback
+    }
+  };
 
   const getActiveClass = (path: string) => {
     const isActive = location.pathname === path;
@@ -20,9 +56,34 @@ const Header = () => {
   const handleSignOut = async () => {
     try {
       await signOut();
+      setUserRole(null);
       navigate('/');
     } catch (error) {
       console.error('Sign out error:', error);
+    }
+  };
+
+  const getDashboardRoute = () => {
+    switch (userRole) {
+      case 'admin':
+        return '/admin';
+      case 'freelancer':
+        return '/freelancer';
+      case 'customer':
+      default:
+        return '/customer';
+    }
+  };
+
+  const getRoleDisplayName = () => {
+    switch (userRole) {
+      case 'admin':
+        return 'Admin Panel';
+      case 'freelancer':
+        return 'Freelancer Hub';
+      case 'customer':
+      default:
+        return 'Dashboard';
     }
   };
 
@@ -78,16 +139,25 @@ const Header = () => {
             <span className="text-sm text-[rgba(40,40,40,1)] mr-2">
               Welcome, {user.email?.split('@')[0]}
             </span>
+            
             <Button
               variant="outline"
               size="sm"
-              onClick={() => navigate('/customer')}
+              onClick={() => navigate(getDashboardRoute())}
               className="text-[#58C0D7] border-[#58C0D7] hover:bg-[#58C0D7] hover:text-white"
             >
-              <User className="h-4 w-4 mr-1" />
-              Dashboard
+              {userRole === 'freelancer' ? (
+                <Briefcase className="h-4 w-4 mr-1" />
+              ) : userRole === 'admin' ? (
+                <Settings className="h-4 w-4 mr-1" />
+              ) : (
+                <User className="h-4 w-4 mr-1" />
+              )}
+              {getRoleDisplayName()}
             </Button>
-            {isAdmin && (
+
+            {/* Additional admin button for non-admin users who might have admin access */}
+            {isAdmin && userRole !== 'admin' && (
               <Button
                 variant="outline"
                 size="sm"
@@ -98,6 +168,7 @@ const Header = () => {
                 Admin
               </Button>
             )}
+            
             <Button
               variant="outline"
               size="sm"
