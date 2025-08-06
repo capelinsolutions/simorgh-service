@@ -52,3 +52,9 @@ verify_jwt = false
 
 [functions.create-stripe-connect-account]
 verify_jwt = true
+
+[functions.create-test-users]
+verify_jwt = false
+
+[functions.setup-test-accounts]
+verify_jwt = false
