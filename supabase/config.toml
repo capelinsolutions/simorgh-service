@@ -58,3 +58,6 @@ verify_jwt = false
 
 [functions.setup-test-accounts]
 verify_jwt = false
+
+[functions.create-demo-users]
+verify_jwt = false

@@ -10,6 +10,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
+import { CreateDemoUsers } from '@/components/CreateDemoUsers';
 import { Loader2, Eye, EyeOff, UserPlus, LogIn, Users, Briefcase, Shield, ChevronRight } from 'lucide-react';
 
 const AuthPage = () => {
@@ -262,6 +263,11 @@ const AuthPage = () => {
                 </div>
               </TabsContent>
             </Tabs>
+            
+            {/* Demo Users Section */}
+            <div className="mt-8 pt-6 border-t border-gray-200">
+              <CreateDemoUsers />
+            </div>
           </CardContent>
         </Card>
       </div>
