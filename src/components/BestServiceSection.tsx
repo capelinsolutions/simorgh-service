@@ -36,6 +36,86 @@ const BestServiceSection = () => {
       buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
     },
     {
+      id: 'staircase-cleaning',
+      title: 'Staircase Cleaning',
+      description: 'Clean every step, book your Staircase Cleaning today. Dust and debris removal, handrail sanitizing, stain and mark cleaning.',
+      price: '$22/hr with Membership (Normally $45)',
+      image: '/lovable-uploads/8ef865af-f8b9-45c5-b20b-e48d7a32578d.png',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'airbnb-cleaning',
+      title: 'Airbnb Cleaning',
+      description: 'Five-Star Clean for Every Guest. Fresh linens and supplies, full home turnaround.',
+      price: '$24/hr with Membership (Normally $54)',
+      image: '/lovable-uploads/ca8b6d5f-2078-44b7-affd-27463c75bf50.png',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'hospital-practice-cleaning',
+      title: 'Hospital & Practice Cleaning',
+      description: 'A healthy space for healing. Maintains a spotless and calm environment that supports recovery and care.',
+      price: '$24/hr with Membership (Normally $54)',
+      image: '/lovable-uploads/5071d900-e393-4f87-9302-b297cabf8c60.png',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'industrial-cleaning',
+      title: 'Industrial Cleaning',
+      description: 'Heavy-duty equipment and surface cleaning. Grease, oil, and debris removal for factories, warehouses, and production areas.',
+      price: '$24/hr with Membership (Normally $54)',
+      image: '/lovable-uploads/63775cf9-1b3d-40f5-8e86-7a30bc35172d.png',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'housekeeping-services',
+      title: 'Housekeeping Services',
+      description: 'Your home deserves consistent, gentle care, just like family. General home cleaning and tidying.',
+      price: '$18/hr with Membership (Normally $36)',
+      image: '/lovable-uploads/837222c4-0f81-4646-a5c6-c7315a0c3202.png',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'winter-garden-cleaning',
+      title: 'Winter Garden Cleaning',
+      description: 'Keep your garden clean and tidy, even in winter. Remove fallen leaves and debris, prepares your garden for winter rest.',
+      price: '$24/hr with Membership (Normally $54)',
+      image: '/lovable-uploads/521f3954-e6c6-4e8c-a3b2-db1700b1bc5f.png',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'pool-cleaning',
+      title: 'Pool Cleaning',
+      description: 'Clear water. Clean peace of mind. Checks and balances pool chemicals, keeps your pool ready for a swim.',
+      price: '$24/hr with Membership (Normally $54)',
+      image: '/lovable-uploads/90024f2c-f5b7-4917-8761-ddb35630d53c.png',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'private-jet-cleaning',
+      title: 'Private Jet & Aircraft Cleaning',
+      description: 'High-altitude hygiene, done right. Interior seat, floor, and cockpit care.',
+      price: '$42/hr with Membership (Normally $75)',
+      image: '/lovable-uploads/cd3cf549-d113-40ab-95e5-015c4eb6576b.png',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'yacht-ship-cleaning',
+      title: 'Yacht and Ship Cleaning',
+      description: 'Building/deck and interior polishing, saltwater damage removal. Professional care for your watercraft investment.',
+      price: '$32/hr with Membership (Normally $65)',
+      image: '/lovable-uploads/db76486a-1783-4ca6-a126-0e0a835eac1e.png',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
+      id: 'hotel-service',
+      title: 'Hotel Service Cleaning',
+      description: 'Let us handle the mess so your guests feel at home. Room turnaround and deep clean, guest-ready standards every time.',
+      price: '$24/hr with Membership (Normally $54)',
+      image: '/lovable-uploads/63d17ca7-9239-4014-8c05-7eb9090ff428.png',
+      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
+    },
+    {
       id: 'sauna-deep-cleaning',
       title: 'Sauna Deep Cleaning',
       description: 'Wood-safe cleaning and disinfection. Bench, floor & wall treatment.',
@@ -89,86 +169,6 @@ const BestServiceSection = () => {
       description: 'Play Hard And Stay Clean. Equipment and floor disinfection, locker room and restroom cleaning.',
       price: '$24/hr with Membership (Normally $54)',
       image: '/lovable-uploads/6e54915e-6b92-4236-98b4-68c306f94300.png',
-      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
-    },
-    {
-      id: 'deep-cleaning',
-      title: 'Deep Cleaning',
-      description: 'Comprehensive deep cleaning for thorough sanitization. Perfect for seasonal cleaning or preparing for special events.',
-      price: '$22/hr with Membership (Normally $45)',
-      image: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=800&q=80',
-      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
-    },
-    {
-      id: 'residential-cleaning',
-      title: 'Residential Cleaning',
-      description: 'Professional residential cleaning services for homes and apartments. Comprehensive cleaning including all rooms, bathrooms, and common areas.',
-      price: '$18/hr with Membership (Normally $36)',
-      image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80',
-      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
-    },
-    {
-      id: 'office-cleaning',
-      title: 'Office Cleaning',
-      description: 'Professional office and workspace cleaning services. Keep your work environment clean, healthy, and productive.',
-      price: '$22/hr with Membership (Normally $45)',
-      image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80',
-      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
-    },
-    {
-      id: 'move-in-out-cleaning',
-      title: 'Move In & Out Cleaning',
-      description: 'Specialized cleaning for moving in or out of properties. Ensure your new home is spotless or leave your old one pristine.',
-      price: '$24/hr with Membership (Normally $54)',
-      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?auto=format&fit=crop&w=800&q=80',
-      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
-    },
-    {
-      id: 'disinfect-cleaning',
-      title: 'Disinfect Cleaning',
-      description: 'Professional disinfection and sanitization services. Hospital-grade cleaning for maximum safety and hygiene.',
-      price: '$24/hr with Membership (Normally $54)',
-      image: 'https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?auto=format&fit=crop&w=800&q=80',
-      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
-    },
-    {
-      id: 'emergency-cleaning',
-      title: 'Emergency Cleaning Services 24/7',
-      description: '24/7 emergency cleaning response services. Immediate professional help when you need it most.',
-      price: '$45/hr with Membership (Normally $99)',
-      image: 'https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?auto=format&fit=crop&w=800&q=80',
-      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
-    },
-    {
-      id: 'carpet-rug-cleaning',
-      title: 'Carpet and Rug Cleaning',
-      description: 'Deep carpet and rug cleaning services. Professional cleaning to restore your carpets and rugs to like-new condition.',
-      price: '$24/hr with Membership (Normally $54)',
-      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?auto=format&fit=crop&w=800&q=80',
-      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
-    },
-    {
-      id: 'window-cleaning',
-      title: 'Glass and Window Cleaning',
-      description: 'Professional window and glass surface cleaning. Crystal clear results for both interior and exterior windows.',
-      price: '$22/hr with Membership (Normally $45)',
-      image: 'https://images.unsplash.com/photo-1582719471384-894fbb16e074?auto=format&fit=crop&w=800&q=80',
-      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
-    },
-    {
-      id: 'private-jet-cleaning',
-      title: 'Private Jet & Aircraft Cleaning',
-      description: 'Specialized aircraft and private jet cleaning services. Premium cleaning for luxury transportation.',
-      price: '$42/hr with Membership (Normally $75)',
-      image: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80',
-      buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
-    },
-    {
-      id: 'yacht-ship-cleaning',
-      title: 'Yacht and Ship Cleaning',
-      description: 'Marine vessel cleaning and maintenance services. Professional care for your watercraft investment.',
-      price: '$32/hr with Membership (Normally $65)',
-      image: 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=format&fit=crop&w=800&q=80',
       buttonStyle: 'bg-white border border-gray-300 text-gray-700 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all duration-300'
     }
   ];

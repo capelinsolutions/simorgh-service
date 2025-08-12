@@ -104,8 +104,8 @@ export const services: Service[] = [
     title: "Hospital & Practice Cleaning",
     regularPrice: 54,
     membershipPrice: 24,
-    image: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/12e423858b89522cac1b8715bada463d4af16bca?placeholderIfAbsent=true",
-    description: "Medical facility cleaning with specialized protocols. Meeting all healthcare cleaning standards and regulations.",
+    image: "/lovable-uploads/5071d900-e393-4f87-9302-b297cabf8c60.png",
+    description: "A healthy space for healing. Our expert medical cleaning services are designed for hospitals, clinics, and healthcare practices, maintaining a spotless and calm environment.",
     category: "Medical"
   },
   {
@@ -113,8 +113,8 @@ export const services: Service[] = [
     title: "Pool Cleaning",
     regularPrice: 54,
     membershipPrice: 24,
-    image: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/a88cd8a5c10b8106f10f753e0640229619532a44?placeholderIfAbsent=true",
-    description: "Swimming pool maintenance and cleaning services. Keep your pool crystal clear and safe for swimming.",
+    image: "/lovable-uploads/90024f2c-f5b7-4917-8761-ddb35630d53c.png",
+    description: "Clear water. Clean peace of mind. Checks and balances pool chemicals, keeps your pool ready for a swim.",
     category: "Specialized"
   },
   {
@@ -122,8 +122,8 @@ export const services: Service[] = [
     title: "Housekeeping Services",
     regularPrice: 36,
     membershipPrice: 18,
-    image: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/9de4baea36394e060b78e19a488d09d9a7f7e1a7?placeholderIfAbsent=true",
-    description: "Comprehensive housekeeping and maintenance services. Regular upkeep to maintain your home's cleanliness.",
+    image: "/lovable-uploads/837222c4-0f81-4646-a5c6-c7315a0c3202.png",
+    description: "Your home deserves consistent, gentle care, just like family. General home cleaning and tidying.",
     category: "Residential"
   },
   {
@@ -131,8 +131,8 @@ export const services: Service[] = [
     title: "Private Jet & Aircraft Cleaning",
     regularPrice: 75,
     membershipPrice: 42,
-    image: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/c4448dfd987bb8cb20375220f09d5078669692a0?placeholderIfAbsent=true",
-    description: "Specialized aircraft and private jet cleaning services. Premium cleaning for luxury transportation.",
+    image: "/lovable-uploads/cd3cf549-d113-40ab-95e5-015c4eb6576b.png",
+    description: "High-altitude hygiene, done right. Interior seat, floor, and cockpit care. Premium cleaning for luxury transportation.",
     category: "Luxury"
   },
   {
@@ -140,8 +140,8 @@ export const services: Service[] = [
     title: "Yacht and Ship Cleaning",
     regularPrice: 65,
     membershipPrice: 32,
-    image: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/a88cd8a5c10b8106f10f753e0640229619532a44?placeholderIfAbsent=true",
-    description: "Marine vessel cleaning and maintenance services. Professional care for your watercraft investment.",
+    image: "/lovable-uploads/db76486a-1783-4ca6-a126-0e0a835eac1e.png",
+    description: "Building/deck and interior polishing, saltwater damage removal. Professional care for your watercraft investment.",
     category: "Luxury"
   },
   {
@@ -158,8 +158,8 @@ export const services: Service[] = [
     title: "Industrial Cleaning",
     regularPrice: 54,
     membershipPrice: 24,
-    image: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/9f8ade4888783da5fad4c6fced299ec4bb1a5934?placeholderIfAbsent=true",
-    description: "Heavy-duty industrial facility cleaning services. Specialized equipment and techniques for industrial environments.",
+    image: "/lovable-uploads/63775cf9-1b3d-40f5-8e86-7a30bc35172d.png",
+    description: "Simorgh's industrial cleaning service tackles dirt, debris, and heavy build-up in factories, warehouses, and production areas. Grease, oil, and debris removal.",
     category: "Industrial"
   },
   {
@@ -167,8 +167,8 @@ export const services: Service[] = [
     title: "Hotel Service",
     regularPrice: 54,
     membershipPrice: 24,
-    image: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/c4448dfd987bb8cb20375220f09d5078669692a0?placeholderIfAbsent=true",
-    description: "Hotel and hospitality cleaning services. Maintain the highest standards for your guests' satisfaction.",
+    image: "/lovable-uploads/63d17ca7-9239-4014-8c05-7eb9090ff428.png",
+    description: "Let us handle the mess so your guests feel at home. Room turnaround and deep clean, guest-ready standards every time.",
     category: "Commercial"
   },
   {
@@ -185,8 +185,8 @@ export const services: Service[] = [
     title: "Winter garden cleaning",
     regularPrice: 54,
     membershipPrice: 24,
-    image: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/950a2c4d5b8648e07f41bbef91720364c4134ae5?placeholderIfAbsent=true",
-    description: "Winter garden and greenhouse cleaning services. Specialized care for your indoor growing spaces.",
+    image: "/lovable-uploads/521f3954-e6c6-4e8c-a3b2-db1700b1bc5f.png",
+    description: "Keep your garden clean and tidy, even in winter. Remove fallen leaves and debris, prepares your garden for winter rest.",
     category: "Seasonal"
   },
   {
@@ -446,8 +446,8 @@ export const services: Service[] = [
     title: "Staircase Cleaning",
     regularPrice: 45,
     membershipPrice: 22,
-    image: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/12e423858b89522cac1b8715bada463d4af16bca?placeholderIfAbsent=true",
-    description: "Stairway and staircase cleaning services. Safe and thorough cleaning of all stairway areas.",
+    image: "/lovable-uploads/8ef865af-f8b9-45c5-b20b-e48d7a32578d.png",
+    description: "Clean every step, book your Staircase Cleaning today. Dust and debris removal, handrail sanitizing, stain and mark cleaning.",
     category: "Specialized"
   },
   {
@@ -455,8 +455,8 @@ export const services: Service[] = [
     title: "Airbnb Cleaning",
     regularPrice: 54,
     membershipPrice: 24,
-    image: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/9de4baea36394e060b78e19a488d09d9a7f7e1a7?placeholderIfAbsent=true",
-    description: "Specialized Airbnb cleaning and turnover services. Quick, thorough cleaning between guests for 5-star reviews.",
+    image: "/lovable-uploads/ca8b6d5f-2078-44b7-affd-27463c75bf50.png",
+    description: "Five-Star Clean for Every Guest. Fresh linens and supplies, full home turnaround. Quick, thorough cleaning between guests for 5-star reviews.",
     category: "Hospitality"
   }
 ];
