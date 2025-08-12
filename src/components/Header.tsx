@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { LogOut, User, Settings, Briefcase } from 'lucide-react';
-import companyLogoImg from 'https://storage.googleapis.com/gpt-engineer-file-uploads/IcZz9zyC77b8XZuBt5UvXurtt4M2/9fe3eeee-35b0-4645-a57c-3b6a87a78efd?Expires=1754971715&GoogleAccessId=go-api-on-aws%40gpt-engineer-390607.iam.gserviceaccount.com&Signature=iPZSKsHIUtB%2FuLKZgdCwiI%2Beef%2B2UOITUXnzTbUZAaVnXeJ2MjRu5eDxWMxMzUqV1n7AhdOKdBdlICNlcmJ84w9N6eQJ9cmOv7JWqGUpcg%2BBoeJ61z9dKjOlvX3Ybcpq5SiKM4XSf3xqUSo5KxKKhlajXU5Z9odPJ2QqTx%2BvAuqBJ%2B6QvaYK808SAui4PwGFI1nyP5cPurmOAnOlEXzBLcMaHlpKurfdxiQNPwj%2FBXqDG5eN0ddAuUZsLhj0ctkUGe7tBItVoKOtO2OIbd2oD5xFvuJLDXKQVlQTBroFNCzBT4hYRi34sQvUuf7xX7B%2FAuN96eDiE4ltvfWWP1z1Bg%3D%3D';
+import companyLogoImg from '@/assets/company-logo.jpg';
 
 const Header = () => {
   const location = useLocation();
