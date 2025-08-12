@@ -17,6 +17,29 @@ export const CreateDemoUsers = () => {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState<DemoUser[]>([]);
   const [created, setCreated] = useState(false);
+  
+  // Security check: Only show in development mode
+  const isProduction = window.location.hostname !== 'localhost' && 
+                      !window.location.hostname.includes('lovable') &&
+                      !window.location.hostname.includes('127.0.0.1');
+                      
+  if (isProduction) {
+    return (
+      <div className="max-w-4xl mx-auto p-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-yellow-600">
+              <Users className="h-5 w-5" />
+              Demo Users Disabled
+            </CardTitle>
+            <CardDescription>
+              Demo user creation is disabled in production for security reasons.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    );
+  }
 
   const createDemoUsers = async () => {
     setLoading(true);
