@@ -1,4 +1,6 @@
 import React from 'react';
+import whyChooseUsMainImg from '../assets/why-choose-us-main.jpg';
+import checkmarkIconImg from '../assets/checkmark-icon.jpg';
 
 const WhyChooseUs = () => {
   const features = [
@@ -24,7 +26,7 @@ const WhyChooseUs = () => {
           <div className="w-full lg:w-1/2 order-2 lg:order-1">
             <div className="relative aspect-square max-w-md mx-auto lg:max-w-none">
               <img
-                src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/3eeedfa4ebf67a2c7e19e4216557c0aa738a157a?placeholderIfAbsent=true"
+                src={whyChooseUsMainImg}
                 alt="Professional cleaning service"
                 className="w-full h-full object-cover rounded-2xl shadow-lg"
               />
@@ -50,7 +52,7 @@ const WhyChooseUs = () => {
                   <article key={index} className="flex items-start gap-4">
                     <div className="flex-shrink-0">
                       <img
-                        src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/d607e6f8960105630b686c50130fdec8508d6b19?placeholderIfAbsent=true"
+                        src={checkmarkIconImg}
                         alt=""
                         className="w-8 h-8 rounded-2xl object-contain"
                       />

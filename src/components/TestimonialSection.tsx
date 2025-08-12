@@ -1,4 +1,5 @@
 import React from 'react';
+import testimonialAvatarImg from '../assets/testimonial-avatar-1.jpg';
 import { Star } from 'lucide-react';
 
 const TestimonialSection = () => {
@@ -18,7 +19,7 @@ const TestimonialSection = () => {
           <div className="bg-white rounded-2xl p-8 shadow-lg">
             <div className="flex items-center gap-4 mb-6">
               <img 
-                src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/testimonial-avatar?placeholderIfAbsent=true"
+                src={testimonialAvatarImg}
                 alt="Sarah Johnson"
                 className="w-16 h-16 rounded-full object-cover"
               />

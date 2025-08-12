@@ -1,4 +1,7 @@
 import React from 'react';
+import blogEcoCleaningImg from '../assets/blog-eco-cleaning.jpg';
+import blogOfficeCleaningImg from '../assets/blog-office-cleaning.jpg';
+import blogProfessionalCleaningImg from '../assets/blog-professional-cleaning.jpg';
 import { Button } from '@/components/ui/button';
 
 const BlogSection = () => {

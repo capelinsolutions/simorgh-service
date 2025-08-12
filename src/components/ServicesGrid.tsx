@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { services, serviceCategories } from '@/data/services';
+import serviceArrowIconImg from '../assets/service-arrow-icon.jpg';
+import bookNowIconImg from '../assets/book-now-icon.jpg';
 
 const ServicesGrid = () => {
   const navigate = useNavigate();
@@ -74,7 +76,7 @@ const ServicesGrid = () => {
                 </div>
                 
                 <img
-                  src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/7789ebe2bce8895c68442087ef3c5c7863c7b050?placeholderIfAbsent=true"
+                  src={serviceArrowIconImg}
                   alt=""
                   className="object-contain w-[59px] stroke-[3px] stroke-[#58C0D7] mt-4"
                 />
@@ -101,7 +103,7 @@ const ServicesGrid = () => {
                 Show More ({filteredServices.length - 12} more services)
               </span>
               <img
-                src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/16bd81c03681f5ddd8569609378268b04706c50f?placeholderIfAbsent=true"
+                src={bookNowIconImg}
                 alt=""
                 className="aspect-[1] object-contain w-6 self-stretch shrink-0 my-auto"
               />

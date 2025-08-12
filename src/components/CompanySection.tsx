@@ -1,4 +1,5 @@
 import React from 'react';
+import companyTeamImg from '../assets/company-team.jpg';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -19,7 +20,7 @@ const CompanySection = () => {
           <div className="relative">
             <div className="bg-[#58C0D7] rounded-2xl p-8 relative overflow-hidden">
               <img 
-                src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/company-team?placeholderIfAbsent=true"
+                src={companyTeamImg}
                 alt="Simorgh+ Company Team"
                 className="w-full h-80 object-cover rounded-lg"
               />

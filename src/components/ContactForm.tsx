@@ -1,4 +1,9 @@
 import React, { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from 'sonner';
+import contactBackgroundImg from '../assets/contact-background.jpg';
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -44,7 +49,7 @@ const ContactForm = () => {
         <div className="flex max-w-full w-[1200px] items-center gap-[40px_89px] text-[rgba(15,15,15,1)] justify-between flex-wrap mt-12 max-md:mt-10">
           <div className="self-stretch min-w-60 min-h-[484px] text-[32px] font-semibold w-[593px] my-auto max-md:max-w-full">
             <img
-              src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/d76fcbd3bb52414156e128a390dccab89b9d3a87?placeholderIfAbsent=true"
+              src={contactBackgroundImg}
               alt="Contact us"
               className="aspect-[1.7] object-contain w-full flex-1 max-md:max-w-full"
             />

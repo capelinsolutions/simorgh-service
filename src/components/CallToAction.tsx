@@ -1,5 +1,7 @@
 import React from 'react';
+import { ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import ctaBackgroundImg from '../assets/cta-background.jpg';
 
 const CallToAction = () => {
   const navigate = useNavigate();
@@ -31,7 +33,7 @@ const CallToAction = () => {
         </div>
         
         <img
-          src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/943930ee6be921e6b5bf00c466428c7e07ce3621?placeholderIfAbsent=true"
+          src={ctaBackgroundImg}
           alt="Join our team"
           className="aspect-[1.87] object-contain w-[588px] self-stretch min-w-60 my-auto rounded-lg max-md:max-w-full"
         />

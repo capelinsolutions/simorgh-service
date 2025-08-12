@@ -1,4 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import companyLogoImg from '../assets/company-logo.jpg';
+import socialIconsImg from '../assets/social-icons.jpg';
 
 const Footer = () => {
   const handleApplyClick = () => {
@@ -15,7 +18,7 @@ const Footer = () => {
         <div className="flex min-w-60 flex-col items-stretch text-base text-white w-[327px]">
           <div className="flex max-w-full w-[327px] flex-col items-stretch font-normal justify-center">
             <img
-              src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/f36bfae74dcefd87a82e36827c0a3872deb3c501?placeholderIfAbsent=true"
+              src={companyLogoImg}
               alt="Simorgh Service Group Logo"
               className="aspect-[2.16] object-contain w-[104px] max-w-full"
             />
@@ -56,7 +59,7 @@ const Footer = () => {
               aria-label="Facebook"
             >
               <img
-                src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/4a67b3ba305268296f80bc7e0618bd2d83fa6f43?placeholderIfAbsent=true"
+                src={socialIconsImg}
                 alt="Facebook"
                 className="aspect-[1] object-contain w-9 self-stretch shrink-0 my-auto"
               />
@@ -67,7 +70,7 @@ const Footer = () => {
               aria-label="Twitter"
             >
               <img
-                src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/96acd8101c0cf7a116e223040af9aeb6c52ba576?placeholderIfAbsent=true"
+                src={socialIconsImg}
                 alt="Twitter"
                 className="aspect-[1] object-contain w-9 self-stretch shrink-0 my-auto"
               />
@@ -78,7 +81,7 @@ const Footer = () => {
               aria-label="LinkedIn"
             >
               <img
-                src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/a22d3ac1bf3f0a42b2d736169db754d4f289bb3e?placeholderIfAbsent=true"
+                src={socialIconsImg}
                 alt="LinkedIn"
                 className="aspect-[1] object-contain w-9 self-stretch shrink-0 my-auto"
               />

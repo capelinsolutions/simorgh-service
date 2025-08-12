@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import faqIconsImg from '../assets/faq-icons.jpg';
 
 const FAQ = () => {
   const [openFAQ, setOpenFAQ] = useState(0);
@@ -54,8 +56,8 @@ const FAQ = () => {
                 </span>
                 <img
                   src={openFAQ === index 
-                    ? "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/08fc777b09c6722a48f3deb0984e7bed9d79ac95?placeholderIfAbsent=true"
-                    : "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/3e9043fbc57ca2873ff6914bbdf7bf67c1c647f6?placeholderIfAbsent=true"
+                    ? faqIconsImg
+                    : faqIconsImg
                   }
                   alt={openFAQ === index ? "Collapse" : "Expand"}
                   className="aspect-[1] object-contain w-6 self-stretch shrink-0 my-auto"

@@ -1,24 +1,28 @@
 import React from 'react';
+import fiveStarRatingImg from '../assets/five-star-rating.jpg';
+import testimonialAvatar1Img from '../assets/testimonial-avatar-1.jpg';
+import testimonialAvatar2Img from '../assets/testimonial-avatar-2.jpg';
+import testimonialAvatar3Img from '../assets/testimonial-avatar-3.jpg';
 
 const Testimonials = () => {
   const testimonials = [
     {
-      rating: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/daafd4ac520f40d78896efd6a67b120cef037019?placeholderIfAbsent=true",
+      rating: fiveStarRatingImg,
       text: "We scheduled with Simorgh Service Group, and they promised to be on time. True to their word, they arrived on time, cleaned up promptly, and now my store is spotless.",
       author: "Alexander Thomas",
-      avatar: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/7304349aaeefddbcb31d30902c2a8e790bdc0a57?placeholderIfAbsent=true"
+      avatar: testimonialAvatar1Img
     },
     {
-      rating: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/daafd4ac520f40d78896efd6a67b120cef037019?placeholderIfAbsent=true",
+      rating: fiveStarRatingImg,
       text: "Who knew cleaning could be this easy? Simorgh took care of everything! My house feels brand new!",
       author: "Anna P",
-      avatar: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/7304349aaeefddbcb31d30902c2a8e790bdc0a57?placeholderIfAbsent=true"
+      avatar: testimonialAvatar2Img
     },
     {
-      rating: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/6f89e181f48bd8397ede34ff84df2d8eeb0ea77c?placeholderIfAbsent=true",
+      rating: fiveStarRatingImg,
       text: "I wholeheartedly recommend Simorgh Service Group for setting a new standard in disinfectant cleaning services in Malibu and Manhattan. Their exceptional attention to detail ensures every corner of my office is bacteria-free",
       author: "Annie Daniel",
-      avatar: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/f09d9e4c26904047019448c89c98d44438cb69cf?placeholderIfAbsent=true"
+      avatar: testimonialAvatar3Img
     }
   ];
 
