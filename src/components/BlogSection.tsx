@@ -8,17 +8,17 @@ const BlogSection = () => {
   const articles = [
     {
       title: "Eco-Friendly Cleaning: How We Keep Your Home Clean",
-      image: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/eco-cleaning?placeholderIfAbsent=true",
+      image: blogEcoCleaningImg,
       date: "March 15, 2024"
     },
     {
       title: "How to Maintain a Clutter-Free Professional Office",
-      image: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/office-cleaning?placeholderIfAbsent=true", 
+      image: blogOfficeCleaningImg, 
       date: "March 12, 2024"
     },
     {
       title: "The Benefits of Regular Professional Cleaning",
-      image: "https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/professional-cleaning?placeholderIfAbsent=true",
+      image: blogProfessionalCleaningImg,
       date: "March 10, 2024"
     }
   ];
