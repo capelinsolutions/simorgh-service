@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import companyLogoImg from '../assets/company-logo.jpg';
+import simorghLogo from '/lovable-uploads/32449588-adb2-4190-98ac-fccbb7dc6557.png';
 import socialIconsImg from '../assets/social-icons.jpg';
 
 const Footer = () => {
@@ -18,7 +18,7 @@ const Footer = () => {
         <div className="flex min-w-60 flex-col items-stretch text-base text-white w-[327px]">
           <div className="flex max-w-full w-[327px] flex-col items-stretch font-normal justify-center">
             <img
-              src={companyLogoImg}
+              src={simorghLogo}
               alt="Simorgh Service Group Logo"
               className="aspect-[2.16] object-contain w-[104px] max-w-full"
             />
