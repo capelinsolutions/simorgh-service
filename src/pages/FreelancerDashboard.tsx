@@ -115,7 +115,7 @@ const FreelancerDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50">
       <Header />
       <div className="flex flex-col lg:flex-row">
         <FreelancerSidebar />
@@ -163,25 +163,24 @@ const FreelancerDashboardHome: React.FC<FreelancerDashboardHomeProps> = ({ stats
   return (
     <div className="space-y-6">
       {/* Welcome Header */}
-      <div className="bg-gradient-to-r from-[#58C0D7] to-[#4aa8c0] rounded-lg p-6 text-white">
-        <div className="flex flex-col md:flex-row md:items-center justify-between">
+      <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-xl p-8 text-white shadow-xl">
+        <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold mb-2">
-              Welcome back, {freelancerData?.business_name || user?.email?.split('@')[0]}!
+            <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
+              🧽 Cleaner Hub
             </h1>
-            <p className="text-blue-100 mb-2">
-              Manage your cleaning jobs and grow your business.
+            <p className="text-orange-100 text-lg mb-2">
+              Welcome back, {freelancerData?.business_name || user?.email?.split('@')[0]}! Your professional command center.
             </p>
             <div className="flex items-center gap-2">
               <span className="text-sm">Status:</span>
               {getStatusBadge(freelancerData?.verification_status)}
             </div>
           </div>
-          <div className="mt-4 md:mt-0 text-right">
-            <div className="text-3xl font-bold">{stats.rating.toFixed(1)}</div>
-            <div className="flex items-center justify-end gap-1">
-              <Star className="h-4 w-4 fill-current" />
-              <span className="text-sm">Rating</span>
+          <div className="hidden md:block">
+            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center">
+              <div className="text-3xl font-bold">{stats.rating.toFixed(1)} ⭐</div>
+              <div className="text-sm text-orange-100">Your Rating</div>
             </div>
           </div>
         </div>

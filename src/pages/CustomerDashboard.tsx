@@ -70,7 +70,7 @@ const CustomerDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50">
       <Header />
       <div className="flex flex-col lg:flex-row">
         <CustomerSidebar />
@@ -105,13 +105,23 @@ const CustomerDashboardHome: React.FC<CustomerDashboardHomeProps> = ({ stats }) 
   return (
     <div className="space-y-6">
       {/* Welcome Header */}
-      <div className="bg-gradient-to-r from-[#58C0D7] to-[#4aa8c0] rounded-lg p-6 text-white">
-        <h1 className="text-2xl font-bold mb-2">
-          Welcome back, {user?.email?.split('@')[0]}!
-        </h1>
-        <p className="text-blue-100">
-          Manage your bookings, track your services, and explore our offerings.
-        </p>
+      <div className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 rounded-xl p-8 text-white shadow-xl">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
+              🏠 Customer Portal
+            </h1>
+            <p className="text-emerald-100 text-lg">
+              Welcome back, {user?.email?.split('@')[0]}! Your personal cleaning service hub.
+            </p>
+          </div>
+          <div className="hidden md:block">
+            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold">⭐ VIP</div>
+              <div className="text-sm text-emerald-100">Member Status</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Quick Stats */}

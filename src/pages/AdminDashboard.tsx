@@ -10,6 +10,7 @@ import OrderManager from '@/components/admin/OrderManager';
 import CleanerApproval from '@/components/admin/CleanerApproval';
 import LiveBookingFeed from '@/components/admin/LiveBookingFeed';
 import AdvancedServiceManager from '@/components/admin/AdvancedServiceManager';
+import EnhancedServiceManager from '@/components/admin/EnhancedServiceManager';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -73,14 +74,14 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <Header />
       <div className="flex flex-col lg:flex-row">
         <AdminSidebar />
         <main className="flex-1 p-4 lg:p-6">
           <Routes>
             <Route index element={<AdminDashboardHome stats={dashboardStats} />} />
-            <Route path="services" element={<AdvancedServiceManager />} />
+            <Route path="services" element={<EnhancedServiceManager />} />
             <Route path="users" element={<UserManager />} />
             <Route path="orders" element={<OrderManager />} />
             <Route path="cleaners" element={<CleanerApproval />} />
@@ -102,13 +103,23 @@ const AdminDashboardHome: React.FC<AdminDashboardHomeProps> = ({ stats }) => {
   return (
     <div className="space-y-6">
       {/* Welcome Header */}
-      <div className="bg-gradient-to-r from-slate-900 to-slate-700 rounded-lg p-6 text-white">
-        <h1 className="text-2xl font-bold mb-2">
-          Admin Dashboard
-        </h1>
-        <p className="text-slate-200">
-          Welcome back, {user?.email?.split('@')[0]}. Here's your platform overview.
-        </p>
+      <div className="bg-gradient-to-r from-red-600 via-purple-600 to-blue-600 rounded-xl p-8 text-white shadow-xl">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
+              🛡️ Admin Control Center
+            </h1>
+            <p className="text-blue-100 text-lg">
+              Welcome back, Administrator {user?.email?.split('@')[0]}. Manage your platform with precision.
+            </p>
+          </div>
+          <div className="hidden md:block">
+            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
+              <div className="text-2xl font-bold">{new Date().toLocaleDateString()}</div>
+              <div className="text-sm text-blue-100">Today's Date</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Quick Stats Grid */}
