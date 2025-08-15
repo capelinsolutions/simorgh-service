@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { LogOut, User, Settings, Briefcase } from 'lucide-react';
-import simorghLogo from '/lovable-uploads/f65d5033-12e6-48cf-ac44-80914e9e2efd.png';
+import companyLogoImg from '@/assets/company-logo.jpg';
 
 const Header = () => {
   const location = useLocation();
@@ -91,7 +91,7 @@ const Header = () => {
   return (
     <header className="bg-white flex w-full items-center gap-[40px_100px] text-base justify-between flex-wrap px-[120px] max-md:max-w-full max-md:px-5">
       <img
-        src={simorghLogo}
+        src={companyLogoImg}
         alt="Simorgh Service Group Logo"
         className="aspect-[1.5] object-contain w-[120px] self-stretch shrink-0 my-auto"
       />
