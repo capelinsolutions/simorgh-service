@@ -60,6 +60,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         if (mounted) {
           setLoading(false);
+          console.log('Auth loading set to false after auth state change');
         }
       }
     );

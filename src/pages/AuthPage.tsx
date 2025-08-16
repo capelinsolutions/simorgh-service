@@ -23,7 +23,13 @@ const AuthPage = () => {
     // Only redirect if user is authenticated and auth is not loading
     if (user && !authLoading) {
       console.log('User authenticated, checking role for redirect...', { user: user.id, isAdmin });
-      checkUserRoleAndRedirect(user.id);
+      
+      // Add a small delay to ensure admin status is loaded
+      const timeoutId = setTimeout(() => {
+        checkUserRoleAndRedirect(user.id);
+      }, 100);
+      
+      return () => clearTimeout(timeoutId);
     }
   }, [user, authLoading, isAdmin, navigate]);
 
@@ -175,19 +181,21 @@ const AuthPage = () => {
   };
 
   // Show loading while checking auth state
-  if (user && authLoading) {
+  if (authLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="flex items-center gap-2">
           <Loader2 className="h-4 w-4 animate-spin" />
-          <span>Checking your account...</span>
+          <span>Loading authentication...</span>
         </div>
       </div>
     );
   }
 
-  // Show redirecting state after auth is loaded but before navigation
-  if (user && !authLoading) {
+  // If user is authenticated, immediately redirect without showing loading screen
+  if (user) {
+    // Trigger redirect in useEffect, but don't show loading screen here
+    // Instead, return null or redirect immediately
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="flex items-center gap-2">
