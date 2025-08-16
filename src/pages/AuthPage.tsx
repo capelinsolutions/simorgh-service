@@ -14,21 +14,21 @@ import { CreateDemoUsers } from '@/components/CreateDemoUsers';
 import { Loader2, Eye, EyeOff, UserPlus, LogIn, Users, Briefcase, Shield, ChevronRight } from 'lucide-react';
 
 const AuthPage = () => {
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState<'customer' | 'cleaner' | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Redirect based on user role if already authenticated
-    if (user) {
+    // Only redirect if user is authenticated and auth is not loading
+    if (user && !authLoading) {
       checkUserRoleAndRedirect(user.id);
     }
-  }, [user, navigate, isAdmin]);
+  }, [user, authLoading, isAdmin, navigate]);
 
   const checkUserRoleAndRedirect = async (userId: string) => {
     try {
-      // Check if user is admin
+      // Check if user is admin first
       if (isAdmin) {
         navigate('/admin');
         return;
@@ -164,7 +164,19 @@ const AuthPage = () => {
   };
 
   // Show loading while checking auth state
-  if (user) {
+  if (user && authLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex items-center gap-2">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <span>Checking your account...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Show redirecting state after auth is loaded but before navigation
+  if (user && !authLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="flex items-center gap-2">
