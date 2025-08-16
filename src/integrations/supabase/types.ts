@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
@@ -862,7 +862,63 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      freelancer_public_profiles: {
+        Row: {
+          bio: string | null
+          business_name: string | null
+          certifications: string[] | null
+          contact_phone: string | null
+          created_at: string | null
+          experience_years: number | null
+          hourly_rate: number | null
+          id: string | null
+          profile_image_url: string | null
+          rating: number | null
+          service_areas: string[] | null
+          services_offered: string[] | null
+          stripe_account_id: string | null
+          total_jobs: number | null
+          user_id: string | null
+          verification_status: string | null
+        }
+        Insert: {
+          bio?: string | null
+          business_name?: string | null
+          certifications?: string[] | null
+          contact_phone?: never
+          created_at?: string | null
+          experience_years?: number | null
+          hourly_rate?: number | null
+          id?: string | null
+          profile_image_url?: string | null
+          rating?: number | null
+          service_areas?: string[] | null
+          services_offered?: string[] | null
+          stripe_account_id?: never
+          total_jobs?: number | null
+          user_id?: string | null
+          verification_status?: string | null
+        }
+        Update: {
+          bio?: string | null
+          business_name?: string | null
+          certifications?: string[] | null
+          contact_phone?: never
+          created_at?: string | null
+          experience_years?: number | null
+          hourly_rate?: number | null
+          id?: string | null
+          profile_image_url?: string | null
+          rating?: number | null
+          service_areas?: string[] | null
+          services_offered?: string[] | null
+          stripe_account_id?: never
+          total_jobs?: number | null
+          user_id?: string | null
+          verification_status?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       auto_assign_order: {
