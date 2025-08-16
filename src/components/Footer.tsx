@@ -1,7 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import simorghLogo from '/lovable-uploads/32449588-adb2-4190-98ac-fccbb7dc6557.png';
-import socialIconsImg from '../assets/social-icons.jpg';
 
 const Footer = () => {
   const handleApplyClick = () => {
@@ -13,90 +10,81 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-black w-full px-[120px] py-20 max-md:max-w-full max-md:px-5">
-      <div className="flex w-full gap-[40px_100px] justify-between flex-wrap max-md:max-w-full">
-        <div className="flex min-w-60 flex-col items-stretch text-base text-white w-[327px]">
-          <div className="flex max-w-full w-[327px] flex-col items-stretch font-normal justify-center">
-            <img
-              src={simorghLogo}
-              alt="Simorgh Service Group Logo"
-              className="aspect-[2.16] object-contain w-[104px] max-w-full"
-            />
-            <p className="text-white mt-2">
-              Become your own boss, choose your own schedule, and work in your preferred areas.
-            </p>
-          </div>
-          
-          <button 
+    <footer className="bg-black w-full py-10 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-10 lg:gap-[100px] justify-between">
+        {/* Left Column */}
+        <div className="flex flex-col text-white max-w-md">
+          <img
+            src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/f36bfae74dcefd87a82e36827c0a3872deb3c501?placeholderIfAbsent=true"
+            alt="Simorgh Service Group Logo"
+            className="w-[104px] object-contain"
+          />
+          <p className="mt-3 text-sm sm:text-base">
+            Become your own boss, choose your own schedule, and work in your preferred areas.
+          </p>
+          <button
             onClick={handleApplyClick}
-            className="justify-center items-center flex min-h-10 gap-2 font-semibold bg-[#58C0D7] mt-6 px-6 py-[9px] rounded-lg max-md:px-5 hover:bg-[#4aa8c0] transition-colors"
+            className="bg-[#58C0D7] hover:bg-[#4aa8c0] text-white mt-6 px-5 sm:px-6 py-2 sm:py-[9px] rounded-lg font-semibold transition-colors w-fit text-sm sm:text-base"
           >
             Apply to become an agent
           </button>
         </div>
-        
-        <div className="flex min-w-60 gap-[40px_100px] justify-between flex-wrap w-[503px] max-md:max-w-full">
-          <nav className="text-base text-white font-normal">
+
+        {/* Right Column */}
+        <div className="flex flex-col sm:flex-row gap-8 lg:gap-[100px] flex-wrap text-white text-sm sm:text-base">
+          {/* First Links */}
+          <nav>
             <ul className="space-y-2">
-              <li><a href="#service" className="text-white hover:text-[#58C0D7] transition-colors">Service</a></li>
-              <li><a href="#contact" className="text-white hover:text-[#58C0D7] transition-colors">Contact Us</a></li>
-              <li><a href="#faq" className="text-white hover:text-[#58C0D7] transition-colors">FAQ</a></li>
-              <li><a href="#about" className="text-white hover:text-[#58C0D7] transition-colors">About us</a></li>
+              <li><a href="#service" className="hover:text-[#58C0D7] transition-colors">Service</a></li>
+              <li><a href="#contact" className="hover:text-[#58C0D7] transition-colors">Contact Us</a></li>
+              <li><a href="#faq" className="hover:text-[#58C0D7] transition-colors">FAQ</a></li>
+              <li><a href="#about" className="hover:text-[#58C0D7] transition-colors">About us</a></li>
             </ul>
           </nav>
-          
-          <nav className="text-base text-white font-normal whitespace-nowrap">
+
+          {/* Second Links */}
+          <nav className="whitespace-nowrap">
             <ul className="space-y-2">
-              <li><a href="#register" className="text-white hover:text-[#58C0D7] transition-colors">Registration</a></li>
-              <li><a href="#login" className="text-white hover:text-[#58C0D7] transition-colors">Login</a></li>
+              <li><a href="#register" className="hover:text-[#58C0D7] transition-colors">Registration</a></li>
+              <li><a href="#login" className="hover:text-[#58C0D7] transition-colors">Login</a></li>
             </ul>
           </nav>
-          
-          <div className="flex items-center gap-2">
-            <button 
-              onClick={() => handleSocialClick('Facebook')}
-              className="hover:opacity-80 transition-opacity"
-              aria-label="Facebook"
-            >
+
+          {/* Social Icons */}
+          <div className="flex gap-3 sm:gap-4 items-center">
+            <button onClick={() => handleSocialClick('Facebook')} className="hover:opacity-80 transition-opacity">
               <img
-                src={socialIconsImg}
+                src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/4a67b3ba305268296f80bc7e0618bd2d83fa6f43?placeholderIfAbsent=true"
                 alt="Facebook"
-                className="aspect-[1] object-contain w-9 self-stretch shrink-0 my-auto"
+                className="w-8 h-8 sm:w-9 sm:h-9 object-contain"
               />
             </button>
-            <button 
-              onClick={() => handleSocialClick('Twitter')}
-              className="hover:opacity-80 transition-opacity"
-              aria-label="Twitter"
-            >
+            <button onClick={() => handleSocialClick('Twitter')} className="hover:opacity-80 transition-opacity">
               <img
-                src={socialIconsImg}
+                src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/96acd8101c0cf7a116e223040af9aeb6c52ba576?placeholderIfAbsent=true"
                 alt="Twitter"
-                className="aspect-[1] object-contain w-9 self-stretch shrink-0 my-auto"
+                className="w-8 h-8 sm:w-9 sm:h-9 object-contain"
               />
             </button>
-            <button 
-              onClick={() => handleSocialClick('LinkedIn')}
-              className="hover:opacity-80 transition-opacity"
-              aria-label="LinkedIn"
-            >
+            <button onClick={() => handleSocialClick('LinkedIn')} className="hover:opacity-80 transition-opacity">
               <img
-                src={socialIconsImg}
+                src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/a22d3ac1bf3f0a42b2d736169db754d4f289bb3e?placeholderIfAbsent=true"
                 alt="LinkedIn"
-                className="aspect-[1] object-contain w-9 self-stretch shrink-0 my-auto"
+                className="w-8 h-8 sm:w-9 sm:h-9 object-contain"
               />
             </button>
           </div>
         </div>
       </div>
-      
-      <div className="justify-between items-center flex w-full gap-[40px_100px] text-base text-white font-normal flex-wrap mt-12 pt-6 border-t-[#353E43] border-t border-solid max-md:max-w-full max-md:mt-10">
-        <p className="text-white self-stretch my-auto max-md:max-w-full">
-          ©ALL right and Copyright reserved by Simorgh Service Group LLC
+
+      {/* Bottom Section */}
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-white border-t border-[#353E43] mt-12 pt-6 text-xs sm:text-sm gap-3 px-4 sm:px-6 lg:px-0">
+        <p className="text-center md:text-left">
+          © ALL right and Copyright reserved by Simorgh Service Group LLC
         </p>
-        <p className="text-white self-stretch my-auto">
+        <p className="text-center md:text-left">
           <a href="#privacy" className="underline hover:text-[#58C0D7] transition-colors">Privacy</a> and{" "}
-          <a href="#policy" className="underline hover:text-[#58C0D7] transition-colors">policy</a>
+          <a href="#policy" className="underline hover:text-[#58C0D7] transition-colors">Policy</a>
         </p>
       </div>
     </footer>

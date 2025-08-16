@@ -1,120 +1,193 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Check } from 'lucide-react';
+import { useState } from 'react';
+import pricingBg from '@/images/pricing.png';
+
+const monthlyPlans = [
+  {
+    name: 'Basic Package',
+    price: '59.00',
+    period: '/Monthly',
+    features: [
+      'Dusting of all surfaces',
+      'Sweeping and mopping floors',
+      'Vacuuming carpets and rugs',
+      'Cleaning of kitchen surfaces',
+      'Cleaning of bathroom surfaces',
+      'Emptying trash bins',
+    ],
+    buttonStyle:
+      'border border-black text-black hover:bg-[#58C0D7] hover:border-none hover:text-white',
+    priceBg: 'bg-[#58C0D7] text-white',
+  },
+  {
+    name: 'Enterprise Package',
+    price: '69.00',
+    period: '/Monthly',
+    features: [
+      'All services in the Basic Plan',
+      'Detailed dusting',
+      'Wiping down of kitchen appt',
+      'Cleaning inside the microwave',
+      'Changing bed linens',
+      'Spot cleaning walls and doors',
+    ],
+    buttonStyle:
+      'border border-black text-black hover:bg-[#58C0D7] hover:border-none hover:text-white',
+    priceBg: 'bg-[#58C0D7] text-white',
+  },
+  {
+    name: 'Premium Package',
+    price: '99.00',
+    period: '/Monthly',
+    features: [
+      'All services in the Clean Plan',
+      'Deep cleaning of kitchen appt',
+      'baseboards, door frames, & vents',
+      'Organization of closets pantries',
+      'Carpet, upholstery spot cleaning',
+      'Detailed bathroom cleaning',
+    ],
+    buttonStyle:
+      'border border-black text-black hover:bg-[#58C0D7] hover:border-none hover:text-white',
+    priceBg: 'bg-[#58C0D7] text-white',
+  },
+];
+
+const yearlyPlans = [
+  {
+    name: 'Basic Package',
+    price: '699.00',
+    period: '/Yearly',
+    features: [
+      'Dusting of all surfaces',
+      'Sweeping and mopping floors',
+      'Vacuuming carpets and rugs',
+      'Cleaning of kitchen surfaces',
+      'Cleaning of bathroom surfaces',
+      'Emptying trash bins',
+      '2 months free cleaning',
+    ],
+    buttonStyle:
+      'border border-black text-black hover:bg-[#58C0D7] hover:border-none hover:text-white',
+    priceBg: 'bg-[#58C0D7] text-white',
+  },
+  {
+    name: 'Enterprise Package',
+    price: '799.00',
+    period: '/Yearly',
+    features: [
+      'All services in the Basic Plan',
+      'Detailed dusting',
+      'Wiping down of kitchen appt',
+      'Cleaning inside the microwave',
+      'Changing bed linens',
+      'Spot cleaning walls and doors',
+      '3 months free cleaning',
+    ],
+    buttonStyle:
+      'border border-black text-black hover:bg-[#58C0D7] hover:border-none hover:text-white',
+    priceBg: 'bg-[#58C0D7] text-white',
+  },
+  {
+    name: 'Premium Package',
+    price: '999.00',
+    period: '/Yearly',
+    features: [
+      'All services in the Clean Plan',
+      'Deep cleaning of kitchen appt',
+      'baseboards, door frames, & vents',
+      'Organization of closets pantries',
+      'Carpet, upholstery spot cleaning',
+      'Detailed bathroom cleaning',
+      '4 months free cleaning',
+    ],
+    buttonStyle:
+      'border border-black text-black hover:bg-[#58C0D7] hover:border-none hover:text-white',
+    priceBg: 'bg-[#58C0D7] text-white',
+  },
+];
 
 const PricingSection = () => {
-  const plans = [
-    {
-      name: "BASIC PACKAGE",
-      price: "29.00",
-      period: "/monthly",
-      features: [
-        "House cleaning service",
-        "Bathroom cleaning",
-        "2+ bathroom clean extra",
-        "Oven cleaning",
-        "Ironing service",
-        "Dishes clean and tidy up",
-        "Cleaning of kitchen",
-        "Cleaning of kitchen"
-      ]
-    },
-    {
-      name: "WELCOME PACKAGE", 
-      price: "69.00",
-      period: "/monthly",
-      features: [
-        "All from Basic Package",
-        "Discount 10% off service",
-        "Upholstery cleaning",
-        "24/7 customer support",
-        "Priority booking",
-        "Deep cleaning service",
-        "Window cleaning",
-        "Carpet cleaning"
-      ],
-      popular: true
-    },
-    {
-      name: "PREMIUM PACKAGE",
-      price: "89.00", 
-      period: "/monthly",
-      features: [
-        "All from Welcome Package",
-        "Discount 20% off service",
-        "Unlimited house visits",
-        "Emergency cleaning service",
-        "Same day service",
-        "Professional equipment",
-        "Eco-friendly products",
-        "Quality guarantee"
-      ]
-    }
-  ];
+  const [activePlan, setActivePlan] = useState<'monthly' | 'yearly'>('monthly');
+  const plans = activePlan === 'monthly' ? monthlyPlans : yearlyPlans;
 
   return (
-    <section className="py-16 px-4 bg-[#58C0D7]">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Choose From Our Lowest Plans and Prices
+    <section
+      className="relative w-full overflow-hidden bg-no-repeat bg-contain"
+      style={{
+        backgroundImage: `url(${pricingBg})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'top',
+        backgroundSize: '100% 900px',
+      }}
+    >
+      {/* Header */}
+      <div className="h-full w-full flex items-center justify-center pt-20 text-center text-white px-4">
+        <div>
+          <h4 className="text-sm uppercase mb-2 font-semibold">Our Pricing</h4>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            Choose From Our Lowest <br className="hidden md:block" />
+            Plans and Prices
           </h2>
-          <div className="flex justify-center gap-4 mt-8">
-            <button className="bg-white text-[#58C0D7] px-6 py-2 rounded-full font-medium">
+
+          {/* Toggle Buttons */}
+          <div className="inline-flex mb-6 rounded-full bg-white p-1">
+            <button
+              onClick={() => setActivePlan('monthly')}
+              className={`px-6 py-2 rounded-full font-medium ${
+                activePlan === 'monthly'
+                  ? 'bg-[#58C0D7] text-white'
+                  : 'bg-white text-[#58C0D7]'
+              }`}
+            >
               Monthly
             </button>
-            <button className="bg-transparent border border-white text-white px-6 py-2 rounded-full font-medium hover:bg-white hover:text-[#58C0D7] transition-colors">
+            <button
+              onClick={() => setActivePlan('yearly')}
+              className={`px-6 py-2 rounded-full font-medium ${
+                activePlan === 'yearly'
+                  ? 'bg-[#58C0D7] text-white'
+                  : 'bg-white text-[#58C0D7]'
+              }`}
+            >
               Yearly
             </button>
           </div>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {/* Cards */}
+      <div className="py-16 px-4 -mt-16 z-10 relative rounded-t-3xl">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 text-gray-800">
           {plans.map((plan, index) => (
-            <div 
-              key={index} 
-              className={`bg-white rounded-2xl p-8 ${plan.popular ? 'ring-4 ring-yellow-400 relative' : ''}`}
+            <div
+              key={index}
+              className="bg-white rounded-3xl shadow-md p-6 md:p-8 flex flex-col justify-between"
             >
-              {plan.popular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-yellow-400 text-yellow-900 px-4 py-2 rounded-full text-sm font-bold">
-                    MOST POPULAR
-                  </span>
-                </div>
-              )}
-              
-              <div className="text-center mb-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
+              <div>
+                <h3 className="text-lg font-semibold mb-6 text-center uppercase">
                   {plan.name}
                 </h3>
-                <div className="flex items-center justify-center gap-1">
-                  <span className="text-4xl font-bold text-[#58C0D7]">
-                    ${plan.price}
-                  </span>
-                  <span className="text-gray-600">
-                    {plan.period}
-                  </span>
+
+                {/* Price */}
+                <div className={`text-center mb-8 py-2 rounded ${plan.priceBg}`}>
+                  <span className="text-xl font-semibold">${plan.price}</span>
+                  <span className="text-sm ml-1">{plan.period}</span>
                 </div>
+
+                <ul className="text-sm text-gray-700 space-y-3 text-left leading-[300%] font-['Be_Vietnam_Pro'] font-[400]">
+                  {plan.features.map((feature, idx) => (
+                    <li key={idx}>• {feature}</li>
+                  ))}
+                </ul>
               </div>
 
-              <ul className="space-y-3 mb-8">
-                {plan.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="flex items-center gap-3">
-                    <Check className="w-5 h-5 text-[#58C0D7] flex-shrink-0" />
-                    <span className="text-gray-700 text-sm">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <Button 
-                className={`w-full py-3 ${
-                  plan.popular 
-                    ? 'bg-[#58C0D7] hover:bg-[#4aa8c0] text-white' 
-                    : 'bg-gray-100 hover:bg-[#58C0D7] hover:text-white text-gray-700'
-                }`}
-              >
-                Get Plan
-              </Button>
+              <div className="mt-10">
+                <button
+                  className={`w-full py-3 rounded-md font-medium transition-all ${plan.buttonStyle}`}
+                >
+                  Book Now
+                </button>
+              </div>
             </div>
           ))}
         </div>

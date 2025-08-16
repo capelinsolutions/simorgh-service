@@ -1,74 +1,90 @@
-import React from 'react';
-import blogEcoCleaningImg from '../assets/blog-eco-cleaning.jpg';
-import blogOfficeCleaningImg from '../assets/blog-office-cleaning.jpg';
-import blogProfessionalCleaningImg from '../assets/blog-professional-cleaning.jpg';
-import { Button } from '@/components/ui/button';
+import React from "react";
+
+const blogs = [
+  {
+    id: 1,
+    author: "JOHN HELTON",
+    date: "JAN 6, 2025",
+    title: "Eco-Friendly Cleaning: How We Keep Your Home Green",
+    description:
+      "Learn about our commitment to eco-friendly practices. We share the eco-conscious products...",
+    image: "/src/images/blog1.png",
+  },
+  {
+    id: 2,
+    author: "JOHN HELTON",
+    date: "JAN 6, 2025",
+    title: "How to Maintain a Clean Home Between Professional Visits",
+    description:
+      "Get practical advice on maintaining cleanliness between our scheduled visits. These easy-to-follow tips...",
+    image: "/src/images/blog2.png",
+  },
+  {
+    id: 3,
+    author: "JOHN HELTON",
+    date: "JAN 6, 2025",
+    title: "The Benefits of Regular Professional Cleaning",
+    description:
+      "Understand the numerous advantages of scheduling regular professional cleanings. From improving indoor air...",
+    image: "/src/images/blog3.png",
+  },
+];
 
 const BlogSection = () => {
-  const articles = [
-    {
-      title: "Eco-Friendly Cleaning: How We Keep Your Home Clean",
-      image: blogEcoCleaningImg,
-      date: "March 15, 2024"
-    },
-    {
-      title: "How to Maintain a Clutter-Free Professional Office",
-      image: blogOfficeCleaningImg, 
-      date: "March 12, 2024"
-    },
-    {
-      title: "The Benefits of Regular Professional Cleaning",
-      image: blogProfessionalCleaningImg,
-      date: "March 10, 2024"
-    }
-  ];
-
   return (
-    <section className="py-16 px-4 bg-gray-50">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Stay Updated with Our Tips & Service News!
-          </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Get the latest cleaning tips, service updates, and helpful guides from our expert team.
-          </p>
+    <section className="py-16 md:py-24 px-5 w-full bg-white">
+      <div className="max-w-screen-xl mx-auto">
+        {/* Header */}
+        <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-8 md:gap-12 mb-12 md:mb-16">
+          <div>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+              Stay Updated with Our <br />
+              Tips & Service News!
+            </h2>
+          </div>
+          <div className="flex flex-col justify-center">
+            <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-3 md:mb-4">
+              Our Blog
+            </h3>
+            <p className="text-gray-600 leading-relaxed">
+              Stay informed with our latest cleaning tips, service updates, expert advice on maintaining an immaculate home
+            </p>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          {articles.map((article, index) => (
-            <article key={index} className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-              <div className="h-48 bg-gray-200">
-                <img 
-                  src={article.image}
-                  alt={article.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-6">
-                <p className="text-sm text-[#58C0D7] font-medium mb-2">
-                  {article.date}
+        {/* Divider */}
+        <div className="w-full h-px bg-[#83A790] mb-12 md:mb-16"></div>
+
+        {/* Blog Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {blogs.map((blog) => (
+            <div
+              key={blog.id}
+              className="bg-white border border-gray-200 rounded-[20px] overflow-hidden shadow-sm flex flex-col w-full max-w-md mx-auto h-[512px]"
+            >
+              <img
+                src={blog.image}
+                alt={blog.title}
+                className="w-full h-[240px] object-cover rounded-t-[20px]"
+              />
+              <div className="p-6 flex flex-col flex-grow">
+                <p className="text-xs text-gray-500 mb-2 tracking-wide">
+                  {blog.author} &nbsp; {blog.date}
                 </p>
-                <h3 className="text-xl font-bold text-gray-900 mb-4 leading-tight">
-                  {article.title}
+                <h3 className="text-lg font-semibold text-gray-900 mb-3 leading-snug">
+                  {blog.title}
                 </h3>
-                <Button 
-                  variant="outline"
-                  className="border-[#58C0D7] text-[#58C0D7] hover:bg-[#58C0D7] hover:text-white"
-                >
-                  Read More
-                </Button>
-              </div>
-            </article>
-          ))}
-        </div>
+                <p className="text-sm text-gray-600 mb-6 flex-grow leading-relaxed">
+                  {blog.description}
+                </p>
 
-        <div className="text-center">
-          <Button 
-            className="bg-[#58C0D7] hover:bg-[#4aa8c0] text-white px-8 py-3 text-lg"
-          >
-            View All
-          </Button>
+                {/* Uniform Read More Button */}
+                <button className="w-full text-sm text-gray-800 underline font-medium self-start hover:bg-[#58C0D7] hover:text-white transition px-4 py-4 rounded-xl hover:no-underline">
+                  Read More
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

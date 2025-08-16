@@ -1,207 +1,265 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
-import { Button } from '@/components/ui/button';
-import { LogOut, User, Settings, Briefcase } from 'lucide-react';
-import simorghLogo from '/lovable-uploads/32449588-adb2-4190-98ac-fccbb7dc6557.png';
+import React, { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { LogOut, User, Settings, Menu, X } from "lucide-react";
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, isAdmin, signOut, loading } = useAuth();
-  const [userRole, setUserRole] = useState<'customer' | 'freelancer' | 'admin' | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      checkUserRole(user.id);
-    } else {
-      setUserRole(null);
-    }
-  }, [user, isAdmin]);
-
-  const checkUserRole = async (userId: string) => {
-    try {
-      if (isAdmin) {
-        setUserRole('admin');
-        return;
-      }
-
-      // Check if user is freelancer
-      const { data: freelancer } = await supabase
-        .from('freelancers')
-        .select('user_id')
-        .eq('user_id', userId)
-        .single();
-
-      if (freelancer) {
-        setUserRole('freelancer');
-        return;
-      }
-
-      // Default to customer
-      setUserRole('customer');
-    } catch (error) {
-      console.error('Role check error:', error);
-      setUserRole('customer'); // Default fallback
-    }
-  };
-
-  const getActiveClass = (path: string) => {
-    const isActive = location.pathname === path;
-    return isActive 
-      ? 'text-[#58C0D7] font-semibold' 
-      : 'text-[rgba(40,40,40,1)] font-normal';
-  };
+  const getActiveClass = (path: string) =>
+    location.pathname === path
+      ? "text-[#58C0D7] font-semibold"
+      : "text-[rgba(40,40,40,1)] font-normal";
 
   const handleSignOut = async () => {
     try {
       await signOut();
-      setUserRole(null);
-      navigate('/');
-    } catch (error) {
-      console.error('Sign out error:', error);
-    }
-  };
-
-  const getDashboardRoute = () => {
-    switch (userRole) {
-      case 'admin':
-        return '/admin';
-      case 'freelancer':
-        return '/freelancer';
-      case 'customer':
-      default:
-        return '/customer';
-    }
-  };
-
-  const getRoleDisplayName = () => {
-    switch (userRole) {
-      case 'admin':
-        return 'Admin Panel';
-      case 'freelancer':
-        return 'Freelancer Hub';
-      case 'customer':
-      default:
-        return 'Dashboard';
+      navigate("/");
+    } catch (err) {
+      console.error(err);
     }
   };
 
   return (
-    <header className="bg-white flex w-full items-center gap-[40px_100px] text-base justify-between flex-wrap px-[120px] max-md:max-w-full max-md:px-5">
-      <img
-        src={simorghLogo}
-        alt="Simorgh Service Group Logo"
-        className="aspect-[1.5] object-contain w-[120px] self-stretch shrink-0 my-auto"
-      />
-      
-      <nav className="bg-[rgba(134,134,134,0.1)] self-stretch flex min-w-60 items-center gap-2 text-[rgba(40,40,40,1)] font-normal flex-wrap my-auto rounded-[48px] max-md:max-w-full">
-        <Link
-          to="/"
-          className={`self-stretch flex min-h-12 items-center gap-2 whitespace-nowrap justify-center my-auto px-4 py-[13px] ${getActiveClass('/')}`}
-        >
-          Home
-        </Link>
-        <Link
-          to="/service-booking"
-          className={`self-stretch flex min-h-12 items-center gap-2 whitespace-nowrap justify-center my-auto px-4 py-[13px] ${getActiveClass('/service-booking')}`}
-        >
-          Services
-        </Link>
-        <Link
-          to="/membership"
-          className={`self-stretch flex min-h-12 items-center gap-2 whitespace-nowrap justify-center my-auto px-4 py-[13px] ${getActiveClass('/membership')}`}
-        >
-          Pricing
-        </Link>
-        {[
-          { name: 'About us', href: '#about' },
-          { name: 'Contact us', href: '#contact' }
-        ].map((item) => (
-          <a
-            key={item.name}
-            href={item.href}
-            className="self-stretch flex min-h-12 items-center gap-2 whitespace-nowrap justify-center my-auto px-4 py-[13px] text-[rgba(40,40,40,1)] font-normal hover:text-[#58C0D7] transition-colors"
+    <header className="bg-white w-full px-5 sm:px-6 lg:px-[120px] py-4 shadow-sm">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        {/* Logo */}
+        <img
+          src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/11d27c766350de61f072c43b85f52036de041534?placeholderIfAbsent=true"
+          alt="Logo"
+          className="w-[100px] sm:w-[120px] object-contain"
+        />
+
+        {/* Desktop Nav */}
+        <nav className="hidden lg:flex bg-[rgba(134,134,134,0.1)] rounded-full items-center gap-2 px-2 py-1">
+          <Link
+            to="/"
+            className={`px-4 py-2 rounded ${getActiveClass("/")}`}
           >
-            {item.name}
-          </a>
-        ))}
-      </nav>
-
-      <div className="self-stretch flex items-center gap-2 font-semibold whitespace-nowrap my-auto">
-        {loading ? (
-          <div className="flex items-center gap-2">
-            <div className="w-20 h-12 bg-gray-200 animate-pulse rounded"></div>
-            <div className="w-24 h-12 bg-gray-200 animate-pulse rounded"></div>
-          </div>
-        ) : user ? (
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-[rgba(40,40,40,1)] mr-2">
-              Welcome, {user.email?.split('@')[0]}
-            </span>
-            
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => navigate(getDashboardRoute())}
-              className="text-[#58C0D7] border-[#58C0D7] hover:bg-[#58C0D7] hover:text-white"
+            Home
+          </Link>
+          <Link
+            to="/service-booking"
+            className={`px-4 py-2 rounded ${getActiveClass("/service-booking")}`}
+          >
+            Services
+          </Link>
+          <Link
+            to="/membership"
+            className={`px-4 py-2 rounded ${getActiveClass("/membership")}`}
+          >
+            Pricing
+          </Link>
+          {[
+            { name: "About us", href: "#about" },
+            { name: "Contact us", href: "#contact" },
+          ].map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              className="px-4 py-2 rounded text-[rgba(40,40,40,1)] hover:text-[#58C0D7] transition"
             >
-              {userRole === 'freelancer' ? (
-                <Briefcase className="h-4 w-4 mr-1" />
-              ) : userRole === 'admin' ? (
-                <Settings className="h-4 w-4 mr-1" />
-              ) : (
-                <User className="h-4 w-4 mr-1" />
-              )}
-              {getRoleDisplayName()}
-            </Button>
+              {item.name}
+            </a>
+          ))}
+        </nav>
 
-            {/* Additional admin button for non-admin users who might have admin access */}
-            {isAdmin && userRole !== 'admin' && (
+        {/* Desktop Auth Buttons */}
+        <div className="hidden lg:flex items-center gap-2">
+          {loading ? (
+            <div className="flex gap-2">
+              <div className="w-20 h-10 bg-gray-200 animate-pulse rounded" />
+              <div className="w-24 h-10 bg-gray-200 animate-pulse rounded" />
+            </div>
+          ) : user ? (
+            <>
+              <span className="text-sm text-[rgba(40,40,40,1)]">
+                Welcome, {user.email?.split("@")[0]}
+              </span>
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => navigate('/admin')}
-                className="text-[#666] border-[#666] hover:bg-[#666] hover:text-white"
+                onClick={() => navigate("/customer")}
+                className="text-[#58C0D7] border-[#58C0D7] hover:bg-[#58C0D7] hover:text-white"
               >
-                <Settings className="h-4 w-4 mr-1" />
-                Admin
+                <User className="h-4 w-4 mr-1" /> Dashboard
               </Button>
-            )}
-            
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleSignOut}
-              className="text-red-600 border-red-600 hover:bg-red-600 hover:text-white"
+              {isAdmin && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate("/admin")}
+                  className="text-[#666] border-[#666] hover:bg-[#666] hover:text-white"
+                >
+                  <Settings className="h-4 w-4 mr-1" /> Admin
+                </Button>
+              )}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleSignOut}
+                className="text-red-600 border-red-600 hover:bg-red-600 hover:text-white"
+              >
+                <LogOut className="h-4 w-4 mr-1" /> Sign Out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/auth"
+                className="px-4 py-2 border border-[#58C0D7] text-[#58C0D7] rounded hover:bg-[#58C0D7] hover:text-white transition"
+              >
+                Login
+              </Link>
+              <Link
+                to="/auth"
+                className="px-4 py-2 bg-[#58C0D7] text-white rounded hover:bg-[#4aa8c0] transition"
+              >
+                Register
+              </Link>
+              <Link
+                to="/freelancer-signup"
+                className="px-4 py-2 border border-[#666] text-[#666] rounded hover:bg-[#666] hover:text-white transition"
+              >
+                Join as Cleaner
+              </Link>
+            </>
+          )}
+        </div>
+
+        {/* Mobile Hamburger */}
+        <button
+          className="lg:hidden p-2 text-gray-700"
+          onClick={() => setMobileOpen(true)}
+        >
+          <Menu size={28} />
+        </button>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      {mobileOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 z-40" onClick={() => setMobileOpen(false)} />
+      )}
+
+      {/* Mobile Drawer */}
+      <div
+        className={`fixed top-0 right-0 w-72 h-full bg-white z-50 shadow-lg transform transition-transform duration-300 ${
+          mobileOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="flex justify-between items-center p-4 border-b">
+          <img
+            src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/11d27c766350de61f072c43b85f52036de041534?placeholderIfAbsent=true"
+            alt="Logo"
+            className="w-[100px] object-contain"
+          />
+          <button onClick={() => setMobileOpen(false)}>
+            <X size={26} />
+          </button>
+        </div>
+
+        <nav className="flex flex-col p-4 space-y-3">
+          <Link to="/" onClick={() => setMobileOpen(false)} className={getActiveClass("/")}>
+            Home
+          </Link>
+          <Link to="/service-booking" onClick={() => setMobileOpen(false)} className={getActiveClass("/service-booking")}>
+            Services
+          </Link>
+          <Link to="/membership" onClick={() => setMobileOpen(false)} className={getActiveClass("/membership")}>
+            Pricing
+          </Link>
+          {[
+            { name: "About us", href: "#about" },
+            { name: "Contact us", href: "#contact" },
+          ].map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              onClick={() => setMobileOpen(false)}
+              className="text-[rgba(40,40,40,1)] hover:text-[#58C0D7]"
             >
-              <LogOut className="h-4 w-4 mr-1" />
-              Sign Out
-            </Button>
-          </div>
-        ) : (
-          <div className="flex items-center gap-2">
-            <Link 
-              to="/auth" 
-              className="justify-center items-center rounded border self-stretch flex min-h-12 gap-2 text-[#58C0D7] w-[97px] my-auto px-4 py-[13px] border-solid border-[#58C0D7] hover:bg-[#58C0D7] hover:text-white transition-colors"
-            >
-              Login
-            </Link>
-            <Link 
-              to="/auth" 
-              className="justify-center items-center rounded self-stretch flex min-h-12 gap-2 text-white w-[127px] bg-[#58C0D7] my-auto px-4 py-[13px] hover:bg-[#4aa8c0] transition-colors"
-            >
-              Register
-            </Link>
-            <Link 
-              to="/freelancer-signup" 
-              className="justify-center items-center rounded border self-stretch flex min-h-12 gap-2 text-[#666] w-[140px] my-auto px-4 py-[13px] border-solid border-[#666] hover:bg-[#666] hover:text-white transition-colors"
-            >
-              Join as Cleaner
-            </Link>
-          </div>
-        )}
+              {item.name}
+            </a>
+          ))}
+        </nav>
+
+        <div className="p-4 border-t mt-auto">
+          {loading ? (
+            <div className="flex gap-2">
+              <div className="w-20 h-10 bg-gray-200 animate-pulse rounded" />
+              <div className="w-24 h-10 bg-gray-200 animate-pulse rounded" />
+            </div>
+          ) : user ? (
+            <>
+              <p className="mb-3 text-sm text-gray-700">
+                Welcome, {user.email?.split("@")[0]}
+              </p>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  navigate("/customer");
+                  setMobileOpen(false);
+                }}
+                className="w-full mb-2 text-[#58C0D7] border-[#58C0D7] hover:bg-[#58C0D7] hover:text-white"
+              >
+                <User className="h-4 w-4 mr-1" /> Dashboard
+              </Button>
+              {isAdmin && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    navigate("/admin");
+                    setMobileOpen(false);
+                  }}
+                  className="w-full mb-2 text-[#666] border-[#666] hover:bg-[#666] hover:text-white"
+                >
+                  <Settings className="h-4 w-4 mr-1" /> Admin
+                </Button>
+              )}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  handleSignOut();
+                  setMobileOpen(false);
+                }}
+                className="w-full text-red-600 border-red-600 hover:bg-red-600 hover:text-white"
+              >
+                <LogOut className="h-4 w-4 mr-1" /> Sign Out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/auth"
+                onClick={() => setMobileOpen(false)}
+                className="block w-full mb-2 px-4 py-2 border border-[#58C0D7] text-[#58C0D7] rounded text-center hover:bg-[#58C0D7] hover:text-white"
+              >
+                Login
+              </Link>
+              <Link
+                to="/auth"
+                onClick={() => setMobileOpen(false)}
+                className="block w-full mb-2 px-4 py-2 bg-[#58C0D7] text-white rounded text-center hover:bg-[#4aa8c0]"
+              >
+                Register
+              </Link>
+              <Link
+                to="/freelancer-signup"
+                onClick={() => setMobileOpen(false)}
+                className="block w-full px-4 py-2 border border-[#666] text-[#666] rounded text-center hover:bg-[#666] hover:text-white"
+              >
+                Join as Cleaner
+              </Link>
+            </>
+          )}
+        </div>
       </div>
     </header>
   );
