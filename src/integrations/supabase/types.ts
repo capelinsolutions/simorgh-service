@@ -867,7 +867,6 @@ export type Database = {
           bio: string | null
           business_name: string | null
           certifications: string[] | null
-          contact_phone: string | null
           created_at: string | null
           experience_years: number | null
           hourly_rate: number | null
@@ -876,7 +875,6 @@ export type Database = {
           rating: number | null
           service_areas: string[] | null
           services_offered: string[] | null
-          stripe_account_id: string | null
           total_jobs: number | null
           user_id: string | null
           verification_status: string | null
@@ -885,7 +883,6 @@ export type Database = {
           bio?: string | null
           business_name?: string | null
           certifications?: string[] | null
-          contact_phone?: never
           created_at?: string | null
           experience_years?: number | null
           hourly_rate?: number | null
@@ -894,7 +891,6 @@ export type Database = {
           rating?: number | null
           service_areas?: string[] | null
           services_offered?: string[] | null
-          stripe_account_id?: never
           total_jobs?: number | null
           user_id?: string | null
           verification_status?: string | null
@@ -903,7 +899,6 @@ export type Database = {
           bio?: string | null
           business_name?: string | null
           certifications?: string[] | null
-          contact_phone?: never
           created_at?: string | null
           experience_years?: number | null
           hourly_rate?: number | null
@@ -912,7 +907,6 @@ export type Database = {
           rating?: number | null
           service_areas?: string[] | null
           services_offered?: string[] | null
-          stripe_account_id?: never
           total_jobs?: number | null
           user_id?: string | null
           verification_status?: string | null
