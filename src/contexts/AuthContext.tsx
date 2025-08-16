@@ -40,9 +40,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Check if user is admin - do this synchronously, not with setTimeout
         if (session?.user) {
           try {
-            const { data: isUserAdmin } = await supabase.rpc('is_admin', { user_id: session.user.id });
+            console.log('Checking admin status for user:', session.user.id);
+            const { data: isUserAdmin, error } = await supabase.rpc('is_admin', { user_id: session.user.id });
+            console.log('Admin check result:', { isUserAdmin, error });
             if (mounted) {
               setIsAdmin(!!isUserAdmin);
+              console.log('Set isAdmin to:', !!isUserAdmin);
             }
           } catch (error) {
             console.error('Error checking admin status:', error);
@@ -52,6 +55,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           }
         } else {
           setIsAdmin(false);
+          console.log('No session user, set isAdmin to false');
         }
         
         if (mounted) {
@@ -69,12 +73,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (session?.user) {
         try {
-          const { data: isUserAdmin } = await supabase.rpc('is_admin', { user_id: session.user.id });
+          console.log('Checking admin status for existing session user:', session.user.id);
+          const { data: isUserAdmin, error } = await supabase.rpc('is_admin', { user_id: session.user.id });
+          console.log('Admin check result for existing session:', { isUserAdmin, error });
           if (mounted) {
             setIsAdmin(!!isUserAdmin);
+            console.log('Set isAdmin to (existing session):', !!isUserAdmin);
           }
         } catch (error) {
-          console.error('Error checking admin status:', error);
+          console.error('Error checking admin status for existing session:', error);
           if (mounted) {
             setIsAdmin(false);
           }
@@ -83,6 +90,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (mounted) {
         setLoading(false);
+        console.log('Auth loading set to false');
       }
     });
 

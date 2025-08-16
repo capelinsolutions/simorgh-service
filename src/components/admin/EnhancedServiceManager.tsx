@@ -46,13 +46,18 @@ const EnhancedServiceManager = () => {
 
       console.log('Service addons query result:', { data, error });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Service addons query error:', error);
+        throw error;
+      }
+      
+      console.log('Successfully fetched service addons:', data?.length || 0);
       setServiceAddons(data || []);
     } catch (error) {
       console.error('Error fetching service addons:', error);
       toast({
         title: "Error",
-        description: "Failed to fetch services",
+        description: `Failed to fetch services: ${error.message || 'Unknown error'}`,
         variant: "destructive"
       });
     } finally {

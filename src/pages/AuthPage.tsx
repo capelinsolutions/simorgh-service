@@ -22,35 +22,46 @@ const AuthPage = () => {
   useEffect(() => {
     // Only redirect if user is authenticated and auth is not loading
     if (user && !authLoading) {
+      console.log('User authenticated, checking role for redirect...', { user: user.id, isAdmin });
       checkUserRoleAndRedirect(user.id);
     }
   }, [user, authLoading, isAdmin, navigate]);
 
   const checkUserRoleAndRedirect = async (userId: string) => {
     try {
+      console.log('Checking user role and redirecting...', { userId, isAdmin });
+      
       // Check if user is admin first (isAdmin should be ready by now)
       if (isAdmin) {
-        navigate('/admin');
+        console.log('User is admin, redirecting to /admin');
+        navigate('/admin', { replace: true });
         return;
       }
 
       // Check if user is freelancer
-      const { data: freelancer } = await supabase
+      console.log('Checking if user is freelancer...');
+      const { data: freelancer, error } = await supabase
         .from('freelancers')
         .select('user_id')
         .eq('user_id', userId)
         .maybeSingle(); // Use maybeSingle instead of single to avoid errors
 
+      if (error) {
+        console.error('Error checking freelancer status:', error);
+      }
+
       if (freelancer) {
-        navigate('/freelancer');
+        console.log('User is freelancer, redirecting to /freelancer');
+        navigate('/freelancer', { replace: true });
         return;
       }
 
       // Default to customer dashboard
-      navigate('/customer');
+      console.log('User is customer, redirecting to /customer');
+      navigate('/customer', { replace: true });
     } catch (error) {
       console.error('Role check error:', error);
-      navigate('/customer'); // Default fallback
+      navigate('/customer', { replace: true }); // Default fallback
     }
   };
 
