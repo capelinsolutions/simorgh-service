@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
-import { Plus, Edit, Trash2, Settings, Upload, Search, Filter } from 'lucide-react';
+import { Plus, Edit, Trash2, Settings, Upload, Search, Filter, Image as ImageIcon, X } from 'lucide-react';
 import { services as staticServices } from '@/data/services';
 
 interface ServiceAddon {
@@ -21,6 +21,7 @@ interface ServiceAddon {
   price_per_hour: number;
   category: string;
   is_active: boolean;
+  image_url?: string;
   created_at: string;
 }
 
@@ -71,9 +72,12 @@ const EnhancedServiceManager = () => {
       description: '',
       pricePerHour: 0,
       category: '',
-      isActive: true
+      isActive: true,
+      imageUrl: ''
     });
     const [selectedStaticService, setSelectedStaticService] = useState<string>('');
+    const [uploading, setUploading] = useState(false);
+    const [imagePreview, setImagePreview] = useState<string>('');
 
     const handleStaticServiceSelect = (serviceId: string) => {
       const service = staticServices.find(s => s.id.toString() === serviceId);
@@ -83,10 +87,76 @@ const EnhancedServiceManager = () => {
           description: service.description,
           pricePerHour: service.regularPrice * 100, // Convert to cents
           category: service.category || 'General',
-          isActive: true
+          isActive: true,
+          imageUrl: service.image
         });
+        setImagePreview(service.image);
         setSelectedStaticService(serviceId);
       }
+    };
+
+    const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Error",
+          description: "Please select an image file",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "Error", 
+          description: "Image size must be less than 5MB",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      setUploading(true);
+      try {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Date.now()}.${fileExt}`;
+        const filePath = `services/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('service-images')
+          .upload(filePath, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('service-images')
+          .getPublicUrl(filePath);
+
+        setFormData({ ...formData, imageUrl: publicUrl });
+        setImagePreview(publicUrl);
+
+        toast({
+          title: "Success",
+          description: "Image uploaded successfully"
+        });
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        toast({
+          title: "Error",
+          description: "Failed to upload image",
+          variant: "destructive"
+        });
+      } finally {
+        setUploading(false);
+      }
+    };
+
+    const removeImage = () => {
+      setFormData({ ...formData, imageUrl: '' });
+      setImagePreview('');
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -100,7 +170,8 @@ const EnhancedServiceManager = () => {
             description: formData.description,
             price_per_hour: formData.pricePerHour,
             category: formData.category,
-            is_active: formData.isActive
+            is_active: formData.isActive,
+            image_url: formData.imageUrl || null
           });
 
         if (error) throw error;
@@ -117,9 +188,11 @@ const EnhancedServiceManager = () => {
           description: '',
           pricePerHour: 0,
           category: '',
-          isActive: true
+          isActive: true,
+          imageUrl: ''
         });
         setSelectedStaticService('');
+        setImagePreview('');
       } catch (error) {
         console.error('Error adding service:', error);
         toast({
@@ -214,15 +287,60 @@ const EnhancedServiceManager = () => {
             </div>
           </div>
 
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="active"
-              checked={formData.isActive}
-              onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
-            />
-            <Label htmlFor="active">Active (available for booking)</Label>
+            {/* Image Upload Section */}
+            <div className="space-y-3">
+              <Label>Service Image</Label>
+              
+              {imagePreview ? (
+                <div className="relative inline-block">
+                  <img 
+                    src={imagePreview} 
+                    alt="Service preview" 
+                    className="w-32 h-32 object-cover rounded-lg border-2 border-gray-200"
+                  />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0"
+                    onClick={removeImage}
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                  <ImageIcon className="h-12 w-12 text-gray-400 mx-auto mb-2" />
+                  <p className="text-sm text-gray-500 mb-4">Upload a service image</p>
+                  <Label htmlFor="image-upload" className="cursor-pointer">
+                    <Button type="button" variant="outline" disabled={uploading} asChild>
+                      <span>
+                        <Upload className="h-4 w-4 mr-2" />
+                        {uploading ? 'Uploading...' : 'Choose Image'}
+                      </span>
+                    </Button>
+                  </Label>
+                  <Input
+                    id="image-upload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+                  <p className="text-xs text-gray-400 mt-2">PNG, JPG up to 5MB</p>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="active"
+                checked={formData.isActive}
+                onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
+              />
+              <Label htmlFor="active">Active (available for booking)</Label>
+            </div>
           </div>
-        </div>
 
         <div className="flex gap-2">
           <Button type="submit" className="flex-1">
@@ -426,7 +544,7 @@ const EnhancedServiceManager = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Service Name</TableHead>
+                  <TableHead>Service</TableHead>
                   <TableHead>Category</TableHead>
                   <TableHead>Price/Hour</TableHead>
                   <TableHead>Status</TableHead>
@@ -437,13 +555,26 @@ const EnhancedServiceManager = () => {
                 {filteredServices.map((service) => (
                   <TableRow key={service.id}>
                     <TableCell>
-                      <div>
-                        <div className="font-medium">{service.name}</div>
-                        {service.description && (
-                          <div className="text-sm text-gray-500 line-clamp-2">
-                            {service.description}
+                      <div className="flex items-center gap-3">
+                        {service.image_url ? (
+                          <img 
+                            src={service.image_url} 
+                            alt={service.name}
+                            className="w-12 h-12 object-cover rounded-lg border"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                            <ImageIcon className="h-6 w-6 text-gray-400" />
                           </div>
                         )}
+                        <div>
+                          <div className="font-medium">{service.name}</div>
+                          {service.description && (
+                            <div className="text-sm text-gray-500 line-clamp-2">
+                              {service.description}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </TableCell>
                     <TableCell>
