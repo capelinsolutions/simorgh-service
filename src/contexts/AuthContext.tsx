@@ -26,8 +26,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  console.log('AuthContext state:', { user: !!user, loading, isAdmin });
-
   useEffect(() => {
     let mounted = true;
 
