@@ -38,10 +38,13 @@ const EnhancedServiceManager = () => {
 
   const fetchServiceAddons = async () => {
     try {
+      console.log('Fetching service addons...');
       const { data, error } = await supabase
         .from('service_addons')
         .select('*')
         .order('name');
+
+      console.log('Service addons query result:', { data, error });
 
       if (error) throw error;
       setServiceAddons(data || []);

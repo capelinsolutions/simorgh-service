@@ -28,7 +28,7 @@ const AuthPage = () => {
 
   const checkUserRoleAndRedirect = async (userId: string) => {
     try {
-      // Check if user is admin first
+      // Check if user is admin first (isAdmin should be ready by now)
       if (isAdmin) {
         navigate('/admin');
         return;
@@ -39,7 +39,7 @@ const AuthPage = () => {
         .from('freelancers')
         .select('user_id')
         .eq('user_id', userId)
-        .single();
+        .maybeSingle(); // Use maybeSingle instead of single to avoid errors
 
       if (freelancer) {
         navigate('/freelancer');

@@ -37,33 +37,53 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSession(session);
         setUser(session?.user ?? null);
         
-        // Check if user is admin
+        // Check if user is admin - do this synchronously, not with setTimeout
         if (session?.user) {
-          setTimeout(() => {
-            checkAdminStatus(session.user.id);
-          }, 0);
+          try {
+            const { data: isUserAdmin } = await supabase.rpc('is_admin', { user_id: session.user.id });
+            if (mounted) {
+              setIsAdmin(!!isUserAdmin);
+            }
+          } catch (error) {
+            console.error('Error checking admin status:', error);
+            if (mounted) {
+              setIsAdmin(false);
+            }
+          }
         } else {
           setIsAdmin(false);
         }
         
-        setLoading(false);
+        if (mounted) {
+          setLoading(false);
+        }
       }
     );
 
     // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (!mounted) return;
       
       setSession(session);
       setUser(session?.user ?? null);
       
       if (session?.user) {
-        setTimeout(() => {
-          checkAdminStatus(session.user.id);
-        }, 0);
+        try {
+          const { data: isUserAdmin } = await supabase.rpc('is_admin', { user_id: session.user.id });
+          if (mounted) {
+            setIsAdmin(!!isUserAdmin);
+          }
+        } catch (error) {
+          console.error('Error checking admin status:', error);
+          if (mounted) {
+            setIsAdmin(false);
+          }
+        }
       }
       
-      setLoading(false);
+      if (mounted) {
+        setLoading(false);
+      }
     });
 
     return () => {
@@ -72,15 +92,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   }, []);
 
-  const checkAdminStatus = async (userId: string) => {
-    try {
-      const { data: isUserAdmin } = await supabase.rpc('is_admin', { user_id: userId });
-      setIsAdmin(!!isUserAdmin);
-    } catch (error) {
-      console.error('Error checking admin status:', error);
-      setIsAdmin(false);
-    }
-  };
+  // Remove the separate checkAdminStatus function since we're doing it inline now
 
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
