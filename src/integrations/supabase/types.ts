@@ -926,7 +926,19 @@ export type Database = {
         Args: { user_id: string }
         Returns: string
       }
+      get_user_admin_role: {
+        Args: { user_id: string }
+        Returns: string
+      }
       is_admin: {
+        Args: { user_id: string }
+        Returns: boolean
+      }
+      is_admin_or_super: {
+        Args: { user_id: string }
+        Returns: boolean
+      }
+      is_super_admin: {
         Args: { user_id: string }
         Returns: boolean
       }
