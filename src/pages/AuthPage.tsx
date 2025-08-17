@@ -48,38 +48,44 @@ const AuthPage = () => {
 
   const checkUserRoleAndRedirect = async (userId: string) => {
     try {
-      console.log('Checking user role and redirecting...', { userId, isAdmin });
+      console.log('🔍 Checking user role and redirecting...', { userId, isAdmin });
       
-      // Check if user is admin first (isAdmin should be ready by now)
-      if (isAdmin) {
-        console.log('User is admin, redirecting to /admin');
+      // Check admin status directly from database instead of relying on state
+      console.log('🔍 Checking admin status from database...');
+      const { data: isUserAdmin, error: adminError } = await supabase.rpc('is_admin', { user_id: userId });
+      console.log('🔍 Admin check result:', { isUserAdmin, adminError });
+
+      if (adminError) {
+        console.error('❌ Error checking admin status:', adminError);
+      } else if (isUserAdmin) {
+        console.log('👑 User is admin, redirecting to /admin');
         navigate('/admin', { replace: true });
         return;
       }
 
       // Check if user is freelancer
-      console.log('Checking if user is freelancer...');
+      console.log('🔍 Checking if user is freelancer...');
       const { data: freelancer, error } = await supabase
         .from('freelancers')
         .select('user_id')
         .eq('user_id', userId)
-        .maybeSingle(); // Use maybeSingle instead of single to avoid errors
+        .maybeSingle();
 
       if (error) {
-        console.error('Error checking freelancer status:', error);
+        console.error('❌ Error checking freelancer status:', error);
       }
 
       if (freelancer) {
-        console.log('User is freelancer, redirecting to /freelancer');
+        console.log('🧹 User is freelancer, redirecting to /freelancer');
         navigate('/freelancer', { replace: true });
         return;
       }
 
       // Default to customer dashboard
-      console.log('User is customer, redirecting to /customer');
+      console.log('👤 User is customer, redirecting to /customer');
       navigate('/customer', { replace: true });
     } catch (error) {
-      console.error('Role check error:', error);
+      console.error('❌ Role check error:', error);
       navigate('/customer', { replace: true }); // Default fallback
     }
   };
