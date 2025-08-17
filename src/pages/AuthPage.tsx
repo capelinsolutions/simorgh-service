@@ -20,23 +20,29 @@ const AuthPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('🏠 AuthPage useEffect triggered:', { user: !!user, authLoading, isAdmin, userId: user?.id });
+    
     // Only redirect if user is authenticated and auth is not loading
     if (user && !authLoading) {
-      console.log('User authenticated, checking role for redirect...', { user: user.id, isAdmin });
+      console.log('📍 User authenticated, checking role for redirect...', { user: user.id, isAdmin });
       
       // Immediate redirect if admin status is already determined
       if (isAdmin) {
-        console.log('User is admin, redirecting to /admin');
+        console.log('👑 User is admin, redirecting to /admin');
         navigate('/admin', { replace: true });
         return;
       }
       
       // Add a small delay to ensure role checking completes for non-admin users
       const timeoutId = setTimeout(() => {
+        console.log('⏰ Timeout triggered, checking user role...');
         checkUserRoleAndRedirect(user.id);
       }, 200);
       
-      return () => clearTimeout(timeoutId);
+      return () => {
+        console.log('🧹 Cleanup timeout');
+        clearTimeout(timeoutId);
+      };
     }
   }, [user, authLoading, isAdmin, navigate]);
 

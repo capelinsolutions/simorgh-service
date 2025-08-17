@@ -39,18 +39,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         // Check if user is admin
         if (session?.user) {
+          console.log('🔍 Checking admin status for user:', session.user.id, session.user.email);
           try {
-            const { data: isUserAdmin } = await supabase.rpc('is_admin', { user_id: session.user.id });
+            const { data: isUserAdmin, error: adminError } = await supabase.rpc('is_admin', { user_id: session.user.id });
+            console.log('🔍 Admin RPC result:', { isUserAdmin, adminError, userId: session.user.id });
             if (mounted) {
               setIsAdmin(!!isUserAdmin);
+              console.log('✅ Set isAdmin to:', !!isUserAdmin);
             }
           } catch (error) {
-            console.error('Error checking admin status:', error);
+            console.error('❌ Error checking admin status:', error);
             if (mounted) {
               setIsAdmin(false);
+              console.log('❌ Set isAdmin to false due to error');
             }
           }
         } else {
+          console.log('🚫 No user session, setting isAdmin to false');
           setIsAdmin(false);
         }
         
@@ -68,15 +73,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(session?.user ?? null);
       
       if (session?.user) {
+        console.log('🔍 Initial session check for user:', session.user.id, session.user.email);
         try {
-          const { data: isUserAdmin } = await supabase.rpc('is_admin', { user_id: session.user.id });
+          const { data: isUserAdmin, error: adminError } = await supabase.rpc('is_admin', { user_id: session.user.id });
+          console.log('🔍 Initial admin RPC result:', { isUserAdmin, adminError, userId: session.user.id });
           if (mounted) {
             setIsAdmin(!!isUserAdmin);
+            console.log('✅ Initial set isAdmin to:', !!isUserAdmin);
           }
         } catch (error) {
-          console.error('Error checking admin status:', error);
+          console.error('❌ Initial error checking admin status:', error);
           if (mounted) {
             setIsAdmin(false);
+            console.log('❌ Initial set isAdmin to false due to error');
           }
         }
       }
