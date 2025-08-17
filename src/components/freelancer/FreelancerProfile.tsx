@@ -329,11 +329,12 @@ const FreelancerProfile = () => {
     if (!newZipCode.trim() || !profile) return;
     
     const zipCode = newZipCode.trim();
-    if (profile.service_areas.includes(zipCode)) return;
+    const serviceAreas = profile.service_areas || [];
+    if (serviceAreas.includes(zipCode)) return;
 
     setProfile(prev => prev ? {
       ...prev,
-      service_areas: [...prev.service_areas, zipCode]
+      service_areas: [...serviceAreas, zipCode]
     } : null);
     setNewZipCode('');
   };
@@ -341,7 +342,7 @@ const FreelancerProfile = () => {
   const removeZipCode = (zipCode: string) => {
     setProfile(prev => prev ? {
       ...prev,
-      service_areas: prev.service_areas.filter(zip => zip !== zipCode)
+      service_areas: (prev.service_areas || []).filter(zip => zip !== zipCode)
     } : null);
   };
 
@@ -349,11 +350,12 @@ const FreelancerProfile = () => {
     if (!newCertification.trim() || !profile) return;
     
     const cert = newCertification.trim();
-    if (profile.certifications.includes(cert)) return;
+    const certifications = profile.certifications || [];
+    if (certifications.includes(cert)) return;
 
     setProfile(prev => prev ? {
       ...prev,
-      certifications: [...prev.certifications, cert]
+      certifications: [...certifications, cert]
     } : null);
     setNewCertification('');
   };
@@ -361,7 +363,7 @@ const FreelancerProfile = () => {
   const removeCertification = (cert: string) => {
     setProfile(prev => prev ? {
       ...prev,
-      certifications: prev.certifications.filter(c => c !== cert)
+      certifications: (prev.certifications || []).filter(c => c !== cert)
     } : null);
   };
 
@@ -369,9 +371,10 @@ const FreelancerProfile = () => {
     setProfile(prev => {
       if (!prev) return null;
       
-      const services = prev.services_offered.includes(service)
-        ? prev.services_offered.filter(s => s !== service)
-        : [...prev.services_offered, service];
+      const servicesOffered = prev.services_offered || [];
+      const services = servicesOffered.includes(service)
+        ? servicesOffered.filter(s => s !== service)
+        : [...servicesOffered, service];
       
       return { ...prev, services_offered: services };
     });
@@ -572,7 +575,7 @@ const FreelancerProfile = () => {
               <div key={service} className="flex items-center space-x-2">
                 <Checkbox
                   id={service}
-                  checked={profile.services_offered.includes(service)}
+                  checked={profile.services_offered?.includes(service) || false}
                   onCheckedChange={() => toggleService(service)}
                 />
                 <Label htmlFor={service} className="text-sm">{service}</Label>
@@ -603,14 +606,18 @@ const FreelancerProfile = () => {
             </Button>
           </div>
           <div className="flex flex-wrap gap-2">
-            {profile.service_areas.map((zipCode) => (
-              <Badge key={zipCode} variant="outline" className="flex items-center gap-1">
-                {zipCode}
-                <button onClick={() => removeZipCode(zipCode)}>
-                  <X className="h-3 w-3" />
-                </button>
-              </Badge>
-            ))}
+            {profile.service_areas && Array.isArray(profile.service_areas) ? (
+              profile.service_areas.map((zipCode) => (
+                <Badge key={zipCode} variant="outline" className="flex items-center gap-1">
+                  {zipCode}
+                  <button onClick={() => removeZipCode(zipCode)}>
+                    <X className="h-3 w-3" />
+                  </button>
+                </Badge>
+              ))
+            ) : (
+              <p className="text-muted-foreground text-sm">No service areas added yet</p>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -682,14 +689,18 @@ const FreelancerProfile = () => {
             </Button>
           </div>
           <div className="flex flex-wrap gap-2">
-            {profile.certifications.map((cert) => (
-              <Badge key={cert} variant="outline" className="flex items-center gap-1">
-                {cert}
-                <button onClick={() => removeCertification(cert)}>
-                  <X className="h-3 w-3" />
-                </button>
-              </Badge>
-            ))}
+            {profile.certifications && Array.isArray(profile.certifications) ? (
+              profile.certifications.map((cert) => (
+                <Badge key={cert} variant="outline" className="flex items-center gap-1">
+                  {cert}
+                  <button onClick={() => removeCertification(cert)}>
+                    <X className="h-3 w-3" />
+                  </button>
+                </Badge>
+              ))
+            ) : (
+              <p className="text-muted-foreground text-sm">No certifications added yet</p>
+            )}
           </div>
         </CardContent>
       </Card>

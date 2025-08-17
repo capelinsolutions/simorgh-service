@@ -255,11 +255,15 @@ const FreelancerDashboardHome: React.FC<FreelancerDashboardHomeProps> = ({ stats
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-2">
-            {freelancerData?.service_areas?.map((area: string, index: number) => (
-              <Badge key={index} variant="outline">
-                {area}
-              </Badge>
-            )) || <p className="text-gray-500">No service areas specified</p>}
+            {freelancerData?.service_areas && Array.isArray(freelancerData.service_areas) && freelancerData.service_areas.length > 0 ? (
+              freelancerData.service_areas.map((area: string, index: number) => (
+                <Badge key={index} variant="outline">
+                  {area}
+                </Badge>
+              ))
+            ) : (
+              <p className="text-gray-500">No service areas specified</p>
+            )}
           </div>
         </CardContent>
       </Card>
