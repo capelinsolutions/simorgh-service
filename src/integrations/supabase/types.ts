@@ -698,6 +698,45 @@ export type Database = {
         }
         Relationships: []
       }
+      services: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          id: number
+          image_url: string | null
+          is_active: boolean | null
+          membership_price: number
+          regular_price: number
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: number
+          image_url?: string | null
+          is_active?: boolean | null
+          membership_price: number
+          regular_price: number
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: number
+          image_url?: string | null
+          is_active?: boolean | null
+          membership_price?: number
+          regular_price?: number
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       special_offers: {
         Row: {
           applicable_services: string[] | null

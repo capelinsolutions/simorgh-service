@@ -10,8 +10,19 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { services } from '@/data/services';
+// Remove static import - will fetch from database
 import { Calendar as CalendarIcon, Clock, MapPin, Plus, CreditCard, Users, Star } from 'lucide-react';
+
+interface Service {
+  id: number;
+  title: string;
+  description: string;
+  regular_price: number;
+  membership_price: number;
+  image_url: string;
+  category: string;
+  is_active: boolean;
+}
 
 interface ServiceAddon {
   id: string;
@@ -46,10 +57,10 @@ const EnhancedServiceBooking = () => {
   const [user, setUser] = useState<any>(null);
   const [session, setSession] = useState<any>(null);
   const [step, setStep] = useState(1);
-  const [services_list] = useState(services);
+  const [services_list, setServicesList] = useState<Service[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [filteredServices, setFilteredServices] = useState(services);
+  const [filteredServices, setFilteredServices] = useState<Service[]>([]);
   const [addons, setAddons] = useState<ServiceAddon[]>([]);
   const [addresses, setAddresses] = useState<CustomerAddress[]>([]);
   const [bookingData, setBookingData] = useState<BookingData>({
@@ -101,6 +112,10 @@ const EnhancedServiceBooking = () => {
   }, []);
 
   useEffect(() => {
+    loadServices();
+  }, []);
+
+  useEffect(() => {
     if (user) {
       loadUserData();
       checkSubscription();
@@ -110,6 +125,29 @@ const EnhancedServiceBooking = () => {
   useEffect(() => {
     filterServices();
   }, [searchQuery, selectedCategory]);
+
+  const loadServices = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('services')
+        .select('*')
+        .eq('is_active', true)
+        .order('category', { ascending: true })
+        .order('title', { ascending: true });
+
+      if (error) throw error;
+      
+      setServicesList(data || []);
+      setFilteredServices(data || []);
+    } catch (error) {
+      console.error('Error loading services:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load services",
+        variant: "destructive",
+      });
+    }
+  };
 
   const loadUserData = async () => {
     if (!user) return;
@@ -184,7 +222,7 @@ const EnhancedServiceBooking = () => {
     const selectedService = services_list.find(s => s.id === bookingData.serviceId);
     if (!selectedService) return 0;
 
-    const basePrice = selectedService.regularPrice * 100; // Convert to cents
+    const basePrice = selectedService.regular_price * 100; // Convert to cents
     const addonTotal = bookingData.selectedAddons.reduce((total, addonId) => {
       const addon = addons.find(a => a.id === addonId);
       return total + (addon ? addon.price_per_hour : 0);
@@ -361,7 +399,7 @@ const EnhancedServiceBooking = () => {
 
         {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredServices.map((service) => (
+                  {filteredServices.map((service) => (
             <Card key={service.id} className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardContent className="p-6">
                 <div className="space-y-4">
@@ -375,15 +413,15 @@ const EnhancedServiceBooking = () => {
                       {subscription?.subscribed ? (
                         <div>
                           <span className="text-sm text-muted-foreground line-through">
-                            ${service.regularPrice.toFixed(2)}/hr
+                            ${service.regular_price.toFixed(2)}/hr
                           </span>
                           <div className="text-xl font-bold text-primary">
-                            ${service.membershipPrice.toFixed(2)}/hr
+                            ${service.membership_price.toFixed(2)}/hr
                           </div>
                         </div>
                       ) : (
                         <div className="text-xl font-bold text-foreground">
-                          ${service.regularPrice.toFixed(2)}/hr
+                          ${service.regular_price.toFixed(2)}/hr
                         </div>
                       )}
                       <p className="text-xs text-muted-foreground">Minimum 2 hours</p>
@@ -628,10 +666,10 @@ const EnhancedServiceBooking = () => {
                 <div>
                   <h4 className="font-medium">{selectedService?.title}</h4>
                   <p className="text-sm text-muted-foreground">
-                    {bookingData.duration} hours × ${selectedService?.regularPrice || 0}/hr
+                    {bookingData.duration} hours × ${selectedService?.regular_price || 0}/hr
                   </p>
                   <p className="font-medium">
-                    ${((selectedService?.regularPrice || 0) * bookingData.duration).toFixed(2)}
+                    ${((selectedService?.regular_price || 0) * bookingData.duration).toFixed(2)}
                   </p>
                 </div>
 

@@ -11,6 +11,7 @@ import CleanerApproval from '@/components/admin/CleanerApproval';
 import LiveBookingFeed from '@/components/admin/LiveBookingFeed';
 import AdvancedServiceManager from '@/components/admin/AdvancedServiceManager';
 import EnhancedServiceManager from '@/components/admin/EnhancedServiceManager';
+import ServiceManagement from '@/components/admin/ServiceManagement';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -81,7 +82,7 @@ const AdminDashboard = () => {
         <main className="flex-1 p-4 lg:p-6">
           <Routes>
             <Route index element={<AdminDashboardHome stats={dashboardStats} />} />
-            <Route path="services" element={<EnhancedServiceManager />} />
+            <Route path="services" element={<ServiceManagement />} />
             <Route path="users" element={<UserManager />} />
             <Route path="orders" element={<OrderManager />} />
             <Route path="cleaners" element={<CleanerApproval />} />
