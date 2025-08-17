@@ -113,7 +113,7 @@ const PricingSection = () => {
   const plans = activePlan === 'monthly' ? monthlyPlans : yearlyPlans;
 
   const handleBookNow = (planName: string) => {
-    navigate('/membership-plans');
+    navigate('/membership');
   };
 
   return (
