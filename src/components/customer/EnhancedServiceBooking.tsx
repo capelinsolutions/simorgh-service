@@ -124,7 +124,7 @@ const EnhancedServiceBooking = () => {
 
   useEffect(() => {
     filterServices();
-  }, [searchQuery, selectedCategory]);
+  }, [searchQuery, selectedCategory, services_list]);
 
   const loadServices = async () => {
     try {
