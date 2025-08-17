@@ -11,7 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Switch } from '@/components/ui/switch';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Edit, Trash2, DollarSign, Package, Search } from 'lucide-react';
+import { Plus, Edit, Trash2, DollarSign, Package, Search, Upload, X } from 'lucide-react';
 
 interface Service {
   id: number;
@@ -49,8 +49,71 @@ const ServiceManagement = () => {
     category: 'Residential',
     is_active: true
   });
+  const [imagePreview, setImagePreview] = useState('');
+  const [uploading, setUploading] = useState(false);
 
   const { toast } = useToast();
+
+  const handleImageUpload = async (file: File) => {
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Error",
+        description: "Please select an image file",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "Error", 
+        description: "Image size must be less than 5MB",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+      const filePath = `services/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('service-images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('service-images')
+        .getPublicUrl(filePath);
+
+      setFormData(prev => ({ ...prev, image_url: publicUrl }));
+      setImagePreview(publicUrl);
+
+      toast({
+        title: "Success",
+        description: "Image uploaded successfully"
+      });
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast({
+        title: "Error",
+        description: "Failed to upload image",
+        variant: "destructive"
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeImage = () => {
+    setFormData(prev => ({ ...prev, image_url: '' }));
+    setImagePreview('');
+  };
 
   useEffect(() => {
     fetchServices();
@@ -96,6 +159,7 @@ const ServiceManagement = () => {
       is_active: true
     });
     setEditingService(null);
+    setImagePreview('');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -166,10 +230,11 @@ const ServiceManagement = () => {
       description: service.description,
       regular_price: service.regular_price.toString(),
       membership_price: service.membership_price.toString(),
-      image_url: service.image_url,
+      image_url: service.image_url || '',
       category: service.category,
       is_active: service.is_active
     });
+    setImagePreview(service.image_url || '');
     setIsAddDialogOpen(true);
   };
 
@@ -324,13 +389,63 @@ const ServiceManagement = () => {
               </div>
 
               <div>
-                <Label htmlFor="image_url">Image URL</Label>
-                <Input
-                  id="image_url"
-                  value={formData.image_url}
-                  onChange={(e) => setFormData(prev => ({ ...prev, image_url: e.target.value }))}
-                  placeholder="Enter image URL"
-                />
+                <Label>Service Image</Label>
+                <div className="space-y-4">
+                  {imagePreview && (
+                    <div className="relative inline-block">
+                      <img
+                        src={imagePreview}
+                        alt="Service preview"
+                        className="w-32 h-32 object-cover rounded-lg border"
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0"
+                        onClick={removeImage}
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  )}
+                  
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => document.getElementById('image-upload')?.click()}
+                      disabled={uploading}
+                      className="flex items-center gap-2"
+                    >
+                      <Upload className="h-4 w-4" />
+                      {uploading ? 'Uploading...' : 'Upload Image'}
+                    </Button>
+                    <input
+                      id="image-upload"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleImageUpload(file);
+                      }}
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="image_url">Or enter image URL</Label>
+                    <Input
+                      id="image_url"
+                      value={formData.image_url}
+                      onChange={(e) => {
+                        setFormData(prev => ({ ...prev, image_url: e.target.value }));
+                        setImagePreview(e.target.value);
+                      }}
+                      placeholder="Enter image URL"
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="flex items-center space-x-2">
