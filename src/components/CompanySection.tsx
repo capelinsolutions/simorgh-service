@@ -10,7 +10,7 @@ const CompanySection = () => {
         {/* Image Section */}
         <div className="flex justify-center lg:justify-start">
             <img
-              src="/public/lovable-uploads/company.png"
+              src="/lovable-uploads/company.png"
               alt="Simoragh Company Team"
               className="w-full h-full object-cover rounded-xl"
             />
