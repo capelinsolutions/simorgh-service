@@ -1,49 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from '@/integrations/supabase/client';
+
+interface Service {
+  id: number;
+  title: string;
+  description: string;
+  regular_price: number;
+  membership_price: number;
+  image_url: string;
+  category: string;
+  is_active: boolean;
+}
 
 const BestServiceSection = () => {
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleBookNow = (service: string) => {
-    navigate(`/service-booking?service=${service}`);
+  const handleBookNow = (serviceId: number) => {
+    navigate(`/service-booking?serviceId=${serviceId}`);
   };
 
-  const services = [
-    {
-      id: "office",
-      title: "Office Cleaning",
-      description:
-        "While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:",
-      image:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      id: "construction",
-      title: "Construction Cleaning",
-      description:
-        "While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:",
-      image:
-        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      id: "deep",
-      title: "Deep Cleaning",
-      description:
-        "While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:",
-      image:
-        "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      id: "residential",
-      title: "Residential Cleaning",
-      description:
-        "While we can customize your cleaning plan to suit your needs, most clients schedule regular cleaning services:",
-      image:
-        "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80",
-    },
-  ];
+  useEffect(() => {
+    loadServices();
+  }, []);
+
+  const loadServices = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('services')
+        .select('*')
+        .eq('is_active', true)
+        .order('category', { ascending: true })
+        .order('title', { ascending: true });
+
+      if (error) throw error;
+      
+      setServices(data || []);
+    } catch (error) {
+      console.error('Error loading services:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const visibleItems = 3;
   const maxSlides = services.length - visibleItems;
@@ -82,48 +84,61 @@ const BestServiceSection = () => {
         {/* Divider */}
         <div className="w-full h-px bg-[#83A790] mb-12 md:mb-16"></div>
 
+        
         {/* Slider */}
         <div className="relative">
-          <div className="overflow-hidden">
-            <div
-              className="flex transition-transform duration-500 ease-in-out"
-              style={{
-                transform: `translateX(-${
-                  currentSlide * (100 / visibleItems)
-                }%)`,
-              }}
-            >
-              {services.map((service) => (
-                <div
-                  key={service.id}
-                  className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 bg-white rounded-2xl overflow-hidden shadow-sm"
-                >
-                  <div className="overflow-hidden px-4 rounded-2xl h-64 md:h-80">
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="w-full h-full object-cover rounded-2xl"
-                    />
-                  </div>
-                  <div className="p-4 md:p-6">
-                    <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2 md:mb-3">
-                      {service.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm leading-relaxed mb-4 md:mb-6">
-                      {service.description}
-                    </p>
-                    <button
-                      onClick={() => handleBookNow(service.id)}
-                      className="bg-white border border-gray-300 text-gray-700 px-5 md:px-6 py-2.5 md:py-3 rounded-lg font-medium flex items-center gap-2 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all"
-                    >
-                      Book Now
-                      <ArrowRight size={16} />
-                    </button>
-                  </div>
-                </div>
-              ))}
+          {loading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="text-gray-500">Loading services...</div>
             </div>
-          </div>
+          ) : services.length === 0 ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="text-gray-500">No services available</div>
+            </div>
+          ) : (
+            <>
+              <div className="overflow-hidden">
+                <div
+                  className="flex transition-transform duration-500 ease-in-out"
+                  style={{
+                    transform: `translateX(-${
+                      currentSlide * (100 / visibleItems)
+                    }%)`,
+                  }}
+                >
+                  {services.map((service) => (
+                    <div
+                      key={service.id}
+                      className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 bg-white rounded-2xl overflow-hidden shadow-sm"
+                    >
+                      <div className="overflow-hidden px-4 rounded-2xl h-64 md:h-80">
+                        <img
+                          src={service.image_url || "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80"}
+                          alt={service.title}
+                          className="w-full h-full object-cover rounded-2xl"
+                        />
+                      </div>
+                      <div className="p-4 md:p-6">
+                        <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2 md:mb-3">
+                          {service.title}
+                        </h3>
+                        <p className="text-gray-600 text-sm leading-relaxed mb-4 md:mb-6">
+                          {service.description}
+                        </p>
+                        <button
+                          onClick={() => handleBookNow(service.id)}
+                          className="bg-white border border-gray-300 text-gray-700 px-5 md:px-6 py-2.5 md:py-3 rounded-lg font-medium flex items-center gap-2 hover:bg-[#58C0D7] hover:text-white hover:border-[#58C0D7] transition-all"
+                        >
+                          Book Now
+                          <ArrowRight size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
 
           {/* Arrows */}
           {services.length > visibleItems && (
