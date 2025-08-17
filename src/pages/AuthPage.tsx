@@ -24,10 +24,17 @@ const AuthPage = () => {
     if (user && !authLoading) {
       console.log('User authenticated, checking role for redirect...', { user: user.id, isAdmin });
       
-      // Add a small delay to ensure admin status is loaded
+      // Immediate redirect if admin status is already determined
+      if (isAdmin) {
+        console.log('User is admin, redirecting to /admin');
+        navigate('/admin', { replace: true });
+        return;
+      }
+      
+      // Add a small delay to ensure role checking completes for non-admin users
       const timeoutId = setTimeout(() => {
         checkUserRoleAndRedirect(user.id);
-      }, 100);
+      }, 200);
       
       return () => clearTimeout(timeoutId);
     }
