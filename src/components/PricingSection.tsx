@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import pricingBg from '@/images/pricing.png';
+import pricingBg from '../../public/lovable-uploads/pricing.png';
 
 const monthlyPlans = [
   {

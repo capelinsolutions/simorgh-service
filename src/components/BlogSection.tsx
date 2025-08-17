@@ -8,7 +8,7 @@ const blogs = [
     title: "Eco-Friendly Cleaning: How We Keep Your Home Green",
     description:
       "Learn about our commitment to eco-friendly practices. We share the eco-conscious products...",
-    image: "/src/images/blog1.png",
+    image: "/lovable-uploads/blog1.png",
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ const blogs = [
     title: "How to Maintain a Clean Home Between Professional Visits",
     description:
       "Get practical advice on maintaining cleanliness between our scheduled visits. These easy-to-follow tips...",
-    image: "/src/images/blog2.png",
+    image: "/lovable-uploads/blog2.png",
   },
   {
     id: 3,
@@ -26,7 +26,7 @@ const blogs = [
     title: "The Benefits of Regular Professional Cleaning",
     description:
       "Understand the numerous advantages of scheduling regular professional cleanings. From improving indoor air...",
-    image: "/src/images/blog3.png",
+    image: "/lovable-uploads/blog3.png",
   },
 ];
 

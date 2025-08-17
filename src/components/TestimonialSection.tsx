@@ -7,7 +7,7 @@ const testimonials = [
   {
     name: "Robert Fox",
     role: "Business Man",
-    image: "/lovable-uploads/fb367c1b-e6dc-4a54-9f2e-7b1dbf4586d4.png",
+    image: "/lovable-uploads/feedback.jpg",
     rating: 5,
     message:
       "Excellent service! The team was punctual, thorough, and left my home sparkling clean. Highly recommend for anyone needing a reliable and detailed cleaning service",
@@ -108,7 +108,7 @@ const TestimonialSection = () => {
             {/* Quote Icon */}
             <div className="hidden sm:block self-start py-10">
               <img
-                src="/src/images/Quotation.png"
+                src="/lovable-uploads/Quotation.png"
                 alt="quotation mark"
                 className="w-[40px] h-[32px] sm:w-[58px] sm:h-[47px] opacity-100"
               />
