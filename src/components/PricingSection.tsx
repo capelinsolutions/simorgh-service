@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import pricingBg from '../../public/lovable-uploads/pricing.png';
 
 const monthlyPlans = [
@@ -108,7 +109,12 @@ const yearlyPlans = [
 
 const PricingSection = () => {
   const [activePlan, setActivePlan] = useState<'monthly' | 'yearly'>('monthly');
+  const navigate = useNavigate();
   const plans = activePlan === 'monthly' ? monthlyPlans : yearlyPlans;
+
+  const handleBookNow = (planName: string) => {
+    navigate('/membership-plans');
+  };
 
   return (
     <section
@@ -183,6 +189,7 @@ const PricingSection = () => {
 
               <div className="mt-10">
                 <button
+                  onClick={() => handleBookNow(plan.name)}
                   className={`w-full py-3 rounded-md font-medium transition-all ${plan.buttonStyle}`}
                 >
                   Book Now
