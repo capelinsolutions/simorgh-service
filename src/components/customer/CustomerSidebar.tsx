@@ -1,82 +1,47 @@
+
 import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { Calendar, User, CreditCard, UserCircle, Bell, Star } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Calendar, User, CreditCard, Bell, Plus } from 'lucide-react';
 
 const CustomerSidebar = () => {
+  const location = useLocation();
+
+  const menuItems = [
+    { path: '/customer', label: 'My Bookings', icon: Calendar },
+    { path: '/customer/book-service', label: 'Book a Service', icon: Plus },
+    { path: '/customer/profile', label: 'Profile', icon: User },
+    { path: '/customer/membership', label: 'Membership', icon: CreditCard },
+    { path: '/customer/notifications', label: 'Notifications', icon: Bell },
+  ];
+
   return (
-    <div className="w-64 bg-white shadow-sm border-r border-gray-200 min-h-screen">
+    <div className="w-64 min-h-screen bg-muted/30 border-r">
       <div className="p-6">
-        <h2 className="text-lg font-semibold text-gray-900">Customer Portal</h2>
+        <h2 className="text-xl font-semibold text-foreground mb-6">Customer Portal</h2>
+        <nav className="space-y-2">
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = location.pathname === item.path || 
+              (item.path === '/customer' && location.pathname === '/customer/bookings');
+            
+            return (
+              <Button
+                key={item.path}
+                asChild
+                variant={isActive ? "default" : "ghost"}
+                className="w-full justify-start"
+              >
+                <Link to={item.path}>
+                  <Icon className="h-4 w-4 mr-2" />
+                  {item.label}
+                </Link>
+              </Button>
+            );
+          })}
+        </nav>
       </div>
-      <nav className="mt-6">
-        <NavLink
-          to="/customer"
-          end
-          className={({ isActive }) =>
-            `flex items-center px-6 py-3 text-sm font-medium ${
-              isActive ? 'bg-[#58C0D7] text-white' : 'text-gray-600 hover:bg-gray-50'
-            }`
-          }
-        >
-          <Calendar className="mr-3 h-5 w-5" />
-          Book Service
-        </NavLink>
-        <NavLink
-          to="/customer/bookings"
-          className={({ isActive }) =>
-            `flex items-center px-6 py-3 text-sm font-medium ${
-              isActive ? 'bg-[#58C0D7] text-white' : 'text-gray-600 hover:bg-gray-50'
-            }`
-          }
-        >
-          <User className="mr-3 h-5 w-5" />
-          My Bookings
-        </NavLink>
-        <NavLink
-          to="/customer/membership"
-          className={({ isActive }) =>
-            `flex items-center px-6 py-3 text-sm font-medium ${
-              isActive ? 'bg-[#58C0D7] text-white' : 'text-gray-600 hover:bg-gray-50'
-            }`
-          }
-        >
-          <CreditCard className="mr-3 h-5 w-5" />
-          Membership
-        </NavLink>
-        <NavLink
-          to="/customer/profile"
-          className={({ isActive }) =>
-            `flex items-center px-6 py-3 text-sm font-medium ${
-              isActive ? 'bg-[#58C0D7] text-white' : 'text-gray-600 hover:bg-gray-50'
-            }`
-          }
-        >
-          <UserCircle className="mr-3 h-5 w-5" />
-          My Profile
-        </NavLink>
-        <NavLink
-          to="/customer/notifications"
-          className={({ isActive }) =>
-            `flex items-center px-6 py-3 text-sm font-medium ${
-              isActive ? 'bg-[#58C0D7] text-white' : 'text-gray-600 hover:bg-gray-50'
-            }`
-          }
-        >
-          <Bell className="mr-3 h-5 w-5" />
-          Notifications
-        </NavLink>
-        <NavLink
-          to="/customer/testimonials"
-          className={({ isActive }) =>
-            `flex items-center px-6 py-3 text-sm font-medium ${
-              isActive ? 'bg-[#58C0D7] text-white' : 'text-gray-600 hover:bg-gray-50'
-            }`
-          }
-        >
-          <Star className="mr-3 h-5 w-5" />
-          Testimonials
-        </NavLink>
-      </nav>
     </div>
   );
 };
