@@ -7,11 +7,21 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { services, Service } from '@/data/services';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { ShoppingCart, CreditCard, User, Mail, MessageCircle } from 'lucide-react';
 import type { User as SupabaseUser, Session } from '@supabase/supabase-js';
+
+interface Service {
+  id: number;
+  title: string;
+  description: string;
+  regular_price: number;
+  membership_price: number;
+  image_url: string;
+  category: string;
+  is_active: boolean;
+}
 
 const ServiceBooking = () => {
   const [searchParams] = useSearchParams();
@@ -23,7 +33,8 @@ const ServiceBooking = () => {
   const [zipCode, setZipCode] = useState('');
   const [specialRequests, setSpecialRequests] = useState('');
   const [loading, setLoading] = useState(false);
-  const [filteredServices, setFilteredServices] = useState(services);
+  const [services, setServices] = useState<Service[]>([]);
+  const [filteredServices, setFilteredServices] = useState<Service[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
@@ -62,6 +73,34 @@ const ServiceBooking = () => {
       }
     }
   }, [searchParams]);
+
+  // Load services from database
+  useEffect(() => {
+    loadServices();
+  }, []);
+
+  const loadServices = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('services')
+        .select('*')
+        .eq('is_active', true)
+        .order('category', { ascending: true })
+        .order('title', { ascending: true });
+
+      if (error) throw error;
+      
+      setServices(data || []);
+      setFilteredServices(data || []);
+    } catch (error) {
+      console.error('Error loading services:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load services",
+        variant: "destructive",
+      });
+    }
+  };
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -137,7 +176,7 @@ const ServiceBooking = () => {
         body: {
           serviceName: selectedService.title,
           serviceDescription: `${selectedService.description}${specialRequests ? ` - Special requests: ${specialRequests}` : ''}`,
-          amount: selectedService.regularPrice * 100, // Convert to cents
+          amount: selectedService.regular_price * 100, // Convert to cents
           isGuest,
           customerEmail: isGuest ? guestEmail : user?.email,
           zipCode: zipCode,
@@ -215,20 +254,22 @@ const ServiceBooking = () => {
                   onClick={() => handleServiceSelect(service)}
                 >
                   <CardHeader className="p-4">
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="w-full h-32 object-cover rounded-md mb-3"
-                    />
+                    {service.image_url && (
+                      <img
+                        src={service.image_url}
+                        alt={service.title}
+                        className="w-full h-32 object-cover rounded-md mb-3"
+                      />
+                    )}
                     <CardTitle className="text-lg">{service.title}</CardTitle>
                     <CardDescription className="text-sm">{service.description}</CardDescription>
                   </CardHeader>
                   <CardContent className="p-4 pt-0">
                     <div className="flex justify-between items-center">
                       <div className="space-y-1">
-                        <p className="text-2xl font-bold text-primary">${service.regularPrice}</p>
+                        <p className="text-2xl font-bold text-primary">${service.regular_price}</p>
                         <p className="text-sm text-muted-foreground">
-                          Member: ${service.membershipPrice}
+                          Member: ${service.membership_price}
                         </p>
                       </div>
                       {service.category && (
@@ -264,7 +305,7 @@ const ServiceBooking = () => {
                         {selectedService.description}
                       </p>
                       <p className="text-2xl font-bold text-primary mt-2">
-                        ${selectedService.regularPrice}
+                        ${selectedService.regular_price}
                       </p>
                     </div>
 
@@ -338,7 +379,7 @@ const ServiceBooking = () => {
                       size="lg"
                     >
                       <CreditCard className="h-4 w-4 mr-2" />
-                      {loading ? 'Processing...' : `Book for $${selectedService.regularPrice}`}
+                      {loading ? 'Processing...' : `Book for $${selectedService.regular_price}`}
                     </Button>
 
                     {!user && !isGuest && (
