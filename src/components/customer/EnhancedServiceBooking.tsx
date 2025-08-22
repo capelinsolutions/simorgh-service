@@ -402,7 +402,7 @@ const EnhancedServiceBooking = () => {
         {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredServices.map((service) => (
-            <Card key={service.id} className="hover:shadow-lg transition-shadow cursor-pointer">
+            <Card key={service.id} className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate(`/service/${service.id}`)}>
               <CardContent className="p-6">
                 <div className="space-y-4">
                   <div>
@@ -433,14 +433,10 @@ const EnhancedServiceBooking = () => {
                   
                    <div className="flex gap-2">
                     <Button 
-                      onClick={() => navigate(`/service/${service.id}`)}
-                      variant="outline"
-                      className="flex-1"
-                    >
-                      View Details
-                    </Button>
-                    <Button 
-                      onClick={() => handleServiceSelect(service.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleServiceSelect(service.id);
+                      }}
                       className="flex-1"
                     >
                       Select Service
