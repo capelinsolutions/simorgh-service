@@ -55,7 +55,7 @@ const ServicesGrid = () => {
   };
 
   const handleBookNow = (serviceId: number) => {
-    navigate(`/service-booking?selectedService=${serviceId}`);
+    navigate(`/service/${serviceId}`);
   };
 
   const filteredServices = selectedCategory === 'All Services' 
