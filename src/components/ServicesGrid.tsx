@@ -125,11 +125,6 @@ const ServicesGrid = () => {
                   </div>
                 </div>
                 
-                <img
-                  src={serviceArrowIconImg}
-                  alt=""
-                  className="object-contain w-[59px] stroke-[3px] stroke-[#58C0D7] mt-4"
-                />
                 <p className="text-sm font-normal mt-3 text-gray-600 line-clamp-2">
                   {service.description}
                 </p>
