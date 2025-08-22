@@ -50,6 +50,10 @@ const ServicesGrid = () => {
     }
   };
 
+  const handleServiceClick = (serviceId: number) => {
+    navigate(`/service/${serviceId}`);
+  };
+
   const handleBookNow = (serviceId: number) => {
     navigate(`/service-booking?selectedService=${serviceId}`);
   };
@@ -96,7 +100,7 @@ const ServicesGrid = () => {
         ) : (
           <div className="flex w-full items-center gap-6 text-[rgba(15,15,15,1)] justify-center flex-wrap mt-[63px] max-md:max-w-full max-md:mt-10">
             {displayedServices.map((service, index) => (
-              <article key={service.id} className="bg-white self-stretch min-w-60 text-center grow shrink w-[350px] my-auto rounded-lg hover:shadow-lg transition-shadow border border-gray-100">
+              <article key={service.id} className="bg-white self-stretch min-w-60 text-center grow shrink w-[350px] my-auto rounded-lg hover:shadow-lg transition-shadow border border-gray-100 cursor-pointer" onClick={() => handleServiceClick(service.id)}>
                 <img
                   src={service.image_url || "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80"}
                   alt={service.title}
@@ -131,7 +135,10 @@ const ServicesGrid = () => {
                 </p>
                 
                 <button 
-                  onClick={() => handleBookNow(service.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleBookNow(service.id);
+                  }}
                   className="mt-4 w-full bg-[#58C0D7] text-white py-2 px-4 rounded-lg hover:bg-[#4aa8c0] transition-colors"
                 >
                   Book Now

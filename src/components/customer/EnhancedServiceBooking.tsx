@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -54,6 +55,7 @@ interface BookingData {
 }
 
 const EnhancedServiceBooking = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
   const [session, setSession] = useState<any>(null);
   const [step, setStep] = useState(1);
@@ -429,12 +431,21 @@ const EnhancedServiceBooking = () => {
                     <Badge variant="secondary">{service.category}</Badge>
                   </div>
                   
-                  <Button 
-                    onClick={() => handleServiceSelect(service.id)}
-                    className="w-full"
-                  >
-                    Select Service
-                  </Button>
+                   <div className="flex gap-2">
+                    <Button 
+                      onClick={() => navigate(`/service/${service.id}`)}
+                      variant="outline"
+                      className="flex-1"
+                    >
+                      View Details
+                    </Button>
+                    <Button 
+                      onClick={() => handleServiceSelect(service.id)}
+                      className="flex-1"
+                    >
+                      Select Service
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
