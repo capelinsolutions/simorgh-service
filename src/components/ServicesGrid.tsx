@@ -65,7 +65,7 @@ const ServicesGrid = () => {
   const displayedServices = showAll ? filteredServices : filteredServices.slice(0, 12);
 
   return (
-    <section className="flex w-full flex-col items-center justify-center bg-[#EEF9FB] mt-[76px] px-20 py-[111px] max-md:max-w-full max-md:mt-10 max-md:pb-[100px] max-md:px-5">
+    <section className="flex w-full flex-col items-center justify-center bg-[#EEF9FB] mt-8 px-20 py-16 max-md:max-w-full max-md:mt-6 max-md:pb-12 max-md:px-5">
       <div className="flex w-full max-w-[1200px] flex-col items-stretch -mb-6 max-md:max-w-full max-md:mb-2.5">
         <div className="self-center flex flex-col items-center max-md:max-w-full">
           <h2 className="text-black text-5xl font-semibold max-md:max-w-full max-md:text-[40px]">
