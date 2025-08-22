@@ -21,7 +21,7 @@ const BestServiceSection = () => {
   const [loading, setLoading] = useState(true);
 
   const handleBookNow = (serviceId: number) => {
-    navigate(`/service-booking?serviceId=${serviceId}`);
+    navigate('/services');
   };
 
   useEffect(() => {
