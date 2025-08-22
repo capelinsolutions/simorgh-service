@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useSearchParams, Link } from 'react-router-dom';
+import { useLocation, useSearchParams, Link, useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -25,6 +25,7 @@ interface Service {
 
 const ServiceBooking = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
@@ -251,7 +252,7 @@ const ServiceBooking = () => {
                   className={`cursor-pointer transition-all hover:shadow-lg ${
                     selectedService?.id === service.id ? 'ring-2 ring-primary' : ''
                   }`}
-                  onClick={() => handleServiceSelect(service)}
+                  onClick={() => navigate(`/service/${service.id}`)}
                 >
                   <CardHeader className="p-4">
                     {service.image_url && (
