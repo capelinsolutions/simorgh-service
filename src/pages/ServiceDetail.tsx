@@ -58,8 +58,39 @@ const ServiceDetail = () => {
     }
   };
 
-  const handleBookNow = () => {
-    navigate(`/service-booking?selectedService=${id}`);
+  const handleBookNow = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('create-payment', {
+        body: {
+          serviceId: parseInt(id!),
+          hours: 2, // Default to 2 hours minimum
+          isGuest: false // Will try to use authenticated user if available
+        }
+      });
+
+      if (error) {
+        toast({
+          title: "Payment Error",
+          description: error.message || "Failed to create payment session",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (data?.url) {
+        // Open Stripe checkout in a new tab
+        window.open(data.url, '_blank');
+      } else {
+        throw new Error("No checkout URL received");
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      toast({
+        title: "Payment Error",
+        description: "Unable to process payment. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   if (loading) {
