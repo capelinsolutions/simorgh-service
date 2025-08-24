@@ -33,14 +33,16 @@ const Hero = React.memo(() => {
   return (
     <section className="relative min-h-[700px] sm:min-h-[600px] md:min-h-[700px] lg:min-h-[800px] w-full flex items-center overflow-hidden">
       {/* Background Image */}
-      <OptimizedImage
-        src="/lovable-uploads/3f1c1c8b-28bc-492c-9013-026112f96e8e.png"
-        alt="Professional cleaning team providing specialized services"
-        className="absolute inset-0 w-full h-full object-cover"
-        priority={true}
-        width={1920}
-        height={800}
-      />
+      <div className="absolute inset-0 w-full h-full">
+        <OptimizedImage
+          src="/lovable-uploads/3f1c1c8b-28bc-492c-9013-026112f96e8e.png"
+          alt="Professional cleaning team providing specialized services"
+          className="w-full h-full object-cover"
+          priority={true}
+          width={1920}
+          height={800}
+        />
+      </div>
 
       {/* Content Wrapper */}
       <div className="relative z-10 w-full">
