@@ -102,12 +102,11 @@ const ServicesGrid = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 lg:gap-10 mt-8 sm:mt-12 lg:mt-16 w-full">
             {displayedServices.map((service, index) => (
               <article key={service.id} className="bg-white text-center rounded-lg hover:shadow-lg transition-shadow border border-gray-100 cursor-pointer h-full flex flex-col" onClick={() => handleServiceClick(service.id)}>
-                <OptimizedImage
-                  src={service.image_url || "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80"}
-                  alt={service.title}
-                  className="aspect-[1.57] object-cover w-full rounded-t-lg"
-                  aspectRatio="photo"
-                />
+                 <OptimizedImage
+                   src={service.image_url || "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80"}
+                   alt={service.title}
+                   className="object-cover w-full rounded-t-lg"
+                 />
               <div className="flex w-full flex-col items-center justify-between px-3 sm:px-4 py-3 sm:py-4 flex-1">
                 <div className="w-full">
                   <h3 className="text-lg sm:text-xl font-semibold line-clamp-2 min-h-[3rem] mb-3">
