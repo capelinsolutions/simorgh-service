@@ -21,12 +21,23 @@ interface Service {
   is_active: boolean;
 }
 
+interface BookingData {
+  customerEmail: string;
+  zipCode: string;
+  specialRequests: string;
+}
+
 const ServiceDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [service, setService] = useState<Service | null>(null);
   const [loading, setLoading] = useState(true);
+  const [bookingData, setBookingData] = useState<BookingData>({
+    customerEmail: '',
+    zipCode: '',
+    specialRequests: ''
+  });
 
   useEffect(() => {
     if (id) {
@@ -59,11 +70,24 @@ const ServiceDetail = () => {
   };
 
   const handleBookNow = async () => {
+    // Validate required fields
+    if (!bookingData.customerEmail || !bookingData.zipCode) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in your email and zip code.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       const { data, error } = await supabase.functions.invoke('create-payment', {
         body: {
           serviceId: parseInt(id!),
           hours: 2, // Default to 2 hours minimum
+          customerEmail: bookingData.customerEmail,
+          zipCode: bookingData.zipCode,
+          specialRequests: bookingData.specialRequests,
           isGuest: false // Will try to use authenticated user if available
         }
       });
@@ -283,6 +307,51 @@ const ServiceDetail = () => {
 
                       <Separator />
 
+                      {/* Customer Information Form */}
+                      <div className="space-y-4">
+                        <div>
+                          <label className="text-sm font-medium text-foreground mb-2 block">
+                            Email Address *
+                          </label>
+                          <input
+                            type="email"
+                            required
+                            value={bookingData.customerEmail}
+                            onChange={(e) => setBookingData(prev => ({ ...prev, customerEmail: e.target.value }))}
+                            className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                            placeholder="your@email.com"
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="text-sm font-medium text-foreground mb-2 block">
+                            Zip Code *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={bookingData.zipCode}
+                            onChange={(e) => setBookingData(prev => ({ ...prev, zipCode: e.target.value }))}
+                            className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                            placeholder="12345"
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="text-sm font-medium text-foreground mb-2 block">
+                            Special Requests (Optional)
+                          </label>
+                          <textarea
+                            value={bookingData.specialRequests}
+                            onChange={(e) => setBookingData(prev => ({ ...prev, specialRequests: e.target.value }))}
+                            className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent min-h-[80px] resize-none"
+                            placeholder="Any special instructions or requests..."
+                          />
+                        </div>
+                      </div>
+
+                      <Separator />
+
                       {/* Service Details */}
                       <div className="space-y-3">
                         <div className="flex items-center justify-between text-sm">
@@ -312,6 +381,7 @@ const ServiceDetail = () => {
                         onClick={handleBookNow}
                         className="w-full"
                         size="lg"
+                        disabled={!bookingData.customerEmail || !bookingData.zipCode}
                       >
                         Book Now
                       </Button>

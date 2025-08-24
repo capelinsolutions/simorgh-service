@@ -38,8 +38,8 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_ANON_KEY") ?? ""
     );
 
-    const { serviceId, hours = 2, customerEmail, isGuest = false } = await req.json();
-    logStep("Request data received", { serviceId, hours, customerEmail, isGuest });
+    const { serviceId, hours = 2, customerEmail, zipCode, specialRequests, isGuest = false } = await req.json();
+    logStep("Request data received", { serviceId, hours, customerEmail, zipCode, isGuest });
 
     if (!serviceId) {
       throw new Error("Service ID is required");
@@ -110,6 +110,8 @@ serve(async (req) => {
         currency: 'usd',
         duration_hours: hours,
         customer_email: userEmail,
+        customer_zip_code: zipCode,
+        special_instructions: specialRequests,
         is_guest_order: !user,
         status: 'pending'
       })
