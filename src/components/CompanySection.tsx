@@ -1,6 +1,7 @@
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import OptimizedImage from "@/components/ui/optimized-image";
 
 const CompanySection = () => {
   return (
@@ -9,10 +10,11 @@ const CompanySection = () => {
         
         {/* Image Section */}
         <div className="flex justify-center lg:justify-start">
-            <img
+            <OptimizedImage
               src="/lovable-uploads/company.png"
               alt="Simoragh Company Team"
               className="w-full h-full object-cover rounded-xl"
+              aspectRatio="photo"
             />
         </div>
 

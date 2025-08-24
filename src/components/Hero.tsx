@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapPin, Search } from 'lucide-react';
 import Select from 'react-select';
+import OptimizedImage from "@/components/ui/optimized-image";
 
 const serviceOptions = [
   { value: 'hospital', label: 'Hospital & Practice Cleaning' },
@@ -32,14 +33,13 @@ const Hero = React.memo(() => {
   return (
     <section className="relative min-h-[700px] sm:min-h-[600px] md:min-h-[700px] lg:min-h-[800px] w-full flex items-center overflow-hidden">
       {/* Background Image */}
-      <img
+      <OptimizedImage
         src="/lovable-uploads/3f1c1c8b-28bc-492c-9013-026112f96e8e.png"
         alt="Professional cleaning team providing specialized services"
         className="absolute inset-0 w-full h-full object-cover"
-        loading="eager"
-        fetchPriority="high"
-        width="1920"
-        height="800"
+        priority={true}
+        width={1920}
+        height={800}
       />
 
       {/* Content Wrapper */}

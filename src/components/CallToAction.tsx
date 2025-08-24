@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import OptimizedImage from "@/components/ui/optimized-image";
 import ctaBackgroundImg from '../assets/cta-background.jpg';
 
 const CallToAction = () => {
@@ -32,10 +33,11 @@ const CallToAction = () => {
           </button>
         </div>
         
-        <img
+        <OptimizedImage
           src={ctaBackgroundImg}
           alt="Join our team"
           className="aspect-[1.87] object-contain w-[588px] self-stretch min-w-60 my-auto rounded-lg max-md:max-w-full"
+          aspectRatio="wide"
         />
       </div>
     </section>

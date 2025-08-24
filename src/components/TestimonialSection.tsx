@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import OptimizedImage from "@/components/ui/optimized-image";
 
 const testimonials = [
   {
@@ -78,13 +79,12 @@ const TestimonialSection = React.memo(() => {
         <div className="w-full max-w-[600px] mx-auto bg-white border-t-[6px] sm:border-t-[10px] border-r-[6px] sm:border-r-[10px] border-[#58C0D7] rounded-[20px] p-4 sm:p-5 shadow-md">
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
             {/* Profile Image */}
-            <img
+            <OptimizedImage
               src={image}
               alt={`${name} - ${role}`}
               className="w-[120px] h-[170px] sm:w-[170px] sm:h-[244px] object-cover rounded-[10px] border border-gray-200"
-              loading="lazy"
-              width="170"
-              height="244"
+              width={170}
+              height={244}
             />
 
             {/* Text Content */}
@@ -110,13 +110,12 @@ const TestimonialSection = React.memo(() => {
 
             {/* Quote Icon */}
             <div className="hidden sm:block self-start py-10">
-              <img
+              <OptimizedImage
                 src="/lovable-uploads/Quotation.png"
                 alt="Quotation mark"
                 className="w-[40px] h-[32px] sm:w-[58px] sm:h-[47px] opacity-100"
-                loading="lazy"
-                width="58"
-                height="47"
+                width={58}
+                height={47}
               />
             </div>
           </div>

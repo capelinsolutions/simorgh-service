@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import OptimizedImage from "@/components/ui/optimized-image";
 import serviceArrowIconImg from '../assets/service-arrow-icon.jpg';
 import bookNowIconImg from '../assets/book-now-icon.jpg';
 
@@ -101,10 +102,11 @@ const ServicesGrid = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-12 lg:mt-16 w-full">
             {displayedServices.map((service, index) => (
               <article key={service.id} className="bg-white text-center rounded-lg hover:shadow-lg transition-shadow border border-gray-100 cursor-pointer h-full flex flex-col" onClick={() => handleServiceClick(service.id)}>
-                <img
+                <OptimizedImage
                   src={service.image_url || "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80"}
                   alt={service.title}
                   className="aspect-[1.57] object-cover w-full rounded-t-lg"
+                  aspectRatio="photo"
                 />
               <div className="flex w-full flex-col items-center justify-between px-3 sm:px-4 py-4 sm:py-6 flex-1">
                 <div className="w-full">
@@ -153,10 +155,12 @@ const ServicesGrid = () => {
                   <span>
                     Show More ({filteredServices.length - 12} more services)
                   </span>
-                  <img
+                  <OptimizedImage
                     src={bookNowIconImg}
                     alt=""
                     className="w-5 h-5 sm:w-6 sm:h-6"
+                    width={24}
+                    height={24}
                   />
                 </button>
               </div>

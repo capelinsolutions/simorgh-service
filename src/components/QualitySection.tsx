@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
+import OptimizedImage from "@/components/ui/optimized-image";
 
 const QualitySection = () => {
   return (
@@ -26,10 +27,11 @@ const QualitySection = () => {
 
           {/* Image Column */}
           <div className="relative flex justify-center">
-            <img
+            <OptimizedImage
               src="/lovable-uploads/e2664ec8-0e6e-4d41-b080-0120dc3d9a91.png"
               alt="Professional cleaning team"
               className="w-full max-w-[500px] h-64 sm:h-80 md:h-[400px] lg:h-[500px] object-contain rounded-xl"
+              aspectRatio="square"
             />
           </div>
         </div>

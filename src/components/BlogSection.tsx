@@ -1,4 +1,5 @@
 import React from "react";
+import OptimizedImage from "@/components/ui/optimized-image";
 
 const blogs = [
   {
@@ -62,10 +63,11 @@ const BlogSection = () => {
               key={blog.id}
               className="bg-white border border-gray-200 rounded-[20px] overflow-hidden shadow-sm flex flex-col w-full max-w-md mx-auto h-[512px]"
             >
-              <img
+              <OptimizedImage
                 src={blog.image}
                 alt={blog.title}
                 className="w-full h-[240px] object-cover rounded-t-[20px]"
+                aspectRatio="photo"
               />
               <div className="p-6 flex flex-col flex-grow">
                 <p className="text-xs text-gray-500 mb-2 tracking-wide">

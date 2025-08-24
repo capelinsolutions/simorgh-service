@@ -1,4 +1,5 @@
 import React from 'react';
+import OptimizedImage from "@/components/ui/optimized-image";
 import whyChooseUsMainImg from '../assets/why-choose-us-main.jpg';
 import checkmarkIconImg from '../assets/checkmark-icon.jpg';
 
@@ -25,10 +26,11 @@ const WhyChooseUs = () => {
           {/* Image Section */}
           <div className="w-full lg:w-1/2 order-2 lg:order-1">
             <div className="relative aspect-square max-w-md mx-auto lg:max-w-none">
-              <img
+              <OptimizedImage
                 src={whyChooseUsMainImg}
                 alt="Professional cleaning service"
                 className="w-full h-full object-cover rounded-2xl shadow-lg"
+                aspectRatio="square"
               />
             </div>
           </div>
@@ -51,10 +53,12 @@ const WhyChooseUs = () => {
                 {features.map((feature, index) => (
                   <article key={index} className="flex items-start gap-4">
                     <div className="flex-shrink-0">
-                      <img
+                      <OptimizedImage
                         src={checkmarkIconImg}
                         alt=""
                         className="w-8 h-8 rounded-2xl object-contain"
+                        width={32}
+                        height={32}
                       />
                     </div>
                     <div className="flex-1 min-w-0">

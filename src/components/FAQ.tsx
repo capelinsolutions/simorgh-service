@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import OptimizedImage from "@/components/ui/optimized-image";
 import faqIconsImg from '../assets/faq-icons.jpg';
 
 const FAQ = () => {
@@ -54,13 +55,15 @@ const FAQ = () => {
                 <span className="self-stretch w-[469px] my-auto max-md:max-w-full text-left">
                   {faq.question}
                 </span>
-                <img
+                <OptimizedImage
                   src={openFAQ === index 
                     ? faqIconsImg
                     : faqIconsImg
                   }
                   alt={openFAQ === index ? "Collapse" : "Expand"}
                   className="aspect-[1] object-contain w-6 self-stretch shrink-0 my-auto"
+                  width={24}
+                  height={24}
                 />
               </button>
               
