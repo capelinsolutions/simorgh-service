@@ -108,7 +108,7 @@ const ServicesGrid = () => {
                   className="aspect-[1.57] object-cover w-full rounded-t-lg"
                   aspectRatio="photo"
                 />
-              <div className="flex w-full flex-col items-center justify-between px-3 sm:px-4 py-4 sm:py-6 flex-1">
+              <div className="flex w-full flex-col items-center justify-between px-3 sm:px-4 py-3 sm:py-4 flex-1">
                 <div className="w-full">
                   <h3 className="text-lg sm:text-xl font-semibold line-clamp-2 min-h-[3rem] mb-3">
                     {service.title}
