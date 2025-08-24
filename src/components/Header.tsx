@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { LogOut, User, Settings, Menu, X } from "lucide-react";
 
-const Header = () => {
+const Header = React.memo(() => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, isAdmin, signOut, loading } = useAuth();
@@ -30,8 +30,11 @@ const Header = () => {
         {/* Logo */}
         <img
           src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/11d27c766350de61f072c43b85f52036de041534?placeholderIfAbsent=true"
-          alt="Logo"
+          alt="Simorgh Service Logo"
           className="w-[100px] sm:w-[120px] object-contain"
+          loading="eager"
+          width="120"
+          height="40"
         />
 
         {/* Desktop Nav */}
@@ -154,8 +157,11 @@ const Header = () => {
         <div className="flex justify-between items-center p-4 border-b">
           <img
             src="https://api.builder.io/api/v1/image/assets/0dc3dcf4d23140908369237a3449fa20/11d27c766350de61f072c43b85f52036de041534?placeholderIfAbsent=true"
-            alt="Logo"
+            alt="Simorgh Service Logo"
             className="w-[100px] object-contain"
+            loading="lazy"
+            width="100"
+            height="33"
           />
           <button onClick={() => setMobileOpen(false)}>
             <X size={26} />
@@ -263,6 +269,6 @@ const Header = () => {
       </div>
     </header>
   );
-};
+});
 
 export default Header;

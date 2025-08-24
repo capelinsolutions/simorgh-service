@@ -12,7 +12,7 @@ const serviceOptions = [
   { value: 'jet', label: 'Private Jet & Aircraft Cleaning' },
 ];
 
-const Hero = () => {
+const Hero = React.memo(() => {
   const navigate = useNavigate();
   const [selectedService, setSelectedService] = React.useState(null);
 
@@ -34,8 +34,12 @@ const Hero = () => {
       {/* Background Image */}
       <img
         src="/lovable-uploads/3f1c1c8b-28bc-492c-9013-026112f96e8e.png"
-        alt="Professional cleaning team"
+        alt="Professional cleaning team providing specialized services"
         className="absolute inset-0 w-full h-full object-cover"
+        loading="eager"
+        fetchPriority="high"
+        width="1920"
+        height="800"
       />
 
       {/* Content Wrapper */}
@@ -121,6 +125,6 @@ const Hero = () => {
       </div>
     </section>
   );
-};
+});
 
 export default Hero;

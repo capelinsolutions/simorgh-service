@@ -30,7 +30,7 @@ const testimonials = [
   },
 ];
 
-const TestimonialSection = () => {
+const TestimonialSection = React.memo(() => {
   const [index, setIndex] = useState(0);
 
   const handleNext = () => {
@@ -80,8 +80,11 @@ const TestimonialSection = () => {
             {/* Profile Image */}
             <img
               src={image}
-              alt={name}
+              alt={`${name} - ${role}`}
               className="w-[120px] h-[170px] sm:w-[170px] sm:h-[244px] object-cover rounded-[10px] border border-gray-200"
+              loading="lazy"
+              width="170"
+              height="244"
             />
 
             {/* Text Content */}
@@ -109,8 +112,11 @@ const TestimonialSection = () => {
             <div className="hidden sm:block self-start py-10">
               <img
                 src="/lovable-uploads/Quotation.png"
-                alt="quotation mark"
+                alt="Quotation mark"
                 className="w-[40px] h-[32px] sm:w-[58px] sm:h-[47px] opacity-100"
+                loading="lazy"
+                width="58"
+                height="47"
               />
             </div>
           </div>
@@ -118,6 +124,6 @@ const TestimonialSection = () => {
       </div>
     </section>
   );
-};
+});
 
 export default TestimonialSection;
