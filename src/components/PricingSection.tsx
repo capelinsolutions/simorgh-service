@@ -118,28 +118,31 @@ const PricingSection = () => {
 
   return (
     <section
-      className="relative w-full overflow-hidden bg-no-repeat bg-contain"
+      className="relative w-full overflow-hidden"
       style={{
         backgroundImage: `url(${pricingBg})`,
         backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'top',
-        backgroundSize: '100% 900px',
+        backgroundPosition: 'top center',
+        backgroundSize: 'cover',
+        minHeight: '600px'
       }}
     >
+      <div className="absolute inset-0 bg-black/20"></div>
+      
       {/* Header */}
-      <div className="h-full w-full flex items-center justify-center pt-20 text-center text-white px-4">
+      <div className="relative z-10 h-full w-full flex items-center justify-center pt-12 sm:pt-16 lg:pt-20 text-center text-white px-4">
         <div>
-          <h4 className="text-sm uppercase mb-2 font-semibold">Our Pricing</h4>
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Choose From Our Lowest <br className="hidden md:block" />
+          <h4 className="text-xs sm:text-sm uppercase mb-2 font-semibold">Our Pricing</h4>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 leading-tight">
+            Choose From Our Lowest <br className="hidden sm:block" />
             Plans and Prices
           </h2>
 
           {/* Toggle Buttons */}
-          <div className="inline-flex mb-6 rounded-full bg-white p-1">
+          <div className="inline-flex mb-4 sm:mb-6 rounded-full bg-white p-1">
             <button
               onClick={() => setActivePlan('monthly')}
-              className={`px-6 py-2 rounded-full font-medium ${
+              className={`px-4 sm:px-6 py-2 rounded-full font-medium text-sm sm:text-base transition-all ${
                 activePlan === 'monthly'
                   ? 'bg-[#58C0D7] text-white'
                   : 'bg-white text-[#58C0D7]'
@@ -149,7 +152,7 @@ const PricingSection = () => {
             </button>
             <button
               onClick={() => setActivePlan('yearly')}
-              className={`px-6 py-2 rounded-full font-medium ${
+              className={`px-4 sm:px-6 py-2 rounded-full font-medium text-sm sm:text-base transition-all ${
                 activePlan === 'yearly'
                   ? 'bg-[#58C0D7] text-white'
                   : 'bg-white text-[#58C0D7]'
@@ -162,35 +165,38 @@ const PricingSection = () => {
       </div>
 
       {/* Cards */}
-      <div className="py-16 px-4 -mt-16 z-10 relative rounded-t-3xl">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 text-gray-800">
+      <div className="relative z-10 py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 -mt-8 sm:-mt-12 lg:-mt-16 rounded-t-3xl">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 text-gray-800">
           {plans.map((plan, index) => (
             <div
               key={index}
-              className="bg-white rounded-3xl shadow-md p-6 md:p-8 flex flex-col justify-between"
+              className="bg-white rounded-2xl lg:rounded-3xl shadow-md p-4 sm:p-6 lg:p-8 flex flex-col justify-between h-full"
             >
               <div>
-                <h3 className="text-lg font-semibold mb-6 text-center uppercase">
+                <h3 className="text-base sm:text-lg font-semibold mb-4 sm:mb-6 text-center uppercase">
                   {plan.name}
                 </h3>
 
                 {/* Price */}
-                <div className={`text-center mb-8 py-2 rounded ${plan.priceBg}`}>
-                  <span className="text-xl font-semibold">${plan.price}</span>
-                  <span className="text-sm ml-1">{plan.period}</span>
+                <div className={`text-center mb-6 sm:mb-8 py-2 rounded ${plan.priceBg}`}>
+                  <span className="text-lg sm:text-xl font-semibold">${plan.price}</span>
+                  <span className="text-xs sm:text-sm ml-1">{plan.period}</span>
                 </div>
 
-                <ul className="text-sm text-gray-700 space-y-3 text-left leading-[300%] font-['Be_Vietnam_Pro'] font-[400]">
+                <ul className="text-xs sm:text-sm text-gray-700 space-y-2 sm:space-y-3 text-left leading-relaxed">
                   {plan.features.map((feature, idx) => (
-                    <li key={idx}>• {feature}</li>
+                    <li key={idx} className="flex items-start">
+                      <span className="text-[#58C0D7] mr-2 flex-shrink-0">•</span>
+                      <span>{feature}</span>
+                    </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="mt-10">
+              <div className="mt-6 sm:mt-8 lg:mt-10">
                 <button
                   onClick={() => handleBookNow(plan.name)}
-                  className={`w-full py-3 rounded-md font-medium transition-all ${plan.buttonStyle}`}
+                  className={`w-full py-2.5 sm:py-3 rounded-md font-medium transition-all text-sm sm:text-base ${plan.buttonStyle}`}
                 >
                   Book Now
                 </button>

@@ -164,49 +164,49 @@ const ServiceDetail = () => {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-r from-primary/10 to-primary/5 py-16">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+        <section className="relative bg-gradient-to-r from-primary/10 to-primary/5 py-8 sm:py-12 lg:py-16">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
               <Button 
                 variant="ghost" 
                 onClick={() => navigate('/services')}
-                className="mb-6"
+                className="mb-4 sm:mb-6"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to All Services
               </Button>
               
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-center">
+                <div className="space-y-4 sm:space-y-6">
                   <div>
-                    <Badge variant="secondary" className="mb-4">
+                    <Badge variant="secondary" className="mb-3 sm:mb-4">
                       {service.category.charAt(0).toUpperCase() + service.category.slice(1)}
                     </Badge>
-                    <h1 className="text-4xl font-bold text-foreground mb-4">
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-3 sm:mb-4 leading-tight">
                       {service.title}
                     </h1>
-                    <p className="text-lg text-muted-foreground">
+                    <p className="text-base sm:text-lg text-muted-foreground">
                       {service.description}
                     </p>
                   </div>
                   
-                  <div className="flex items-center gap-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
                     <div className="flex items-center text-primary">
-                      <Star className="h-5 w-5 fill-current" />
-                      <Star className="h-5 w-5 fill-current" />
-                      <Star className="h-5 w-5 fill-current" />
-                      <Star className="h-5 w-5 fill-current" />
-                      <Star className="h-5 w-5 fill-current" />
-                      <span className="ml-2 text-foreground">4.9 (124 reviews)</span>
+                      <Star className="h-4 w-4 sm:h-5 sm:w-5 fill-current" />
+                      <Star className="h-4 w-4 sm:h-5 sm:w-5 fill-current" />
+                      <Star className="h-4 w-4 sm:h-5 sm:w-5 fill-current" />
+                      <Star className="h-4 w-4 sm:h-5 sm:w-5 fill-current" />
+                      <Star className="h-4 w-4 sm:h-5 sm:w-5 fill-current" />
+                      <span className="ml-2 text-sm sm:text-base text-foreground">4.9 (124 reviews)</span>
                     </div>
                   </div>
                 </div>
                 
-                <div className="lg:justify-self-end">
+                <div className="order-first lg:order-last lg:justify-self-end">
                   <img
                     src={service.image_url || "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80"}
                     alt={service.title}
-                    className="rounded-lg shadow-lg w-full max-w-md object-cover aspect-[4/3]"
+                    className="rounded-lg shadow-lg w-full max-w-md mx-auto lg:mx-0 object-cover aspect-[4/3]"
                   />
                 </div>
               </div>
@@ -215,12 +215,12 @@ const ServiceDetail = () => {
         </section>
 
         {/* Main Content */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
+        <section className="py-8 sm:py-12 lg:py-16">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
                 {/* Left Content */}
-                <div className="lg:col-span-2 space-y-8">
+                <div className="lg:col-span-2 space-y-6 sm:space-y-8">
                   {/* What's Included */}
                   <Card>
                     <CardHeader>
@@ -282,24 +282,24 @@ const ServiceDetail = () => {
 
                 {/* Right Sidebar - Booking Card */}
                 <div className="space-y-6">
-                  <Card className="sticky top-6">
+                  <Card className="lg:sticky lg:top-6">
                     <CardHeader>
-                      <CardTitle className="text-center">Book This Service</CardTitle>
+                      <CardTitle className="text-center text-lg sm:text-xl">Book This Service</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-6">
+                    <CardContent className="space-y-4 sm:space-y-6">
                       {/* Pricing */}
                       <div className="text-center space-y-2">
-                        <div className="text-3xl font-bold text-foreground">
+                        <div className="text-2xl sm:text-3xl font-bold text-foreground">
                           ${service.regular_price}/hr
                         </div>
-                        <p className="text-sm text-muted-foreground">Minimum 2 hours</p>
+                        <p className="text-xs sm:text-sm text-muted-foreground">Minimum 2 hours</p>
                         
                         {/* Membership Savings */}
                         <div className="bg-primary/10 rounded-lg p-3 space-y-2">
-                          <div className="text-primary font-semibold">
+                          <div className="text-sm sm:text-base text-primary font-semibold">
                             💎 Member Price: ${service.membership_price}/hr
                           </div>
-                          <div className="text-sm text-muted-foreground">
+                          <div className="text-xs sm:text-sm text-muted-foreground">
                             Save ${savings}/hr ({savingsPercentage}% off) with membership
                           </div>
                         </div>
