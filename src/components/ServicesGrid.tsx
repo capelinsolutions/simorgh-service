@@ -114,14 +114,14 @@ const ServicesGrid = () => {
                   </h3>
                   
                   <div className="flex flex-col items-center mb-3">
-                    <div className="text-3xl sm:text-4xl font-bold text-[#58C0D7] mb-1">
+                    <div className="text-3xl sm:text-4xl font-bold text-black mb-1">
                       ${service.membership_price}/h
                     </div>
-                    <div className="text-xs text-gray-400 line-through mb-2">
+                    <div className="text-sm text-gray-500 line-through mb-2">
                       Regular: ${service.regular_price}/h
                     </div>
-                    <div className="bg-[#58C0D7] text-white text-xs px-2 py-1 rounded-full text-center">
-                      Save ${service.regular_price - service.membership_price}/h with membership
+                    <div className="text-green-600 text-sm font-medium">
+                      Save {Math.round(((service.regular_price - service.membership_price) / service.regular_price) * 100)}% with membership
                     </div>
                   </div>
                   
