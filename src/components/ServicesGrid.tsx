@@ -115,7 +115,7 @@ const ServicesGrid = () => {
                   
                   <div className="flex flex-col items-center mb-3">
                     <div className="text-3xl sm:text-4xl font-bold text-black mb-1">
-                      ${service.membership_price}/h
+                      ${service.membership_price}/h/session
                     </div>
                     <div className="text-sm text-gray-500 line-through mb-2">
                       Regular: ${service.regular_price}/h
