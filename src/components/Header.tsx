@@ -46,8 +46,8 @@ const Header = React.memo(() => {
             Home
           </Link>
           <Link
-            to="/service-booking"
-            className={`px-4 py-2 rounded ${getActiveClass("/service-booking")}`}
+            to="/services"
+            className={`px-4 py-2 rounded ${getActiveClass("/services")}`}
           >
             Services
           </Link>
@@ -172,7 +172,7 @@ const Header = React.memo(() => {
           <Link to="/" onClick={() => setMobileOpen(false)} className={getActiveClass("/")}>
             Home
           </Link>
-          <Link to="/service-booking" onClick={() => setMobileOpen(false)} className={getActiveClass("/service-booking")}>
+          <Link to="/services" onClick={() => setMobileOpen(false)} className={getActiveClass("/services")}>
             Services
           </Link>
           <Link to="/membership" onClick={() => setMobileOpen(false)} className={getActiveClass("/membership")}>
