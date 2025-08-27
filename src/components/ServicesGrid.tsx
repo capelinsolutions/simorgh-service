@@ -23,6 +23,7 @@ const ServicesGrid = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [serviceCategories, setServiceCategories] = useState<string[]>(['All Services']);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     loadServices();
@@ -59,9 +60,14 @@ const ServicesGrid = () => {
     navigate(`/service/${serviceId}`);
   };
 
-  const filteredServices = selectedCategory === 'All Services' 
-    ? services 
-    : services.filter(service => service.category === selectedCategory);
+  const filteredServices = services.filter(service => {
+    const matchesCategory = selectedCategory === 'All Services' || service.category === selectedCategory;
+    const matchesSearch = searchTerm === '' || 
+      service.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      service.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      service.category.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   const displayedServices = showAll ? filteredServices : filteredServices.slice(0, 12);
 
@@ -75,6 +81,17 @@ const ServicesGrid = () => {
           <p className="text-gray-800 text-base sm:text-lg lg:text-xl font-normal text-center mt-3 max-w-4xl">
             Choose from our 50+ professional cleaning services with membership savings up to 50%
           </p>
+          
+          {/* Search Bar */}
+          <div className="w-full max-w-md mt-6">
+            <input
+              type="text"
+              placeholder="Search services..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#58C0D7] focus:border-transparent text-gray-700 placeholder-gray-400"
+            />
+          </div>
           
           {/* Service Categories Filter */}
           <div className="flex flex-wrap gap-2 mt-6 sm:mt-8 justify-center max-w-4xl">
@@ -105,7 +122,8 @@ const ServicesGrid = () => {
                  <OptimizedImage
                    src={service.image_url || "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80"}
                    alt={service.title}
-                   className="object-cover w-full h-48 rounded-t-lg"
+                   aspectRatio="photo"
+                   className="object-cover w-full rounded-t-lg"
                  />
               <div className="flex w-full flex-col justify-between p-4 flex-1">
                 <div className="w-full">
