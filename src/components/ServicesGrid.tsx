@@ -116,7 +116,7 @@ const ServicesGrid = () => {
             <div className="text-gray-500">Loading services...</div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-8 sm:mt-12 lg:mt-16 w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 lg:gap-10 mt-8 sm:mt-12 lg:mt-16 w-full">
             {displayedServices.map((service, index) => (
               <article key={service.id} className="bg-white text-center rounded-lg hover:shadow-lg transition-shadow border border-gray-100 cursor-pointer h-full flex flex-col" onClick={() => handleServiceClick(service.id)}>
                  <OptimizedImage
@@ -125,21 +125,21 @@ const ServicesGrid = () => {
                    aspectRatio="photo"
                    className="object-cover w-full rounded-t-lg"
                  />
-              <div className="flex w-full flex-col justify-between p-2 flex-1">
+              <div className="flex w-full flex-col justify-between p-4 flex-1">
                 <div className="w-full">
-                  <h3 className="text-lg sm:text-xl font-bold text-black uppercase mb-1 line-clamp-2">
+                  <h3 className="text-lg sm:text-xl font-bold text-black uppercase mb-3 line-clamp-2">
                     {service.title}
                   </h3>
                   
-                  <p className="text-sm text-gray-600 mb-1 line-clamp-3 text-left">
+                  <p className="text-sm text-gray-600 mb-4 line-clamp-3 text-left">
                     {service.description}
                   </p>
                   
-                  <div className="mb-1 text-center">
-                    <div className="text-2xl sm:text-3xl font-bold text-black">
+                  <div className="mb-4 text-center">
+                    <div className="text-2xl sm:text-3xl font-bold text-black mb-1">
                       ${service.membership_price}/h/session
                     </div>
-                    <div className="text-sm text-gray-500 line-through">
+                    <div className="text-sm text-gray-500 line-through mb-1">
                       Regular: ${service.regular_price}/h
                     </div>
                     <div className="text-green-600 text-sm font-medium">
