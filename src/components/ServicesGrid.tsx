@@ -127,19 +127,19 @@ const ServicesGrid = () => {
                  />
               <div className="flex w-full flex-col justify-between p-4 flex-1">
                 <div className="w-full">
-                  <h3 className="text-lg sm:text-xl font-bold text-black uppercase mb-3 line-clamp-2">
+                  <h3 className="text-lg sm:text-xl font-bold text-black uppercase mb-2 line-clamp-2">
                     {service.title}
                   </h3>
                   
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-3 text-left">
+                  <p className="text-sm text-gray-600 mb-2 line-clamp-3 text-left">
                     {service.description}
                   </p>
                   
-                  <div className="mb-4 text-center">
-                    <div className="text-2xl sm:text-3xl font-bold text-black mb-1">
+                  <div className="mb-2 text-center">
+                    <div className="text-2xl sm:text-3xl font-bold text-black">
                       ${service.membership_price}/h/session
                     </div>
-                    <div className="text-sm text-gray-500 line-through mb-1">
+                    <div className="text-sm text-gray-500 line-through">
                       Regular: ${service.regular_price}/h
                     </div>
                     <div className="text-green-600 text-sm font-medium">
