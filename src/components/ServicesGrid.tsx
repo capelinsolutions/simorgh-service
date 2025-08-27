@@ -125,17 +125,17 @@ const ServicesGrid = () => {
                    aspectRatio="photo"
                    className="object-cover w-full rounded-t-lg"
                  />
-              <div className="flex w-full flex-col justify-between p-4 flex-1">
+              <div className="flex w-full flex-col justify-between p-2 flex-1">
                 <div className="w-full">
-                  <h3 className="text-lg sm:text-xl font-bold text-black uppercase mb-2 line-clamp-2">
+                  <h3 className="text-lg sm:text-xl font-bold text-black uppercase mb-1 line-clamp-2">
                     {service.title}
                   </h3>
                   
-                  <p className="text-sm text-gray-600 mb-2 line-clamp-3 text-left">
+                  <p className="text-sm text-gray-600 mb-1 line-clamp-3 text-left">
                     {service.description}
                   </p>
                   
-                  <div className="mb-2 text-center">
+                  <div className="mb-1 text-center">
                     <div className="text-2xl sm:text-3xl font-bold text-black">
                       ${service.membership_price}/h/session
                     </div>
