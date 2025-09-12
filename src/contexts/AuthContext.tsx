@@ -56,7 +56,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           }
         } else {
           console.log('🚫 No user session, setting isAdmin to false');
-          setIsAdmin(false);
+          if (mounted) {
+            setIsAdmin(false);
+          }
         }
         
         if (mounted) {
@@ -87,6 +89,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setIsAdmin(false);
             console.log('❌ Initial set isAdmin to false due to error');
           }
+        }
+      } else {
+        if (mounted) {
+          setIsAdmin(false);
         }
       }
       
