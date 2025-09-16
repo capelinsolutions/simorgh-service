@@ -26,13 +26,10 @@ const ServicesGrid = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    console.log('🔥 ServicesGrid: Component mounted, calling loadServices');
     loadServices();
   }, []);
 
   const loadServices = async () => {
-    console.log('🚀 ServicesGrid: Starting loadServices API call');
-    setLoading(true);
     try {
       const { data, error } = await supabase
         .from('services')
@@ -41,23 +38,16 @@ const ServicesGrid = () => {
         .order('category', { ascending: true })
         .order('title', { ascending: true });
 
-      if (error) {
-        console.error('❌ ServicesGrid: API error:', error);
-        throw error;
-      }
+      if (error) throw error;
       
-      console.log('✅ ServicesGrid: API call successful, loaded', data?.length || 0, 'services');
       setServices(data || []);
       
       // Extract unique categories
       const categories = ['All Services', ...new Set(data?.map(service => service.category) || [])];
       setServiceCategories(categories);
     } catch (error) {
-      console.error('❌ ServicesGrid: Error loading services:', error);
-      setServices([]);
-      setServiceCategories(['All Services']);
+      console.error('Error loading services:', error);
     } finally {
-      console.log('🏁 ServicesGrid: Setting loading to false');
       setLoading(false);
     }
   };
