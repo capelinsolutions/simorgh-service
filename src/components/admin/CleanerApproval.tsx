@@ -61,7 +61,6 @@ const CleanerApproval = () => {
       const { data, error } = await supabase
         .from('freelancers')
         .select('*')
-        .in('verification_status', ['pending', 'approved', 'rejected'])
         .order('created_at', { ascending: false });
 
       console.log('Freelancers loaded:', { count: data?.length, error });
