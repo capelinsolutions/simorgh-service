@@ -62,6 +62,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
         
         if (mounted) {
+          console.log('🔄 Setting loading to false in auth listener');
           setLoading(false);
         }
       }
@@ -97,6 +98,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       
       if (mounted) {
+        console.log('🔄 Setting loading to false in initial session check');
         setLoading(false);
       }
     });
