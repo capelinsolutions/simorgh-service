@@ -40,8 +40,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Check if user is admin
         if (session?.user) {
           console.log('🔍 Checking admin status for user:', session.user.id, session.user.email);
+          
+          // Add timeout to prevent hanging
+          const adminCheckPromise = supabase.rpc('is_admin', { user_id: session.user.id });
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Admin check timeout')), 5000)
+          );
+          
           try {
-            const { data: isUserAdmin, error: adminError } = await supabase.rpc('is_admin', { user_id: session.user.id });
+            const result = await Promise.race([
+              adminCheckPromise,
+              timeoutPromise
+            ]);
+            
+            // If we get here, it's the admin check result, not timeout
+            const { data: isUserAdmin, error: adminError } = result as any;
             console.log('🔍 Admin RPC result:', { isUserAdmin, adminError, userId: session.user.id });
             if (mounted) {
               setIsAdmin(!!isUserAdmin);
@@ -77,8 +90,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (session?.user) {
         console.log('🔍 Initial session check for user:', session.user.id, session.user.email);
+        
+        // Add timeout to prevent hanging
+        const adminCheckPromise = supabase.rpc('is_admin', { user_id: session.user.id });
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Admin check timeout')), 5000)
+        );
+        
         try {
-          const { data: isUserAdmin, error: adminError } = await supabase.rpc('is_admin', { user_id: session.user.id });
+          const result = await Promise.race([
+            adminCheckPromise,
+            timeoutPromise
+          ]);
+          
+          // If we get here, it's the admin check result, not timeout
+          const { data: isUserAdmin, error: adminError } = result as any;
           console.log('🔍 Initial admin RPC result:', { isUserAdmin, adminError, userId: session.user.id });
           if (mounted) {
             setIsAdmin(!!isUserAdmin);
