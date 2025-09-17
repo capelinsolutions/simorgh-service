@@ -204,6 +204,7 @@ const CleanerApproval = () => {
     const configs = {
       pending: { color: 'bg-yellow-100 text-yellow-800', icon: Clock, label: 'Pending Review' },
       approved: { color: 'bg-green-100 text-green-800', icon: CheckCircle, label: 'Approved' },
+      verified: { color: 'bg-green-100 text-green-800', icon: CheckCircle, label: 'Approved' },
       rejected: { color: 'bg-red-100 text-red-800', icon: XCircle, label: 'Rejected' }
     };
 
