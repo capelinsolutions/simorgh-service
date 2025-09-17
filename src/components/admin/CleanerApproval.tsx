@@ -56,11 +56,15 @@ const CleanerApproval = () => {
 
   const loadFreelancers = async () => {
     try {
+      console.log('Loading freelancers...');
+      
       const { data, error } = await supabase
         .from('freelancers')
         .select('*')
         .in('verification_status', ['pending', 'approved', 'rejected'])
         .order('created_at', { ascending: false });
+
+      console.log('Freelancers loaded:', { count: data?.length, error });
 
       if (error) throw error;
       setFreelancers(data || []);
@@ -81,16 +85,24 @@ const CleanerApproval = () => {
 
     setActionLoading(true);
     try {
-      const { error } = await supabase
+      console.log('Starting approval process for freelancer:', selectedFreelancer.id);
+      
+      const { data, error } = await supabase
         .from('freelancers')
         .update({
           verification_status: 'approved',
           is_active: true,
           updated_at: new Date().toISOString()
         })
-        .eq('id', selectedFreelancer.id);
+        .eq('id', selectedFreelancer.id)
+        .select();
 
-      if (error) throw error;
+      console.log('Update result:', { data, error });
+
+      if (error) {
+        console.error('Database update error:', error);
+        throw error;
+      }
 
       // Send notification to freelancer
       await supabase.functions.invoke('send-notification', {
@@ -135,16 +147,24 @@ const CleanerApproval = () => {
 
     setActionLoading(true);
     try {
-      const { error } = await supabase
+      console.log('Starting rejection process for freelancer:', selectedFreelancer.id);
+      
+      const { data, error } = await supabase
         .from('freelancers')
         .update({
           verification_status: 'rejected',
           is_active: false,
           updated_at: new Date().toISOString()
         })
-        .eq('id', selectedFreelancer.id);
+        .eq('id', selectedFreelancer.id)
+        .select();
 
-      if (error) throw error;
+      console.log('Rejection update result:', { data, error });
+
+      if (error) {
+        console.error('Database rejection error:', error);
+        throw error;
+      }
 
       // Send notification to freelancer
       await supabase.functions.invoke('send-notification', {
