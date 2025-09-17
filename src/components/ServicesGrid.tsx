@@ -47,34 +47,98 @@ const ServicesGrid = () => {
       }
     }
     
-    if (locationParam) {
-      console.log('Search location:', locationParam);
-      // Note: Location filtering would require geocoding implementation
-    }
+    // Load services with location filter if provided
+    loadServices(locationParam || undefined);
   }, []);
 
   useEffect(() => {
-    console.log('ServicesGrid: Component mounted, calling loadServices');
-    loadServices();
+    // Only load services if not already loaded from URL params
+    if (!window.location.search) {
+      console.log('ServicesGrid: Component mounted, calling loadServices');
+      loadServices();
+    }
   }, []);
 
-  const loadServices = async () => {
-    console.log('ServicesGrid: Starting loadServices API call');
+  const loadServices = async (locationFilter?: string) => {
+    console.log('ServicesGrid: Starting loadServices API call', locationFilter ? `with location: ${locationFilter}` : '');
     try {
-      const { data, error } = await supabase
-        .from('services')
-        .select('*')
-        .eq('is_active', true)
-        .order('category', { ascending: true })
-        .order('title', { ascending: true });
-
-      if (error) throw error;
+      let servicesData;
       
-      console.log('ServicesGrid: API call successful, loaded', data?.length || 0, 'services');
-      setServices(data || []);
+      if (locationFilter) {
+        // First, get freelancers who serve the specified location
+        const { data: freelancersData, error: freelancersError } = await supabase
+          .from('freelancers')
+          .select('services_offered, service_areas')
+          .eq('is_active', true)
+          .eq('verification_status', 'verified');
+
+        if (freelancersError) {
+          console.error('ServicesGrid: Error loading freelancers:', freelancersError);
+          // Fallback to all services
+          const fallback = await supabase
+            .from('services')
+            .select('*')
+            .eq('is_active', true)
+            .order('category', { ascending: true })
+            .order('title', { ascending: true });
+          servicesData = fallback.data;
+        } else {
+          // Filter freelancers by location
+          const availableFreelancers = freelancersData?.filter(freelancer => 
+            freelancer.service_areas?.some((area: string) => 
+              area.toLowerCase().includes(locationFilter.toLowerCase()) ||
+              locationFilter.toLowerCase().includes(area.toLowerCase()) ||
+              locationFilter.substring(0, 3) === area.substring(0, 3) // Match first 3 digits of postal code
+            )
+          ) || [];
+
+          // Get all services offered by available freelancers
+          const availableServiceNames = new Set(
+            availableFreelancers.flatMap(freelancer => freelancer.services_offered || [])
+          );
+
+          // Get services that are available in the location
+          const { data: allServices, error: servicesError } = await supabase
+            .from('services')
+            .select('*')
+            .eq('is_active', true)
+            .order('category', { ascending: true })
+            .order('title', { ascending: true });
+
+          if (servicesError) throw servicesError;
+
+          // Filter services by availability
+          const filteredServices = allServices?.filter(service => 
+            availableServiceNames.has(service.title)
+          ) || [];
+          
+          servicesData = filteredServices;
+          
+          if (filteredServices.length === 0) {
+            console.log('No services available in the specified location, showing all services');
+            servicesData = allServices;
+          } else {
+            console.log(`Found ${filteredServices.length} services available in location: ${locationFilter}`);
+          }
+        }
+      } else {
+        // Load all services
+        const { data, error } = await supabase
+          .from('services')
+          .select('*')
+          .eq('is_active', true)
+          .order('category', { ascending: true })
+          .order('title', { ascending: true });
+
+        if (error) throw error;
+        servicesData = data;
+      }
+
+      console.log('ServicesGrid: API call successful, loaded', servicesData?.length || 0, 'services');
+      setServices((servicesData as Service[]) || []);
       
       // Extract unique categories
-      const categories = ['All Services', ...new Set(data?.map(service => service.category) || [])];
+      const categories: string[] = ['All Services', ...new Set((servicesData as Service[])?.map(service => service.category) || [])];
       setServiceCategories(categories);
     } catch (error) {
       console.error('ServicesGrid: Error loading services:', error);
