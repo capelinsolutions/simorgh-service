@@ -31,24 +31,8 @@ const ServicesGrid = () => {
     const serviceParam = urlParams.get('service');
     const locationParam = urlParams.get('location');
     
-    if (serviceParam) {
-      // Map service parameter to category if possible
-      const serviceMapping: Record<string, string> = {
-        'hospital': 'Medical',
-        'industrial': 'Industrial',
-        'housekeeping': 'Residential',
-        'winter': 'Specialized',
-        'pool': 'Specialized',
-        'jet': 'Specialized',
-      };
-      const mappedCategory = serviceMapping[serviceParam];
-      if (mappedCategory) {
-        setSelectedCategory(mappedCategory);
-      }
-    }
-    
-    // Load services with location filter if provided
-    loadServices(locationParam || undefined);
+    // Load services with both service and location filters if provided
+    loadServices(locationParam || undefined, serviceParam || undefined);
   }, []);
 
   useEffect(() => {
@@ -59,8 +43,8 @@ const ServicesGrid = () => {
     }
   }, []);
 
-  const loadServices = async (locationFilter?: string) => {
-    console.log('ServicesGrid: Starting loadServices API call', locationFilter ? `with location: ${locationFilter}` : '');
+  const loadServices = async (locationFilter?: string, serviceFilter?: string) => {
+    console.log('ServicesGrid: Starting loadServices API call', locationFilter ? `with location: ${locationFilter}` : '', serviceFilter ? `with service: ${serviceFilter}` : '');
     try {
       let servicesData;
       
@@ -98,16 +82,27 @@ const ServicesGrid = () => {
           );
 
           // Get services that are available in the location
-          const { data: allServices, error: servicesError } = await supabase
+          let serviceQuery = supabase
             .from('services')
             .select('*')
             .eq('is_active', true)
             .order('category', { ascending: true })
             .order('title', { ascending: true });
 
+          // If specific service is requested, filter by it
+          if (serviceFilter && serviceFilter !== 'all') {
+            // Convert service slug back to title
+            const serviceTitle = serviceFilter.split('-').map(word => 
+              word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' ');
+            serviceQuery = serviceQuery.ilike('title', `%${serviceTitle}%`);
+          }
+
+          const { data: allServices, error: servicesError } = await serviceQuery;
+
           if (servicesError) throw servicesError;
 
-          // Filter services by availability
+          // Filter services by availability in the location
           const filteredServices = allServices?.filter(service => 
             availableServiceNames.has(service.title)
           ) || [];
@@ -115,20 +110,39 @@ const ServicesGrid = () => {
           servicesData = filteredServices;
           
           if (filteredServices.length === 0) {
-            console.log('No services available in the specified location, showing all services');
-            servicesData = allServices;
+            console.log('No services available in the specified location for the requested service');
+            // If a specific service was requested but not available, show empty
+            if (serviceFilter && serviceFilter !== 'all') {
+              servicesData = [];
+            } else {
+              // Otherwise show all services in that location
+              servicesData = allServices?.filter(service => 
+                availableServiceNames.has(service.title)
+              ) || [];
+            }
           } else {
             console.log(`Found ${filteredServices.length} services available in location: ${locationFilter}`);
           }
         }
       } else {
-        // Load all services
-        const { data, error } = await supabase
+        // Load all services or filter by specific service
+        let serviceQuery = supabase
           .from('services')
           .select('*')
           .eq('is_active', true)
           .order('category', { ascending: true })
           .order('title', { ascending: true });
+
+        // If specific service is requested, filter by it
+        if (serviceFilter && serviceFilter !== 'all') {
+          // Convert service slug back to title
+          const serviceTitle = serviceFilter.split('-').map(word => 
+            word.charAt(0).toUpperCase() + word.slice(1)
+          ).join(' ');
+          serviceQuery = serviceQuery.ilike('title', `%${serviceTitle}%`);
+        }
+
+        const { data, error } = await serviceQuery;
 
         if (error) throw error;
         servicesData = data;
@@ -209,6 +223,16 @@ const ServicesGrid = () => {
         {loading ? (
           <div className="flex justify-center items-center h-64 mt-[63px]">
             <div className="text-gray-500">Loading services...</div>
+          </div>
+        ) : displayedServices.length === 0 ? (
+          <div className="flex flex-col justify-center items-center h-64 mt-[63px] text-center">
+            <div className="text-gray-500 text-lg mb-2">No services found</div>
+            <div className="text-gray-400 text-sm max-w-md">
+              {window.location.search ? 
+                "The requested service is not available in the specified location. Try searching without a location or choose a different service." :
+                "Try adjusting your search criteria or category filter."
+              }
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 lg:gap-10 mt-8 sm:mt-12 lg:mt-16 w-full">
