@@ -196,12 +196,28 @@ const CleanerApproval = () => {
     }
   };
 
+  const isPending = (status: string | null | undefined) => {
+    return !status || status === 'pending' || status === 'pending_review' || status === '';
+  };
+
   const getStatusBadge = (status: string) => {
     const configs = {
       pending: { color: 'bg-yellow-100 text-yellow-800', icon: Clock, label: 'Pending Review' },
       approved: { color: 'bg-green-100 text-green-800', icon: CheckCircle, label: 'Approved' },
       rejected: { color: 'bg-red-100 text-red-800', icon: XCircle, label: 'Rejected' }
     };
+
+    // If it's a pending status or null/undefined, show as pending
+    if (isPending(status)) {
+      const config = configs.pending;
+      const Icon = config.icon;
+      return (
+        <Badge className={`${config.color} flex items-center gap-1`}>
+          <Icon className="h-3 w-3" />
+          {config.label}
+        </Badge>
+      );
+    }
 
     const config = configs[status as keyof typeof configs] || configs.pending;
     const Icon = config.icon;
@@ -237,7 +253,7 @@ const CleanerApproval = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Pending Applications ({freelancers.filter(f => f.verification_status === 'pending').length})</CardTitle>
+          <CardTitle>Pending Applications ({freelancers.filter(f => isPending(f.verification_status)).length})</CardTitle>
           <CardDescription>
             Review cleaner applications and approve or reject them
           </CardDescription>
@@ -305,7 +321,7 @@ const CleanerApproval = () => {
                             >
                               <Eye className="h-4 w-4" />
                             </Button>
-                            {(freelancer.verification_status === 'pending' || !freelancer.verification_status) && (
+                            {isPending(freelancer.verification_status) && (
                               <>
                                 <Button
                                   size="sm"
