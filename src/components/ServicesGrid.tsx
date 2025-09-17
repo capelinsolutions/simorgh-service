@@ -24,6 +24,34 @@ const ServicesGrid = () => {
   const [serviceCategories, setServiceCategories] = useState<string[]>(['All Services']);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  
+  // Get search parameters from URL
+  React.useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const serviceParam = urlParams.get('service');
+    const locationParam = urlParams.get('location');
+    
+    if (serviceParam) {
+      // Map service parameter to category if possible
+      const serviceMapping: Record<string, string> = {
+        'hospital': 'Medical',
+        'industrial': 'Industrial',
+        'housekeeping': 'Residential',
+        'winter': 'Specialized',
+        'pool': 'Specialized',
+        'jet': 'Specialized',
+      };
+      const mappedCategory = serviceMapping[serviceParam];
+      if (mappedCategory) {
+        setSelectedCategory(mappedCategory);
+      }
+    }
+    
+    if (locationParam) {
+      console.log('Search location:', locationParam);
+      // Note: Location filtering would require geocoding implementation
+    }
+  }, []);
 
   useEffect(() => {
     console.log('ServicesGrid: Component mounted, calling loadServices');

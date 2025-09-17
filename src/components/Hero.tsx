@@ -16,18 +16,28 @@ const serviceOptions = [
 const Hero = React.memo(() => {
   const navigate = useNavigate();
   const [selectedService, setSelectedService] = React.useState(null);
+  const [postalCode, setPostalCode] = React.useState('');
 
   const handleGetStarted = () => {
     navigate('/service-booking');
   };
 
   const handleViewServices = () => {
-    navigate('/service-booking');
+    navigate('/services');
   };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Selected service:', selectedService);
+    // Navigate to services page with search parameters
+    const searchParams = new URLSearchParams();
+    if (selectedService) {
+      searchParams.append('service', selectedService.value);
+    }
+    if (postalCode.trim()) {
+      searchParams.append('location', postalCode.trim());
+    }
+    
+    navigate(`/services${searchParams.toString() ? `?${searchParams.toString()}` : ''}`);
   };
 
   return (
@@ -73,16 +83,24 @@ const Hero = React.memo(() => {
                 <Select
                   options={serviceOptions}
                   placeholder="Select Your Service"
+                  value={selectedService}
                   onChange={(selected) => setSelectedService(selected)}
                   classNames={{
                     control: () =>
                       'border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#58C0D7]',
-                    menu: () => 'z-50',
+                    menu: () => 'z-50 bg-white border border-gray-200 rounded-md shadow-lg',
+                    option: (state) => 
+                      `px-3 py-2 cursor-pointer ${state.isSelected ? 'bg-[#58C0D7] text-white' : state.isFocused ? 'bg-gray-100' : 'text-gray-700 hover:bg-gray-50'}`,
                   }}
                   styles={{
                     control: (base) => ({
                       ...base,
                       padding: '2px 4px',
+                      backgroundColor: 'white',
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      zIndex: 9999,
                     }),
                   }}
                 />
@@ -92,6 +110,8 @@ const Hero = React.memo(() => {
                 <input
                   type="text"
                   placeholder="Enter Postal Code"
+                  value={postalCode}
+                  onChange={(e) => setPostalCode(e.target.value)}
                   className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#58C0D7] pl-10"
                 />
                 <MapPin className="h-5 w-5 text-gray-400 absolute left-3 top-2.5 pointer-events-none" />
