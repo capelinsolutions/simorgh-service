@@ -266,63 +266,72 @@ const CleanerApproval = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  freelancers.map((freelancer) => (
-                    <TableRow key={freelancer.id}>
-                      <TableCell>
-                        <div>
-                          <p className="font-medium">{freelancer.business_name || 'N/A'}</p>
-                          <p className="text-sm text-muted-foreground">{freelancer.contact_phone}</p>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Star className="h-4 w-4 text-yellow-500" />
-                          <span>{freelancer.experience_years || 0} years</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <MapPin className="h-4 w-4 text-muted-foreground" />
-                          <span>{freelancer.service_areas?.length || 0} areas</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {getStatusBadge(freelancer.verification_status)}
-                      </TableCell>
-                      <TableCell>
-                        {new Date(freelancer.created_at).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex gap-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => openDialog(freelancer, 'view')}
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          {freelancer.verification_status === 'pending' && (
-                            <>
-                              <Button
-                                size="sm"
-                                onClick={() => openDialog(freelancer, 'approve')}
-                                className="bg-green-600 hover:bg-green-700 text-white"
-                              >
-                                <CheckCircle className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="destructive"
-                                onClick={() => openDialog(freelancer, 'reject')}
-                              >
-                                <XCircle className="h-4 w-4" />
-                              </Button>
-                            </>
-                          )}
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                  freelancers.map((freelancer) => {
+                    // Debug log to see the verification status
+                    console.log('Freelancer:', freelancer.business_name, 'Status:', freelancer.verification_status);
+                    return (
+                      <TableRow key={freelancer.id}>
+                        <TableCell>
+                          <div>
+                            <p className="font-medium">{freelancer.business_name || 'N/A'}</p>
+                            <p className="text-sm text-muted-foreground">{freelancer.contact_phone}</p>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Star className="h-4 w-4 text-yellow-500" />
+                            <span>{freelancer.experience_years || 0} years</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <MapPin className="h-4 w-4 text-muted-foreground" />
+                            <span>{freelancer.service_areas?.length || 0} areas</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          {getStatusBadge(freelancer.verification_status)}
+                        </TableCell>
+                        <TableCell>
+                          {new Date(freelancer.created_at).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex gap-2">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => openDialog(freelancer, 'view')}
+                              title="View Details"
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                            {(freelancer.verification_status === 'pending' || !freelancer.verification_status) && (
+                              <>
+                                <Button
+                                  size="sm"
+                                  onClick={() => openDialog(freelancer, 'approve')}
+                                  className="bg-green-600 hover:bg-green-700 text-white"
+                                  title="Approve"
+                                >
+                                  <CheckCircle className="h-4 w-4 mr-1" />
+                                  Approve
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="destructive"
+                                  onClick={() => openDialog(freelancer, 'reject')}
+                                  title="Reject"
+                                >
+                                  <XCircle className="h-4 w-4 mr-1" />
+                                  Reject
+                                </Button>
+                              </>
+                            )}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
                 )}
               </TableBody>
             </Table>
