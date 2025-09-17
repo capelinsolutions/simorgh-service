@@ -203,18 +203,27 @@ const FreelancerSignup = () => {
       // Upload documents to Supabase storage if any
       let documentUrls: string[] = [];
       if (formData.documents.length > 0) {
+        console.log('Starting document upload process for', formData.documents.length, 'files');
         for (const doc of formData.documents) {
+          console.log('Uploading document:', doc.name, 'size:', doc.size);
           const fileName = `${user.id}/${Date.now()}_${doc.name}`;
           const { data, error } = await supabase.storage
             .from('cleaner-documents')
             .upload(fileName, doc);
           
-          if (error) throw error;
+          if (error) {
+            console.error('Document upload error:', error);
+            throw new Error(`Failed to upload ${doc.name}: ${error.message}`);
+          }
+          
+          console.log('Successfully uploaded:', fileName);
           documentUrls.push(data.path);
         }
+        console.log('All documents uploaded successfully');
       }
 
       // Create freelancer profile
+      console.log('Creating freelancer profile...');
       const { error } = await supabase
         .from('freelancers')
         .insert({
@@ -233,8 +242,12 @@ const FreelancerSignup = () => {
           is_active: false // Will be activated after admin approval
         });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Freelancer profile creation error:', error);
+        throw new Error(`Failed to create profile: ${error.message}`);
+      }
 
+      console.log('Freelancer profile created successfully');
       toast({
         title: "Application submitted!",
         description: "Your cleaner application has been submitted for review. You'll be notified once approved.",
@@ -245,10 +258,11 @@ const FreelancerSignup = () => {
       console.error('Error submitting application:', error);
       toast({
         title: "Submission failed",
-        description: error.message,
+        description: error.message || "An unexpected error occurred. Please try again.",
         variant: "destructive"
       });
     } finally {
+      console.log('Resetting loading state');
       setLoading(false);
     }
   };
