@@ -535,7 +535,8 @@ const FreelancerSignup = () => {
                   <Label className="text-base font-medium mb-4 block">Supporting Documents (Optional)</Label>
                   <p className="text-sm text-gray-600 mb-4">Upload certifications, insurance, or other relevant documents (PDF or images, max 5MB each)</p>
                   
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                  <div className="border-2 border-dashed border-gray-300 hover:border-gray-400 rounded-lg p-6 text-center cursor-pointer transition-colors"
+                       onClick={() => document.getElementById('file-upload')?.click()}>
                     <Upload className="h-8 w-8 text-gray-400 mx-auto mb-2" />
                     <p className="text-sm text-gray-600 mb-2">
                       Click to upload or drag and drop files here
@@ -548,11 +549,9 @@ const FreelancerSignup = () => {
                       className="hidden"
                       id="file-upload"
                     />
-                    <Label htmlFor="file-upload" className="cursor-pointer">
-                      <Button type="button" variant="outline">
-                        Choose Files
-                      </Button>
-                    </Label>
+                    <Button type="button" variant="outline" className="pointer-events-none">
+                      Choose Files
+                    </Button>
                   </div>
 
                   {formData.documents.length > 0 && (
