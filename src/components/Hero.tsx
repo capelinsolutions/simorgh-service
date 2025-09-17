@@ -1,22 +1,78 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapPin, Search } from 'lucide-react';
 import Select from 'react-select';
 import OptimizedImage from "@/components/ui/optimized-image";
+import { supabase } from '@/integrations/supabase/client';
 
-const serviceOptions = [
-  { value: 'hospital', label: 'Hospital & Practice Cleaning' },
-  { value: 'industrial', label: 'Industrial Cleaning' },
-  { value: 'housekeeping', label: 'Housekeeping Services' },
-  { value: 'winter', label: 'Winter Garden Cleaning' },
-  { value: 'pool', label: 'Pool Cleaning' },
-  { value: 'jet', label: 'Private Jet & Aircraft Cleaning' },
-];
+interface Service {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  is_active: boolean;
+}
 
 const Hero = React.memo(() => {
   const navigate = useNavigate();
   const [selectedService, setSelectedService] = React.useState(null);
   const [postalCode, setPostalCode] = React.useState('');
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Load services from database
+  useEffect(() => {
+    const loadServices = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('services')
+          .select('id, title, description, category, is_active')
+          .eq('is_active', true)
+          .order('category', { ascending: true })
+          .order('title', { ascending: true });
+
+        if (error) {
+          console.error('Error loading services:', error);
+          return;
+        }
+
+        setServices(data || []);
+      } catch (error) {
+        console.error('Error loading services:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadServices();
+  }, []);
+
+  // Convert services to options format for react-select, grouped by category
+  const serviceOptions = services.reduce((acc, service) => {
+    const existingGroup = acc.find(group => group.label === service.category);
+    const option = {
+      value: service.title.toLowerCase().replace(/[^a-z0-9]/g, '-'),
+      label: service.title,
+    };
+
+    if (existingGroup) {
+      existingGroup.options.push(option);
+    } else {
+      acc.push({
+        label: service.category,
+        options: [option]
+      });
+    }
+    return acc;
+  }, [] as Array<{ label: string; options: Array<{ value: string; label: string }> }>);
+
+  // Custom format for group labels
+  const formatGroupLabel = (data: any) => (
+    <div className="flex items-center justify-between px-3 py-2 bg-gray-50 border-b border-gray-200 font-medium text-gray-700 text-sm">
+      <span>{data.label}</span>
+      <span className="text-gray-500 text-xs">({data.options.length})</span>
+    </div>
+  );
 
   const handleGetStarted = () => {
     navigate('/service-booking');
@@ -82,26 +138,91 @@ const Hero = React.memo(() => {
               <div className="flex-1">
                 <Select
                   options={serviceOptions}
-                  placeholder="Select Your Service"
+                  placeholder={loading ? "Loading services..." : "Select Your Service"}
+                  isLoading={loading}
+                  isDisabled={loading}
                   value={selectedService}
                   onChange={(selected) => setSelectedService(selected)}
+                  formatGroupLabel={formatGroupLabel}
+                  maxMenuHeight={300}
+                  isSearchable={true}
                   classNames={{
-                    control: () =>
-                      'border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#58C0D7]',
-                    menu: () => 'z-50 bg-white border border-gray-200 rounded-md shadow-lg',
+                    control: (state) =>
+                      `border border-gray-300 rounded-md text-sm ${
+                        state.isFocused ? 'ring-2 ring-[#58C0D7] border-[#58C0D7]' : ''
+                      }`,
+                    menu: () => 'z-[9999] bg-white border border-gray-200 rounded-md shadow-xl',
+                    menuList: () => 'bg-white rounded-md max-h-[300px] overflow-y-auto py-1',
                     option: (state) => 
-                      `px-3 py-2 cursor-pointer ${state.isSelected ? 'bg-[#58C0D7] text-white' : state.isFocused ? 'bg-gray-100' : 'text-gray-700 hover:bg-gray-50'}`,
+                      `px-3 py-2 cursor-pointer text-sm ${
+                        state.isSelected 
+                          ? 'bg-[#58C0D7] text-white' 
+                          : state.isFocused 
+                            ? 'bg-gray-100 text-gray-900' 
+                            : 'text-gray-700 hover:bg-gray-50'
+                      }`,
+                    placeholder: () => 'text-gray-500 text-sm',
+                    singleValue: () => 'text-gray-900 text-sm',
+                    input: () => 'text-gray-900 text-sm',
+                    noOptionsMessage: () => 'text-gray-500 text-sm px-3 py-2',
+                    loadingMessage: () => 'text-gray-500 text-sm px-3 py-2',
                   }}
                   styles={{
-                    control: (base) => ({
+                    control: (base, state) => ({
                       ...base,
-                      padding: '2px 4px',
+                      padding: '4px 8px',
                       backgroundColor: 'white',
+                      minHeight: '42px',
+                      boxShadow: 'none',
+                      '&:hover': {
+                        borderColor: '#58C0D7',
+                      },
                     }),
                     menu: (base) => ({
                       ...base,
                       zIndex: 9999,
+                      backgroundColor: 'white',
+                      boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
                     }),
+                    menuList: (base) => ({
+                      ...base,
+                      backgroundColor: 'white',
+                      maxHeight: '300px',
+                      padding: 0,
+                    }),
+                    groupHeading: (base) => ({
+                      ...base,
+                      backgroundColor: '#f9fafb',
+                      borderBottom: '1px solid #e5e7eb',
+                      color: '#374151',
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
+                      padding: '8px 12px',
+                      margin: 0,
+                      textTransform: 'none',
+                    }),
+                    indicatorSeparator: () => ({
+                      display: 'none',
+                    }),
+                    dropdownIndicator: (base) => ({
+                      ...base,
+                      color: '#9ca3af',
+                      '&:hover': {
+                        color: '#58C0D7',
+                      },
+                    }),
+                  }}
+                  components={{
+                    NoOptionsMessage: ({ children, ...props }: any) => (
+                      <div {...props.innerProps} className="px-3 py-2 text-gray-500 text-sm">
+                        {children || 'No services found'}
+                      </div>
+                    ),
+                    LoadingMessage: ({ children, ...props }: any) => (
+                      <div {...props.innerProps} className="px-3 py-2 text-gray-500 text-sm">
+                        Loading services...
+                      </div>
+                    ),
                   }}
                 />
               </div>
