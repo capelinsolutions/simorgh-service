@@ -304,7 +304,10 @@ const FreelancerProfile = () => {
     try {
       const { data, error } = await supabase.functions.invoke('create-stripe-connect-account');
       
-      if (error) throw error;
+      if (error) {
+        console.error('Stripe connect error:', error);
+        throw new Error(error.message || 'Failed to connect to Stripe');
+      }
       
       if (data?.url) {
         window.open(data.url, '_blank');
@@ -312,12 +315,14 @@ const FreelancerProfile = () => {
           title: "Stripe Connect",
           description: "Opening Stripe Connect setup in a new tab.",
         });
+      } else {
+        throw new Error('No setup URL received from Stripe');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error connecting to Stripe:', error);
       toast({
-        title: "Error",
-        description: "Failed to connect to Stripe. Please try again.",
+        title: "Stripe Connection Failed",
+        description: error.message || "Failed to connect to Stripe. Please try again.",
         variant: "destructive",
       });
     } finally {

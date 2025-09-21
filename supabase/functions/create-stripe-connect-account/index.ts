@@ -41,10 +41,15 @@ serve(async (req) => {
       .from('freelancers')
       .select('*')
       .eq('user_id', user.id)
-      .single();
+      .maybeSingle();
 
-    if (freelancerError || !freelancer) {
-      throw new Error('Freelancer profile not found');
+    if (freelancerError) {
+      console.error('Error fetching freelancer profile:', freelancerError);
+      throw new Error(`Database error: ${freelancerError.message}`);
+    }
+
+    if (!freelancer) {
+      throw new Error('Freelancer profile not found. Please complete your freelancer registration first.');
     }
 
     // Check if Stripe account already exists
