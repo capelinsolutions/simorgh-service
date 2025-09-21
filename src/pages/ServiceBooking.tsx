@@ -310,7 +310,12 @@ const ServiceBooking = () => {
                       </p>
                     </div>
 
-                    {!user && (
+                    {user ? (
+                      <div className="p-3 bg-muted rounded-lg">
+                        <p className="text-sm text-muted-foreground">Booking for:</p>
+                        <p className="font-medium">{user.email}</p>
+                      </div>
+                    ) : (
                       <div className="space-y-3">
                         <div className="flex items-center space-x-2">
                           <input
