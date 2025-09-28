@@ -67,9 +67,11 @@ const AuthPage = () => {
       console.log('🔍 Checking if user is freelancer...');
       const { data: freelancer, error } = await supabase
         .from('freelancers')
-        .select('user_id')
+        .select('user_id, business_name, verification_status')
         .eq('user_id', userId)
         .maybeSingle();
+
+      console.log('🔍 Freelancer check result:', { freelancer, error });
 
       if (error) {
         console.error('❌ Error checking freelancer status:', error);

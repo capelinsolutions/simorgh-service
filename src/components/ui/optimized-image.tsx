@@ -52,7 +52,6 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         src={imgSrc}
         alt={alt}
         loading={priority ? "eager" : "lazy"}
-        fetchPriority={priority ? "high" : "auto"}
         onLoad={handleLoad}
         onError={handleError}
         className={cn(
@@ -61,6 +60,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           className
         )}
         {...props}
+        {...(priority && { fetchPriority: "high" as any })}
       />
     </div>
   );
