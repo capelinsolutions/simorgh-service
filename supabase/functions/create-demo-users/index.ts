@@ -17,7 +17,20 @@ Deno.serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    console.log('Creating demo users...');
+    console.log('Deleting existing demo users...');
+    
+    // Delete existing demo users from auth
+    const { data: existingUsers } = await supabaseAdmin.auth.admin.listUsers()
+    const demoEmails = ['customer@demo.com', 'cleaner@demo.com', 'admin@demo.com', 'test123@gmail.com']
+    
+    for (const user of existingUsers?.users || []) {
+      if (demoEmails.includes(user.email || '')) {
+        await supabaseAdmin.auth.admin.deleteUser(user.id)
+        console.log(`Deleted user: ${user.email}`)
+      }
+    }
+
+    console.log('Creating new demo users...');
 
     // Demo users data
     const demoUsers = [
@@ -36,13 +49,26 @@ Deno.serve(async (req) => {
         password: 'demo123456',
         role: 'cleaner',
         userData: {
-          business_name: 'Premium Cleaning Services',
-          contact_phone: '(555) 987-6543',
-          bio: 'Professional cleaner with 5+ years experience',
-          service_areas: ['90210', '90211', '90212'],
-          services_offered: ['Deep Cleaning', 'Office Cleaning', 'Residential cleaning'],
-          hourly_rate: 45,
-          experience_years: 5
+          business_name: 'Elite Cleaning Services',
+          contact_phone: '+1-555-0123',
+          bio: 'Professional cleaning specialist with 7+ years of experience. I take pride in delivering exceptional cleaning services with attention to detail. Specialized in residential, commercial, and deep cleaning. Eco-friendly cleaning options available. Licensed, insured, and background checked.',
+          service_areas: ['10001', '10002', '10003', '10004', '10005', '10006', '10007', '10008', '10009', '10010'],
+          services_offered: ['Residential Cleaning', 'Deep Cleaning', 'Move-in/Move-out Cleaning', 'Office Cleaning', 'Post-Construction Cleaning'],
+          hourly_rate: 50,
+          experience_years: 7,
+          certifications: ['Certified Professional Cleaner', 'Green Cleaning Specialist', 'IICRC Certified', 'OSHA Safety Certified'],
+          max_concurrent_jobs: 8,
+          rating: 4.9,
+          total_jobs: 150,
+          availability: {
+            monday: { available: true, hours: '9:00 AM - 6:00 PM' },
+            tuesday: { available: true, hours: '9:00 AM - 6:00 PM' },
+            wednesday: { available: true, hours: '9:00 AM - 6:00 PM' },
+            thursday: { available: true, hours: '9:00 AM - 6:00 PM' },
+            friday: { available: true, hours: '9:00 AM - 6:00 PM' },
+            saturday: { available: true, hours: '10:00 AM - 4:00 PM' },
+            sunday: { available: false, hours: 'Closed' }
+          }
         }
       },
       {
@@ -103,11 +129,16 @@ Deno.serve(async (req) => {
             services_offered: user.userData.services_offered,
             hourly_rate: user.userData.hourly_rate,
             experience_years: user.userData.experience_years,
+            certifications: user.userData.certifications,
+            max_concurrent_jobs: user.userData.max_concurrent_jobs,
             is_active: true,
-            verification_status: 'approved',
+            verification_status: 'verified',
             status: 'active',
-            rating: 4.8,
-            total_jobs: 25
+            rating: user.userData.rating,
+            total_jobs: user.userData.total_jobs,
+            availability: user.userData.availability,
+            current_active_jobs: 0,
+            documents: []
           });
 
         if (freelancerError) {
