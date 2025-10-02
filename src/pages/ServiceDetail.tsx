@@ -203,11 +203,13 @@ const ServiceDetail = () => {
                 </div>
                 
                 <div className="order-first lg:order-last lg:justify-self-end">
-                  <img
-                    src={service.image_url || "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80"}
-                    alt={service.title}
-                    className="rounded-lg shadow-lg w-full max-w-md mx-auto lg:mx-0 object-cover aspect-[4/3]"
-                  />
+                  <div className="rounded-lg shadow-lg w-full max-w-md mx-auto lg:mx-0 aspect-[4/3] bg-gray-50 flex items-center justify-center overflow-hidden p-4">
+                    <img
+                      src={service.image_url || "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80"}
+                      alt={service.title}
+                      className="w-full h-full object-contain rounded-lg"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
