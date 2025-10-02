@@ -55,7 +55,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         onLoad={handleLoad}
         onError={handleError}
         className={cn(
-          "transition-opacity duration-300",
+          "w-full h-full transition-opacity duration-300",
           isLoading ? "opacity-0" : "opacity-100",
           className
         )}

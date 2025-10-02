@@ -110,13 +110,13 @@ const BestServiceSection = React.memo(() => {
                   {services.map((service) => (
                     <div
                       key={service.id}
-                      className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 bg-white rounded-2xl overflow-hidden shadow-sm"
+                       className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 bg-white rounded-2xl overflow-hidden shadow-sm"
                     >
-                       <div className="overflow-hidden px-3 sm:px-4 rounded-2xl h-48 sm:h-64 lg:h-80">
+                       <div className="overflow-hidden px-3 sm:px-4 rounded-2xl h-48 sm:h-64 lg:h-80 bg-gray-50 flex items-center justify-center">
                           <OptimizedImage
                             src={service.image_url || "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80"}
                             alt={`${service.title} - Professional cleaning service`}
-                            className="w-full h-full object-cover rounded-2xl"
+                            className="w-full h-full object-contain rounded-2xl"
                             width={400}
                             height={320}
                           />

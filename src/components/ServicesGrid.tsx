@@ -237,15 +237,15 @@ const ServicesGrid = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 lg:gap-10 mt-8 sm:mt-12 lg:mt-16 w-full">
             {displayedServices.map((service, index) => (
-              <article key={service.id} className="bg-white text-center rounded-lg hover:shadow-lg transition-shadow border border-gray-100 cursor-pointer h-full flex flex-col" onClick={() => handleServiceClick(service.id)}>
-               <div className="w-full aspect-[5/5] overflow-hidden rounded-t-lg">
+               <article key={service.id} className="bg-white text-center rounded-lg hover:shadow-lg transition-shadow border border-gray-100 cursor-pointer h-full flex flex-col" onClick={() => handleServiceClick(service.id)}>
+                <div className="w-full aspect-[5/5] overflow-hidden rounded-t-lg bg-gray-50">
     <OptimizedImage
       src={
         service.image_url ||
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80"
       }
       alt={service.title}
-      className="w-full h-full object-cover"
+      className="w-full h-full object-contain"
     />
   </div>
               <div className="flex w-full flex-col justify-between p-4 flex-1">
