@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from "@/components/ui/toaster";
+import Header from '@/components/Header';
 import CustomerSidebar from '@/components/customer/CustomerSidebar';
 import MyBookings from '@/components/customer/MyBookings';
 import CustomerProfile from '@/components/customer/CustomerProfile';
@@ -12,6 +12,7 @@ import CustomerNotifications from '@/components/customer/CustomerNotifications';
 const CustomerDashboard = () => {
   return (
     <div className="min-h-screen bg-background">
+      <Header />
       <div className="flex">
         <CustomerSidebar />
         <main className="flex-1 p-6">

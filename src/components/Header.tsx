@@ -18,9 +18,9 @@ const Header = React.memo(() => {
   const handleSignOut = async () => {
     try {
       await signOut();
-      navigate("/");
+      window.location.href = "/";
     } catch (err) {
-      console.error(err);
+      console.error("Sign out error:", err);
     }
   };
 
