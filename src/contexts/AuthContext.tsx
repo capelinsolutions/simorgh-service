@@ -7,6 +7,7 @@ interface AuthContextType {
   session: Session | null;
   loading: boolean;
   isAdmin: boolean;
+  isFreelancer: boolean;
   signOut: () => Promise<void>;
 }
 
@@ -25,6 +26,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isFreelancer, setIsFreelancer] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -37,7 +39,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSession(session);
         setUser(session?.user ?? null);
         
-        // Check if user is admin
+        // Check if user is admin and freelancer
         if (session?.user) {
           console.log('🔍 Checking admin status for user:', session.user.id, session.user.email);
           
@@ -67,10 +69,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               console.log('❌ Set isAdmin to false due to error');
             }
           }
+
+          // Check if user is a freelancer
+          try {
+            const { data: freelancerData, error: freelancerError } = await supabase
+              .from('freelancers')
+              .select('user_id')
+              .eq('user_id', session.user.id)
+              .maybeSingle();
+            
+            console.log('🧹 Freelancer check result:', { freelancerData, freelancerError });
+            if (mounted) {
+              setIsFreelancer(!!freelancerData);
+              console.log('✅ Set isFreelancer to:', !!freelancerData);
+            }
+          } catch (error) {
+            console.error('❌ Error checking freelancer status:', error);
+            if (mounted) {
+              setIsFreelancer(false);
+            }
+          }
         } else {
-          console.log('🚫 No user session, setting isAdmin to false');
+          console.log('🚫 No user session, setting isAdmin and isFreelancer to false');
           if (mounted) {
             setIsAdmin(false);
+            setIsFreelancer(false);
           }
         }
         
@@ -117,9 +140,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             console.log('❌ Initial set isAdmin to false due to error');
           }
         }
+
+        // Check if user is a freelancer
+        try {
+          const { data: freelancerData, error: freelancerError } = await supabase
+            .from('freelancers')
+            .select('user_id')
+            .eq('user_id', session.user.id)
+            .maybeSingle();
+          
+          console.log('🧹 Initial freelancer check result:', { freelancerData, freelancerError });
+          if (mounted) {
+            setIsFreelancer(!!freelancerData);
+            console.log('✅ Initial set isFreelancer to:', !!freelancerData);
+          }
+        } catch (error) {
+          console.error('❌ Initial error checking freelancer status:', error);
+          if (mounted) {
+            setIsFreelancer(false);
+          }
+        }
       } else {
         if (mounted) {
           setIsAdmin(false);
+          setIsFreelancer(false);
         }
       }
       
@@ -147,6 +191,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
     setSession(null);
     setIsAdmin(false);
+    setIsFreelancer(false);
     setLoading(false);
   }, []);
 
@@ -155,8 +200,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     session,
     loading,
     isAdmin,
+    isFreelancer,
     signOut,
-  }), [user, session, loading, isAdmin, signOut]);
+  }), [user, session, loading, isAdmin, isFreelancer, signOut]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

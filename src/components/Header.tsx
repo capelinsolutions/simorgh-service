@@ -7,7 +7,7 @@ import { LogOut, User, Settings, Menu, X } from "lucide-react";
 const Header = React.memo(() => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, isAdmin, signOut, loading } = useAuth();
+  const { user, isAdmin, isFreelancer, signOut, loading } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const getActiveClass = (path: string) =>
@@ -86,7 +86,7 @@ const Header = React.memo(() => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => navigate("/customer")}
+                onClick={() => navigate(isFreelancer ? "/freelancer" : "/customer")}
                 className="text-[#58C0D7] border-[#58C0D7] hover:bg-[#58C0D7] hover:text-white"
               >
                 <User className="h-4 w-4 mr-1" /> Dashboard
@@ -208,7 +208,7 @@ const Header = React.memo(() => {
                 variant="outline"
                 size="sm"
                 onClick={() => {
-                  navigate("/customer");
+                  navigate(isFreelancer ? "/freelancer" : "/customer");
                   setMobileOpen(false);
                 }}
                 className="w-full mb-2 text-[#58C0D7] border-[#58C0D7] hover:bg-[#58C0D7] hover:text-white"
